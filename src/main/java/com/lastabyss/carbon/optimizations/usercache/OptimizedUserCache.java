@@ -14,17 +14,19 @@ import java.util.UUID;
 
 import org.spigotmc.SpigotConfig;
 
-import net.minecraft.server.v1_7_R4.EntityHuman;
-import net.minecraft.server.v1_7_R4.MinecraftServer;
-import net.minecraft.server.v1_7_R4.UserCache;
-import net.minecraft.util.com.google.common.base.Charsets;
-import net.minecraft.util.com.google.common.collect.Lists;
-import net.minecraft.util.com.google.common.io.Files;
-import net.minecraft.util.com.google.gson.Gson;
-import net.minecraft.util.com.google.gson.GsonBuilder;
-import net.minecraft.util.com.mojang.authlib.Agent;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.org.apache.commons.io.IOUtils;
+import net.minecraft.server.v1_8_R1.EntityHuman;
+import net.minecraft.server.v1_8_R1.MinecraftServer;
+import net.minecraft.server.v1_8_R1.UserCache;
+
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
+import com.mojang.authlib.Agent;
+import com.mojang.authlib.GameProfile;
+
+import org.apache.commons.io.IOUtils;
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
 
 public class OptimizedUserCache extends UserCache {
 

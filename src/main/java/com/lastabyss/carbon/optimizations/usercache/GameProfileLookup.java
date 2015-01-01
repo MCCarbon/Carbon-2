@@ -1,7 +1,7 @@
 package com.lastabyss.carbon.optimizations.usercache;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.ProfileLookupCallback;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.ProfileLookupCallback;
 
 public class GameProfileLookup implements ProfileLookupCallback {
 

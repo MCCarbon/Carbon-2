@@ -14,12 +14,12 @@ if (!hasProperty('mainClass')) {
 }
 
 jar {
-    baseName "Carbon 2"
+    baseName "Carbon2"
 }
 
 tasks.build.doLast {
-    ant.jar destfile:"build/libs/Carbon 2.jar", basedir: "build/classes/main", includes: "**/*.*", update: true
-    File export = file('build/libs/Carbon 2.jar')
+    ant.jar destfile:"build/libs/Carbon2.jar", basedir: "build/classes/main", includes: "**/*.*", update: true
+    File export = file('build/libs/Carbon2.jar')
     File dest = file('dist')
     dest.mkdir()
     dest.listFiles().each {
@@ -33,22 +33,9 @@ tasks.build.doLast {
 
 file('libs').mkdirs()
 
-ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/carbon/libs/spigotapi.jar', dest: file('libs'), verbose: false, skipexisting: true
-ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/carbon/libs/spigotserver.jar', dest: file('libs'), verbose: false, skipexisting: true
-
-repositories {
-    maven {
-        url "http://assets.comphenix.net/plugin/repository/everything"
-        artifactUrls "http://assets.comphenix.net/plugin/repository/everything/com/comphenix/protocol/ProtocolLib-Spigot/3.6.0-SNAPSHOT/ProtocolLib-Spigot-3.6.0-SNAPSHOT.jar"
-    }
-    
-    mavenCentral()  
-}
+ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/ProtocolSupport/spigot.jar', dest: file('libs'), verbose: false, skipexisting: true
 
 dependencies {
-    compile group: 'com.comphenix.protocol', name: 'ProtocolLib-Spigot', version: '3.6.0-SNAPSHOT'
-    compile files('libs/spigotapi.jar', 'libs/spigotserver.jar')
+    compile files('libs/spigot.jar')
     testCompile group: 'junit', name: 'junit', version: '4.10'
 }
-
-

@@ -33,6 +33,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -300,7 +301,8 @@ public class Metrics {
 		boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
 		String pluginVersion = description.getVersion();
 		String serverVersion = Bukkit.getVersion();
-		int playersOnline = Bukkit.getServer().getOnlinePlayers().size();
+		@SuppressWarnings("deprecation")
+		int playersOnline = Bukkit.getServer().getOnlinePlayers().length;
 		// END server software specific section -- all code below does not use any code outside of this class / Java
 		// Construct the post data
 		StringBuilder json = new StringBuilder(1024);

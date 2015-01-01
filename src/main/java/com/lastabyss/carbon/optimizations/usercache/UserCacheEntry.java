@@ -3,7 +3,7 @@ package com.lastabyss.carbon.optimizations.usercache;
 import java.util.Calendar;
 import java.util.Date;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
+import com.mojang.authlib.GameProfile;
 
 public class UserCacheEntry {
 

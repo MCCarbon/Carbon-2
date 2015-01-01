@@ -5,15 +5,17 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.UUID;
 
-import net.minecraft.server.v1_7_R4.UserCache;
-import net.minecraft.util.com.google.gson.JsonDeserializationContext;
-import net.minecraft.util.com.google.gson.JsonDeserializer;
-import net.minecraft.util.com.google.gson.JsonElement;
-import net.minecraft.util.com.google.gson.JsonObject;
-import net.minecraft.util.com.google.gson.JsonParseException;
-import net.minecraft.util.com.google.gson.JsonSerializationContext;
-import net.minecraft.util.com.google.gson.JsonSerializer;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonDeserializationContext;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonDeserializer;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonElement;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonObject;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonParseException;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonSerializationContext;
+import org.bukkit.craftbukkit.libs.com.google.gson.JsonSerializer;
+
+import net.minecraft.server.v1_8_R1.UserCache;
+
+import com.mojang.authlib.GameProfile;
 
 public class UserCacheEntryJsonSerializer implements JsonDeserializer<UserCacheEntry>, JsonSerializer<UserCacheEntry> {
 
