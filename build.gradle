@@ -1,0 +1,54 @@
+apply plugin: 'java'
+
+println 'Compiling Carbon 2 via Gradle ver. ' + gradle.gradleVersion
+
+sourceCompatibility = '1.7'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = ''
+}
+
+jar {
+    baseName "Carbon 2"
+}
+
+tasks.build.doLast {
+    ant.jar destfile:"build/libs/Carbon 2.jar", basedir: "build/classes/main", includes: "**/*.*", update: true
+    File export = file('build/libs/Carbon 2.jar')
+    File dest = file('dist')
+    dest.mkdir()
+    dest.listFiles().each {
+        it.delete()
+    }
+    export.renameTo(new File(dest, "Carbon 2.jar"))
+    file('build').delete()
+    println "Copied Carbon 2.jar into /dist"
+    println "Carbon is finished compiling, have a nice day!"
+}
+
+file('libs').mkdirs()
+
+ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/carbon/libs/spigotapi.jar', dest: file('libs'), verbose: false, skipexisting: true
+ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/carbon/libs/spigotserver.jar', dest: file('libs'), verbose: false, skipexisting: true
+
+repositories {
+    maven {
+        url "http://assets.comphenix.net/plugin/repository/everything"
+        artifactUrls "http://assets.comphenix.net/plugin/repository/everything/com/comphenix/protocol/ProtocolLib-Spigot/3.6.0-SNAPSHOT/ProtocolLib-Spigot-3.6.0-SNAPSHOT.jar"
+    }
+    
+    mavenCentral()  
+}
+
+dependencies {
+    compile group: 'com.comphenix.protocol', name: 'ProtocolLib-Spigot', version: '3.6.0-SNAPSHOT'
+    compile files('libs/spigotapi.jar', 'libs/spigotserver.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+}
+
+

@@ -1,0 +1,158 @@
+#All options are straightforward. Put the names of your worlds (CASE-SENSITIVE) in which you want 1.8 terrain to generate in.
+options:
+  sheep:
+    dropMutton: true
+  creeper:
+    dropMobHead: true
+  worlds: [world]
+  
+mobSpawning:
+  rabbits: true
+  endermites: true
+  guardians: true
+  
+modify:
+  blocks:
+    stone: true
+    sponge: true
+    stone_button: true
+    torch: true
+    stone_pressure_plate: true
+    wooden_pressure_plate: true
+    unlit_redstone_torch: true
+    redstone_torch: true
+    wooden_button: true
+    light_weighted_pressure_plate: true
+    heavy_weighted_pressure_plate: true
+    unpowered_comparator: true
+    powered_comparator: true
+    daylight_detector: true
+    slime: true
+    barrier: true
+    prismarine: true
+    sea_lantern: true
+    standing_banner: true
+    wall_banner: true
+    daylight_detector_inverted: true
+    red_sandstone: true
+    red_sandstone_stairs: true
+    #Red Sandstone Doubleslab
+    double_stone_slab2: true 
+    #Red Sandstone Slab
+    stone_slab2: true
+    spruce_fence_gate: true
+    birch_fence_gate: true
+    jungle_fence_gate: true
+    dark_oak_fence_gate: true
+    acacia_fence_gate: true
+    spruce_fence: true
+    birch_fence: true
+    jungle_fence: true
+    dark_oak_fence: true
+    acacia_fence: true
+    spruce_door: true
+    birch_door: true
+    jungle_door: true
+    acacia_door: true
+    dark_oak_door: true
+    anvil: true
+    enchanting_table: true
+    chest: true
+    trapped_chest: true
+    ender_chest: true
+  items:
+    spruce_door: true
+    birch_door: true
+    jungle_door: true
+    acacia_door: true
+    dark_oak_door: true
+    prismarine_shard: true
+    prismarine_crystals: true
+    rabbit: true
+    cooked_rabbit: true
+    rabbit_stew: true
+    rabbit_foot: true
+    rabbit_hide: true
+    mutton: true
+    cooked_mutton: true
+    banner: true
+    armor_stand: true
+    item_frame: true
+    comparator: true
+  entities:
+    Endermite: true
+    Guardian: true
+    Rabbit: true
+    ArmorStand: true
+    ItemFrame: true
+  tileentities:
+    Banner: true
+    Chest: true
+    EnderChest: true
+    EnchantTable: true
+  commands:
+    worldborder: true
+    title: true
+    particle: true
+    
+protocollib:
+  blocks:
+    slime: 133
+    barrier: 20
+    iron_trapdoor: 96
+    prismarine: 48
+    sea_lantern: 89
+    standing_banner: 63
+    wall_banner: 68
+    red_sandstone: 24
+    red_sandstone_stairs: 128
+    red_sandstone_doubleslab: 43
+    red_sandstone_slab: 44
+    fence_gates: 107
+    fences: 85
+    doors: 64
+    inverted_daylight_detector: 151
+  entities:
+    silverfish: 60
+    endermites: 94
+    rabbits: 93
+  items:
+    slime: 133
+    barrier: 7
+    iron_trapdoor: 96
+    prismarine: 48
+    sea_lantern: 89
+    red_sandstone: 24
+    red_sandstone_stairs: 128
+    red_sandstone_doubleslab: 43
+    red_sandstone_slab: 44
+    fence_gates: 107
+    fences: 85
+    doors: 324
+    rabbit_meat: 365
+    rabbit_cooked_meat: 366
+    rabbit_stew: 282
+    mutton: 365
+    cooked_mutton: 366
+    banner: 323
+    prismarine_shard: 1
+    prismarine_crystal: 1
+    rabbit_foot: 1
+    rabbit_hide: 1
+    armor_stand: 51
+    
+features:
+  monsterEggMobSpawner: true
+    
+optimizations:
+  world:
+    tileentitytick: false
+  usercache: false
+  cleanupreferences:
+    player: false
+    world: false
+    
+debug:
+  verbose: true
+        
+donottouch.configVersion: 0.9
