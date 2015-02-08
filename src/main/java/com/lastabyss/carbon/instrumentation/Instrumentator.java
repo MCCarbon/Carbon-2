@@ -36,21 +36,7 @@ public class Instrumentator {
         AgentLoader.attachAgentToJVM(
         	Tools.getCurrentPID(), CarbonTransformAgent.class,
         	new String[] {
-        		"org/bukkit/craftbukkit/v1_7_R4/inventory/BannerMeta.class",
-        		"org/bukkit/craftbukkit/v1_7_R4/inventory/BannerMeta$BannerPattern.class",
-        		"net/minecraft/server/v1_7_R4/EnumEntitySpawnZone.class",
-        		"net/minecraft/server/v1_7_R4/EntitySpawnZone.class",
-        	},
-        	"org/bukkit/craftbukkit/v1_7_R4/inventory/CraftItemStack.class",
-        	"org/bukkit/craftbukkit/v1_7_R4/inventory/CraftMetaItem.class",
-        	"org/bukkit/craftbukkit/v1_7_R4/inventory/CraftMetaItem$SerializableMeta.class",
-        	"org/bukkit/craftbukkit/v1_7_R4/inventory/CraftItemFactory.class",
-        	"net/minecraft/server/v1_7_R4/EntityTracker.class",
-        	"net/minecraft/server/v1_7_R4/EntityTrackerEntry.class",
-        	"net/minecraft/server/v1_7_R4/DataWatcher.class",
-        	"net/minecraft/server/v1_7_R4/SpawnerCreature.class",
-        	"net/minecraft/server/v1_7_R4/SpawnerCreature$1.class",
-        	"org/bukkit/Material.class"
+        	}
         );
     }
 

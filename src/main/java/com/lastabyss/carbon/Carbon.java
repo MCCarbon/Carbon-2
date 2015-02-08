@@ -1,8 +1,6 @@
 package com.lastabyss.carbon;
 
 import com.lastabyss.carbon.instrumentation.Instrumentator;
-import com.lastabyss.carbon.optimizations.usercache.OptimizedUserCacheInjector;
-import com.lastabyss.carbon.optimizations.world.WorldTileEntityListInjectorListener;
 import com.lastabyss.carbon.utils.Metrics;
 import com.lastabyss.carbon.utils.Utilities;
 
@@ -60,20 +58,14 @@ public class Carbon extends JavaPlugin {
 			injector = new Injector(this);
 			injector.registerAll();
 			injector.registerRecipes();
-			if (getConfig().getBoolean("optimizations.usercache", false)) {
-				OptimizedUserCacheInjector.injectUserCache();
-				if (getConfig().getBoolean("debug.verbose", false)) {
-					Carbon.log.log(Level.INFO, "[Carbon] Optimized UserCache was injected into Minecraft");
-				}
-			}
 		} catch (Throwable e) {
 			e.printStackTrace(System.out);
-			log.warning("[Carbon] 1.8 injection failed! Something went wrong, server cannot start properly, shutting down...");
+			log.warning("[Carbon] 1.9 injection failed! Something went wrong, server cannot start properly, shutting down...");
 			Bukkit.shutdown();
 			return;
 		}
 
-		log.info("Carbon has finished injecting all 1.8 functionalities.");
+		log.info("Carbon has finished injecting all 1.9 functionalities.");
 	}
 
 	@Override
@@ -83,13 +75,6 @@ public class Carbon extends JavaPlugin {
 			this.getDataFolder().mkdirs();
 		}
 		reloadConfig();
-
-		if (getConfig().getBoolean("optimizations.world.tileentitytick", false)) {
-			getServer().getPluginManager().registerEvents(new WorldTileEntityListInjectorListener(), this);
-			if (getConfig().getBoolean("debug.verbose", false)) {
-				Carbon.log.log(Level.INFO, "[Carbon] Started optimized entity tick list injector listener");
-			}
-		}
 
 		if (getConfig().getDouble("donottouch.configVersion", 0.0f) < localConfigVersion) {
 			log.warning("Please delete your Carbon config and let it regenerate! Yours is outdated and may cause issues with the mod!");
