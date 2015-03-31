@@ -17,25 +17,10 @@ jar {
     baseName "Carbon2"
 }
 
-tasks.build.doLast {
-    ant.jar destfile:"build/libs/Carbon2.jar", basedir: "build/classes/main", includes: "**/*.*", update: true
-    File export = file('build/libs/Carbon2.jar')
-    File dest = file('dist')
-    dest.mkdir()
-    dest.listFiles().each {
-        it.delete()
-    }
-    export.renameTo(new File(dest, "Carbon 2.jar"))
-    file('build').delete()
-    println "Copied Carbon 2.jar into /dist"
-    println "Carbon is finished compiling, have a nice day!"
-}
-
 file('libs').mkdirs()
 
 ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/ProtocolSupport/spigot.jar', dest: file('libs'), verbose: false, skipexisting: true
 
 dependencies {
     compile files('libs/spigot.jar')
-    testCompile group: 'junit', name: 'junit', version: '4.10'
 }
