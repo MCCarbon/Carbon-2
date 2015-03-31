@@ -3,6 +3,7 @@ apply plugin: 'java'
 println 'Compiling Carbon 2 via Gradle ver. ' + gradle.gradleVersion
 
 sourceCompatibility = '1.7'
+ext.spigotVersion = '1.8.3-R0.1-SNAPSHOT'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 task wrapper(type: Wrapper) {
