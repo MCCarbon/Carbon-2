@@ -5,10 +5,10 @@
 /*.iml
 /*.ipr
 /*.iws
-/.gradle
-/dest
 /libs
 /.externalToolBuilders
+/dist
+/.nb-gradle
 
 /bin
 /build
