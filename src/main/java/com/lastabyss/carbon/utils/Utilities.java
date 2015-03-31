@@ -54,8 +54,6 @@ public class Utilities {
 
 	/**
 	 * Registers a bukkit command without the need for a plugin.yml entry.
-	 *
-	 * Yes, I'm terrible.
 	 * 
 	 * @param fallbackPrefix
 	 * @param cmd
@@ -78,11 +76,11 @@ public class Utilities {
 	}
 
 	/**
-	 * Returns the BUKKIT ENTITYTYPE.
+	 * Adds entity type to bukkit entity types enum and returns it
 	 * 
-	 * @param name
-	 * @param id
-	 * @param entityClass
+	 * @param name - name of the entitytype
+	 * @param id - id of the entitytype
+	 * @param entityClass - entity class
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -111,6 +109,13 @@ public class Utilities {
 		return entityType;
 	}
 
+	/**
+	 * Adds material to bukkit material enum end returns it
+	 * 
+	 * @param name - name of the material
+	 * @param id - id of the material
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static Material addMaterial(String name, int id) {
 		Material material = DynamicEnumType.addEnum(Material.class, name, new Class[] { Integer.TYPE }, new Object[] { id });
@@ -138,6 +143,14 @@ public class Utilities {
 		return material;
 	}
 
+	/**
+	 * Adds material with data to bukkit material enum end returns it
+	 * 
+	 * @param name
+	 * @param id
+	 * @param data
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static Material addMaterial(String name, int id, short data) {
 		Material material = DynamicEnumType.addEnum(Material.class, name, new Class[] { Integer.TYPE }, new Object[] { id });
@@ -244,24 +257,27 @@ public class Utilities {
 	 * @param accessible
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends AccessibleObject> T setAccessible(AccessibleObject object, boolean accessible) {
-		object.setAccessible(accessible);
-		return (T) object;
+	public static <T extends AccessibleObject> T setAccessible(T object) {
+		object.setAccessible(true);
+		return object;
 	}
 
+	/**
+	 * Sets final field to the provided value
+	 * 
+	 * @param field - the field which should be modified
+	 * @param obj - the object whose field should be modified
+	 * @param newValue - the new value for the field of obj being modified
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
 	public static void setFinalField(Field field, Object obj, Object newValue) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		field.setAccessible(true);
-		Field fieldModifiers = Field.class.getDeclaredField("modifiers");
-		fieldModifiers.setAccessible(true);
-		fieldModifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-		Field root = Field.class.getDeclaredField("root");
-		root.setAccessible(true);
-		root.set(field, null);
-		Field accessor = Field.class.getDeclaredField("overrideFieldAccessor");
-		accessor.setAccessible(true);
-		accessor.set(field, null);
-		field.set(obj, newValue);
+		setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
+		setAccessible(Field.class.getDeclaredField("root")).set(field, null);
+		setAccessible(Field.class.getDeclaredField("overrideFieldAccessor")).set(field, null);
+		setAccessible(field).set(obj, newValue);
 	}
 
 }

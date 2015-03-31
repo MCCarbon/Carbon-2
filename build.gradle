@@ -19,7 +19,8 @@ jar {
 
 file('libs').mkdirs()
 
-ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/ProtocolSupport/spigot.jar', dest: file('libs'), verbose: false, skipexisting: true
+ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigotapi.jar', dest: file('libs'), verbose: false, skipexisting: true
+ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigot.jar', dest: file('libs'), verbose: false, skipexisting: true
 
 dependencies {
     compile files('libs/spigot.jar')
