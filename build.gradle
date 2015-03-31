@@ -17,11 +17,25 @@ jar {
     baseName "Carbon2"
 }
 
+tasks.build.doLast {
+    ant.jar destfile:"build/libs/Carbon2.jar", basedir: "build/classes/main", includes: "**/*.*", update: true
+    File export = file('build/libs/Carbon2.jar')
+    File dest = file('dist')
+    dest.mkdir()
+    dest.listFiles().each {
+        it.delete()
+    }
+    export.renameTo(new File(dest, "Carbon2.jar"))
+    file('build').delete()
+    println "Copied Carbon2.jar into /dist"
+    println "Carbon is finished compiling, have a nice day!"
+}
+
 file('libs').mkdirs()
 
 ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigotapi.jar', dest: file('libs'), verbose: false, skipexisting: true
 ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigot.jar', dest: file('libs'), verbose: false, skipexisting: true
 
 dependencies {
-    compile files('libs/spigot.jar')
+    compile files('libs/spigotapi.jar', 'libs/spigot.jar')
 }
