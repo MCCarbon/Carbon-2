@@ -9,6 +9,20 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
 }
 
+repositories {
+    mavenCentral()
+    
+    maven {
+        name 'Spigot'
+        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+    
+    maven {
+        name 'shadowvolt-repo'
+        url 'http://ci.shadowvolt.com/plugin/repository/everything'
+    }
+}
+
 if (!hasProperty('mainClass')) {
     ext.mainClass = ''
 }
@@ -33,9 +47,10 @@ tasks.build.doLast {
 
 file('libs').mkdirs()
 
-ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigotapi.jar', dest: file('libs'), verbose: false, skipexisting: true
-ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigot.jar', dest: file('libs'), verbose: false, skipexisting: true
+ant.get src: 'https://www.dropbox.com/s/1ofgubrldjwamnk/spigot.jar?dl=1', dest: file('libs'), verbose: false, skipexisting: true
 
 dependencies {
-    compile files('libs/spigotapi.jar', 'libs/spigot.jar')
+    compile files('libs/spigot.jar')
+    compile 'org.bukkit:bukkit:' + project.ext.spigotVersion
+    compile 'com.comphenix.protocol:ProtocolLib:3.6.3-SNAPSHOT'
 }
