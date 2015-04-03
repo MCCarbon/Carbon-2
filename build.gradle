@@ -1,5 +1,6 @@
-apply plugin: 'java'
-
+plugins {
+  id 'java'
+}
 println 'Compiling Carbon 2 via Gradle ver. ' + gradle.gradleVersion
 
 sourceCompatibility = '1.7'
