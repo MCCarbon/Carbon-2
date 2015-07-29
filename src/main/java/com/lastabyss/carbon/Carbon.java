@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.minecraft.server.v1_8_R1.MinecraftServer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,6 +31,8 @@ public class Carbon extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
+		// TODO: instead of loading as a plugin, just inject into BootClassPath
+
 		// call to server shutdown if worlds are already loaded, prevents various errors when loading plugin on the fly
 		if (!Bukkit.getWorlds().isEmpty()) {
 			log.log(Level.SEVERE, "World loaded before{0} {1}! (Was {2} loaded on the fly?)", new Object[] { pluginDescriptionFile.getName(), pluginDescriptionFile.getVersion(), pluginDescriptionFile.getName() });

@@ -16,7 +16,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public class CarbonTransformAgent implements ClassFileTransformer {
 
-	//All pretransformed classes should be located in the pretransformedclasses folder inside the jar
+	// All pretransformed classes should be located in the pretransformedclasses folder inside the jar
 
 	private static Instrumentation instrumentation = null;
 	private static CarbonTransformAgent transformer;
@@ -36,12 +36,13 @@ public class CarbonTransformAgent implements ClassFileTransformer {
 		return null;
 	}
 
-        /**
-         * Gets class before transformation.
-         * @param className
-         * @return
-         * @throws IOException 
-         */
+	/**
+	 * Gets class before transformation.
+	 * 
+	 * @param className
+	 * @return
+	 * @throws IOException
+	 */
 	private static byte[] getPreTransformedClass(String className) throws IOException {
 		InputStream stream = CarbonTransformAgent.class.getClassLoader().getResourceAsStream("pretransformedclasses/" + className + ".class");
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();

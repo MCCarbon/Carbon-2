@@ -3,8 +3,9 @@ package com.lastabyss.carbon.utils;
 import com.lastabyss.carbon.Carbon;
 import com.lastabyss.carbon.DynamicEnumType;
 
-import net.minecraft.server.v1_8_R1.EntityPlayer;
-import net.minecraft.server.v1_8_R1.Packet;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,8 +13,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
-import org.bukkit.craftbukkit.v1_8_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -194,7 +195,7 @@ public class Utilities {
 	 * @param b
 	 * @return
 	 */
-	public static float getBlockStrength(net.minecraft.server.v1_8_R1.Block b) {
+	public static float getBlockStrength(net.minecraft.server.v1_8_R3.Block b) {
 		try {
 			Field field = b.getClass().getField("strength");
 			field.setAccessible(true);
@@ -211,7 +212,7 @@ public class Utilities {
 	 * @param b
 	 * @return
 	 */
-	public static float getBlockDurability(net.minecraft.server.v1_8_R1.Block b) {
+	public static float getBlockDurability(net.minecraft.server.v1_8_R3.Block b) {
 		try {
 			Field field = b.getClass().getField("durability");
 			field.setAccessible(true);
@@ -245,7 +246,7 @@ public class Utilities {
 	 * @param player
 	 * @param packet
 	 */
-	public static void sendPacket(Player player, Packet packet) {
+	public static void sendPacket(Player player, Packet<? extends PacketListener> packet) {
 		EntityPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
 		nmsPlayer.playerConnection.sendPacket(packet);
 	}

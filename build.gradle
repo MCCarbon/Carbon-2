@@ -49,7 +49,7 @@ tasks.build.doLast {
 
 file('libs').mkdirs()
 
-ant.get src: 'https://www.dropbox.com/s/1ofgubrldjwamnk/spigot.jar?dl=1', dest: file('libs'), verbose: false, skipexisting: true
+ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigot.jar', dest: file('libs'), verbose: false, skipexisting: true
 
 dependencies {
     compile files('libs/spigot.jar')
