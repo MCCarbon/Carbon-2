@@ -79,9 +79,12 @@ public class Utilities {
 	/**
 	 * Adds entity type to bukkit entity types enum and returns it
 	 * 
-	 * @param name - name of the entitytype
-	 * @param id - id of the entitytype
-	 * @param entityClass - entity class
+	 * @param name
+	 *            - name of the entitytype
+	 * @param id
+	 *            - id of the entitytype
+	 * @param entityClass
+	 *            - entity class
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -93,8 +96,9 @@ public class Utilities {
 			Object object = field.get(null);
 			Map<String, EntityType> NAME_MAP = (Map<String, EntityType>) object;
 			NAME_MAP.put(name, entityType);
-			if (plugin.getConfig().getBoolean("debug.verbose", false))
+			if (plugin.getConfig().getBoolean("debug.verbose", false)) {
 				Carbon.log.log(Level.INFO, "[Carbon] Entity {0} with ID {1} was injected into CraftBukkit.", new Object[] { name, id });
+			}
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace(System.out);
 		}
@@ -113,8 +117,10 @@ public class Utilities {
 	/**
 	 * Adds material to bukkit material enum end returns it
 	 * 
-	 * @param name - name of the material
-	 * @param id - id of the material
+	 * @param name
+	 *            - name of the material
+	 * @param id
+	 *            - id of the material
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -266,9 +272,12 @@ public class Utilities {
 	/**
 	 * Sets final field to the provided value
 	 * 
-	 * @param field - the field which should be modified
-	 * @param obj - the object whose field should be modified
-	 * @param newValue - the new value for the field of obj being modified
+	 * @param field
+	 *            - the field which should be modified
+	 * @param obj
+	 *            - the object whose field should be modified
+	 * @param newValue
+	 *            - the new value for the field of obj being modified
 	 * @throws NoSuchFieldException
 	 * @throws SecurityException
 	 * @throws IllegalArgumentException

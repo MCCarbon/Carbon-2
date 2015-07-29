@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -88,11 +86,6 @@ public class Carbon extends JavaPlugin {
 		} catch (IOException e) {
 		}
 		log.info("Carbon is enabled.");
-	}
-
-	@Override
-	public void onDisable() {
-		MinecraftServer.getServer().getUserCache().c();
 	}
 
 	public double getLocalConfigVersion() {
