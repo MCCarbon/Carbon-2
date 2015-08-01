@@ -1,5 +1,7 @@
 package com.lastabyss.carbon;
 
+import com.lastabyss.carbon.blocks.BlockEndRod;
+import com.lastabyss.carbon.blocks.util.WrappedBlock;
 import com.lastabyss.carbon.utils.Utilities;
 
 import net.minecraft.server.v1_8_R3.Block;
@@ -21,6 +23,7 @@ import net.minecraft.server.v1_8_R3.PotionBrewer;
 import net.minecraft.server.v1_8_R3.TileEntity;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.Recipe;
 
 import gnu.trove.map.TObjectIntMap;
@@ -40,10 +43,28 @@ import java.util.logging.Level;
  */
 public class Injector {
 
+	public WrappedBlock endRodBlock = new BlockEndRod();
+
+	public Material endRodMat = Utilities.addMaterial("END_ROD_BLOCK", 198);
+
 	private Carbon plugin;
 
 	public Injector(Carbon plugin) {
 		this.plugin = plugin;
+	}
+
+	public void registerAll() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InvocationTargetException, NoSuchMethodException {
+		registerBlock(198, "end_rod", endRodBlock.setStrength(0.0F).setLightLevel(0.9375F).setStepSound(Block.f).setName("endRod"));
+		fixBlocksRefs();
+		fixItemsRefs();
+	}
+
+	public void registerRecipes() {
+		Bukkit.resetRecipes();
+	}
+
+	private void addRecipe(Recipe recipe) {
+		Bukkit.getServer().addRecipe(recipe);
 	}
 
 	public void registerBlock(int id, String name, Block block) {
@@ -183,19 +204,6 @@ public class Injector {
 				}
 			}
 		}
-	}
-
-	public void registerAll() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InvocationTargetException, NoSuchMethodException {
-		fixBlocksRefs();
-		fixItemsRefs();
-	}
-
-	public void registerRecipes() {
-		Bukkit.resetRecipes();
-	}
-
-	private void addRecipe(Recipe recipe) {
-		Bukkit.getServer().addRecipe(recipe);
 	}
 
 }
