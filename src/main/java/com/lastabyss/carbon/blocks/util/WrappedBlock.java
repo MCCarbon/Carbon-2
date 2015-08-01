@@ -1,12 +1,17 @@
 package com.lastabyss.carbon.blocks.util;
 
+import java.util.Random;
+
 import net.minecraft.server.v1_8_R3.AxisAlignedBB;
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.IBlockData;
+import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MaterialMapColor;
 import net.minecraft.server.v1_8_R3.MovingObjectPosition;
+import net.minecraft.server.v1_8_R3.TileEntity;
 import net.minecraft.server.v1_8_R3.Vec3D;
 import net.minecraft.server.v1_8_R3.World;
 
@@ -26,6 +31,10 @@ public class WrappedBlock extends Block {
 
 	public void setSizes(float f, float f1, float f2, float f3, float f4, float f5) {
 		a(f, f1, f2, f3, f4, f5);
+	}
+
+	public void setTicking(boolean ticking) {
+		a(ticking);
 	}
 
 	public WrappedBlock setStrength(float strength) {
@@ -51,6 +60,10 @@ public class WrappedBlock extends Block {
 	public WrappedBlock disableBreakStat() {
 		K();
 		return this;
+	}
+
+	public static void dropItem(World world, BlockPosition blockposition, ItemStack itemstack) {
+		Block.a(world, blockposition, itemstack);
 	}
 
 	@Override
@@ -96,6 +109,60 @@ public class WrappedBlock extends Block {
 
 	public boolean isFullCube() {
 		return super.A();
+	}
+
+	@Override
+	public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+		randomTick(world, blockposition, iblockdata, random);
+	}
+
+	public void randomTick(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+		super.a(world, blockposition, iblockdata, random);
+	}
+
+	@Override
+	public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+		tick(world, blockposition, iblockdata, random);
+	}
+
+	public void tick(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+		super.b(world, blockposition, iblockdata, random);
+	}
+
+	@Override
+	public int a(Random rnd) {
+		return getDropCount(rnd);
+	}
+
+	public int getDropCount(Random rnd) {
+		return super.a(rnd);
+	}
+
+	@Override
+	public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
+		breakBlockNaturally(world, entityhuman, blockposition, iblockdata, tileentity, null);
+	}
+
+	public void breakBlockNaturally(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+		super.a(world, entityhuman, blockposition, iblockdata, tileentity);
+	}
+
+	@Override
+	public boolean I() {
+		return canApplySilkTouch();
+	}
+
+	public boolean canApplySilkTouch() {
+		return super.I();
+	}
+
+	@Override
+	protected ItemStack i(IBlockData iblockdata) {
+		return createItemStack(iblockdata);
+	}
+
+	protected ItemStack createItemStack(IBlockData blockdata) {
+		return super.i(blockdata);
 	}
 
 }
