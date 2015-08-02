@@ -15,7 +15,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
     public BlockPurpurSlabAbstract() {
         super(Material.STONE);
         IBlockData var1 = blockStateList.getBlockData();
-        if (!l()) {
+        if (!isDouble()) {
             var1 = var1.set(HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
@@ -25,7 +25,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
     @Override
     public IBlockData fromLegacyData(int var1) {
         IBlockData var2 = getBlockData().set(VARIANT, BlockPurpurSlabAbstract.EnumPurpurSlabType.DEFAULT);
-        if (!l()) {
+        if (!isDouble()) {
             var2 = var2.set(HALF, (var1 & 8) == 0 ? BlockStepAbstract.EnumSlabHalf.BOTTOM : BlockStepAbstract.EnumSlabHalf.TOP);
         }
 
@@ -35,7 +35,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
     @Override
     public int toLegacyData(IBlockData var1) {
         int var2 = 0;
-        if (!l() && (var1.get(HALF) == BlockStepAbstract.EnumSlabHalf.TOP)) {
+        if (!isDouble() && (var1.get(HALF) == BlockStepAbstract.EnumSlabHalf.TOP)) {
             var2 |= 8;
         }
 
@@ -44,7 +44,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
 
     @Override
     protected BlockStateList getStateList() {
-        return l() ? new BlockStateList(this, new IBlockState[] { VARIANT }) : new BlockStateList(this, new IBlockState[] { HALF, VARIANT });
+        return isDouble() ? new BlockStateList(this, new IBlockState[] { VARIANT }) : new BlockStateList(this, new IBlockState[] { HALF, VARIANT });
     }
 
     @Override
@@ -75,7 +75,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
     public static class BlockPurpurDoubleSlab extends BlockPurpurSlabAbstract {
 
         @Override
-        public boolean l() {
+        public boolean isDouble() {
             return true;
         }
     }
@@ -83,7 +83,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
     public static class BlockPuprpurSlab extends BlockPurpurSlabAbstract {
 
         @Override
-        public boolean l() {
+        public boolean isDouble() {
             return false;
         }
     }

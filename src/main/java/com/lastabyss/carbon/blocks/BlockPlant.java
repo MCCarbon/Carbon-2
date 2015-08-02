@@ -53,7 +53,7 @@ public class BlockPlant extends WrappedBlock {
     }
 
     @Override
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void tick(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -79,12 +79,12 @@ public class BlockPlant extends WrappedBlock {
     }
 
     @Override
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public AxisAlignedBB getBoundingBox(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }
 
     @Override
-    public boolean c() {
+    public boolean isOpaqueCube() {
         return false;
     }
 

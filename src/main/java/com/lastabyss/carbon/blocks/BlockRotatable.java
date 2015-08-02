@@ -30,16 +30,7 @@ public class BlockRotatable extends WrappedBlock {
 
     @Override
     public int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
-        return super.a(iblockaccess, blockposition, iblockdata, enumdirection); // To
-                                                                                // change
-                                                                                // body
-                                                                                // of
-                                                                                // generated
-                                                                                // methods,
-                                                                                // choose
-                                                                                // Tools
-                                                                                // |
-                                                                                // Templates.
+        return super.a(iblockaccess, blockposition, iblockdata, enumdirection);
     }
 
     @Override
@@ -82,4 +73,5 @@ public class BlockRotatable extends WrappedBlock {
     public IBlockData getPlacedState(World var1, BlockPosition var2, EnumDirection var3, float var4, float var5, float var6, int var7, EntityLiving var8) {
         return super.getPlacedState(var1, var2, var3, var4, var5, var6, var7, var8).set(AXIS, var3.k());
     }
+
 }

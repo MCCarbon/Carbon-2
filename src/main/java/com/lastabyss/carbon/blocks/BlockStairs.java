@@ -63,7 +63,7 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-    public boolean c() {
+    public boolean isOpaqueCube() {
         return false;
     }
 
@@ -78,7 +78,6 @@ public class BlockStairs extends WrappedBlock {
         } else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         }
-
     }
 
     public static boolean c(Block block) {
@@ -441,8 +440,8 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-    public boolean A() {
-        return P.A();
+    public boolean isFullCube() {
+        return P.isFullCube();
     }
 
     @Override
@@ -472,8 +471,8 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        P.b(world, blockposition, iblockdata, random);
+    public void tick(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+        P.tick(world, blockposition, iblockdata, random);
     }
 
     @Override
@@ -500,7 +499,7 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-    public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
+    public MovingObjectPosition rayTraceCollision(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
         MovingObjectPosition[] amovingobjectposition = new MovingObjectPosition[8];
         IBlockData iblockdata = world.getType(blockposition);
         int i = iblockdata.get(BlockStairs.FACING).b();

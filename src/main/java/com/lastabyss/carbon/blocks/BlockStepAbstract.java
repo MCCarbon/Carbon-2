@@ -25,7 +25,7 @@ public abstract class BlockStepAbstract extends WrappedBlock {
 
     public BlockStepAbstract(Material material) {
         super(material);
-        if (this.l()) {
+        if (this.isDouble()) {
             r = true;
         } else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
@@ -35,13 +35,13 @@ public abstract class BlockStepAbstract extends WrappedBlock {
     }
 
     @Override
-    public boolean I() {
+    public boolean canApplySilkTouch() {
         return false;
     }
 
     @Override
     public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        if (this.l()) {
+        if (this.isDouble()) {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else {
             IBlockData iblockdata = iblockaccess.getType(blockposition);
@@ -59,12 +59,11 @@ public abstract class BlockStepAbstract extends WrappedBlock {
 
     @Override
     public void j() {
-        if (this.l()) {
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        if (this.isDouble()) {
+            this.setSizes(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else {
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+            this.setSizes(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         }
-
     }
 
     @Override
@@ -74,25 +73,25 @@ public abstract class BlockStepAbstract extends WrappedBlock {
     }
 
     @Override
-    public boolean c() {
-        return this.l();
+    public boolean isOpaqueCube() {
+        return this.isDouble();
     }
 
     @Override
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         IBlockData iblockdata = super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
 
-        return this.l() ? iblockdata : ((enumdirection != EnumDirection.DOWN) && ((enumdirection == EnumDirection.UP) || (f1 <= 0.5D)) ? iblockdata : iblockdata.set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.TOP));
+        return this.isDouble() ? iblockdata : ((enumdirection != EnumDirection.DOWN) && ((enumdirection == EnumDirection.UP) || (f1 <= 0.5D)) ? iblockdata : iblockdata.set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.TOP));
     }
 
     @Override
-    public int a(Random random) {
-        return this.l() ? 2 : 1;
+    public int getDropCount(Random random) {
+        return this.isDouble() ? 2 : 1;
     }
 
     @Override
     public boolean d() {
-        return this.l();
+        return this.isDouble();
     }
 
     public abstract String b(int i);
@@ -102,7 +101,7 @@ public abstract class BlockStepAbstract extends WrappedBlock {
         return super.getDropData(world, blockposition) & 7;
     }
 
-    public abstract boolean l();
+    public abstract boolean isDouble();
 
     public abstract IBlockState<?> n();
 
