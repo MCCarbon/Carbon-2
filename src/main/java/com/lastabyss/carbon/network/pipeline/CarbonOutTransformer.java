@@ -17,9 +17,11 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
 
     private final TIntObjectHashMap<WatchedEntity> entities = new TIntObjectHashMap<WatchedEntity>();
+    private WatchedPlayer player;
 
     public void setPlayerId(int playerId) {
-        entities.put(playerId, new WatchedPlayer(playerId));
+        player = new WatchedPlayer(playerId);
+        entities.put(playerId, player);
     }
 
     @Override
@@ -29,7 +31,7 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
         int packetId = messageserializer.readVarInt();
         packetdataserializer.writeVarInt(packetId);
         switch (packetId) {
-            case 0x04: { //EntitEquip
+            case 0x04: { //EntitEquip - fix slot id (left hand now has id == 1, and other parts 2-5, main hand id remain untouched)
                 packetdataserializer.writeVarInt(messageserializer.readVarInt());
                 int slot = messageserializer.readShort();
                 if (slot > 0) {
@@ -39,7 +41,7 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                 packetdataserializer.writeBytes(messageserializer);
                 break;
             }
-            case 0x0C: { //PlayerSpawn
+            case 0x0C: { //PlayerSpawn - add random uuid and transform entity metadata
                 int entityId = messageserializer.readVarInt();
                 entities.put(entityId, new WatchedPlayer(entityId));
                 packetdataserializer.writeVarInt(entityId);
@@ -53,7 +55,7 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                 packetdataserializer.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(messageserializer)));
                 break;
             }
-            case 0x0E: { //SpawnObject
+            case 0x0E: { //SpawnObject - add random uuid
                 packetdataserializer.writeVarInt(messageserializer.readVarInt());
                 packetdataserializer.writeUUID(UUID.randomUUID()); //TODO: check if it is safe
                 packetdataserializer.writeByte(messageserializer.readByte());
@@ -75,23 +77,38 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                 }
                 break;
             }
-            case 0x0F: { //SpawnMob
+            case 0x0F: { //SpawnMob - add random uuid
                 packetdataserializer.writeVarInt(messageserializer.readVarInt());
                 packetdataserializer.writeUUID(UUID.randomUUID()); //TODO: check if it is safe
                 packetdataserializer.writeBytes(messageserializer);
                 break;
             }
-            case 0x1C: { //EntityMetadata
+            case 0x1C: { //EntityMetadata - transform entity metadata
                 int entityId = messageserializer.readVarInt();
                 packetdataserializer.writeVarInt(entityId);
                 packetdataserializer.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(messageserializer)));
                 break;
             }
-            case 0x49: { //UpdateEntityNBT
-                //was removed in 1.9
+            case 0x07: { //Respawn - reset watched entity map, and send original packet
+                entities.clear();
+                entities.put(player.getId(), player);
+                message.resetReaderIndex();
+                out.writeBytes(message);
                 return;
             }
-            default: { //Any other - just add original message
+            case 0x13: { //DestroyEntities - remove entries from watched entity map and send original packet
+                int count = messageserializer.readVarInt();
+                for (int i = 0; i < count; i++) {
+                    entities.remove(messageserializer.readVarInt());
+                }
+                message.resetReaderIndex();
+                out.writeBytes(message);
+                return;
+            }
+            case 0x49: { //UpdateEntityNBT - was removed in 1.9, just skip
+                return;
+            }
+            default: { //Any other - just send original packet
                 message.resetReaderIndex();
                 out.writeBytes(message);
                 return;
