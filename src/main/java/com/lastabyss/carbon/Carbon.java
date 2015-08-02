@@ -22,9 +22,6 @@ public class Carbon extends JavaPlugin {
 
 	public static final Logger log = Bukkit.getLogger();
 
-	private static Injector injector;
-	private static Instrumentator instrumentator;
-
 	private final double localConfigVersion = 0.1;
 
 	@Override
@@ -42,20 +39,20 @@ public class Carbon extends JavaPlugin {
 			return;
 		}
 
-		saveResource("libraries/natives/32/linux/libattach.so", true);
+		/*saveResource("libraries/natives/32/linux/libattach.so", true);
 		saveResource("libraries/natives/32/solaris/libattach.so", true);
 		saveResource("libraries/natives/32/windows/attach.dll", true);
 		saveResource("libraries/natives/64/linux/libattach.so", true);
 		saveResource("libraries/natives/64/mac/libattach.dylib", true);
 		saveResource("libraries/natives/64/solaris/libattach.so", true);
-		saveResource("libraries/natives/64/windows/attach.dll", true);
+		saveResource("libraries/natives/64/windows/attach.dll", true);*/
 
 		// Inject 1.8 features. Stop server if something fails
 		try {
 			Utilities.instantiate(this);
-			instrumentator = new Instrumentator(this, new File(getDataFolder(), "libraries/natives/").getPath());
-			instrumentator.instrumentate();
-			injector = new Injector(this);
+			//Instrumentator instrumentator = new Instrumentator(this, new File(getDataFolder(), "libraries/natives/").getPath());
+			//instrumentator.instrumentate();
+			Injector injector = new Injector(this);
 			injector.registerAll();
 			injector.registerRecipes();
 		} catch (Throwable e) {
