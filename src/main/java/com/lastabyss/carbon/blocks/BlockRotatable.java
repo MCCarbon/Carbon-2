@@ -65,7 +65,7 @@ public class BlockRotatable extends WrappedBlock {
     }
 
     @Override
-    protected ItemStack i(IBlockData var1) {
+    protected ItemStack createItemStack(IBlockData var1) {
         return new ItemStack(Item.getItemOf(this));
     }
 

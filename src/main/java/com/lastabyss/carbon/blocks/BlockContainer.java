@@ -1,6 +1,5 @@
 package com.lastabyss.carbon.blocks;
 
-import com.lastabyss.carbon.blocks.util.WrappedBlock;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.EnumDirection;
 import net.minecraft.server.v1_8_R3.IBlockData;
@@ -9,6 +8,8 @@ import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MaterialMapColor;
 import net.minecraft.server.v1_8_R3.TileEntity;
 import net.minecraft.server.v1_8_R3.World;
+
+import com.lastabyss.carbon.blocks.util.WrappedBlock;
 
 public abstract class BlockContainer extends WrappedBlock implements IContainer {
 

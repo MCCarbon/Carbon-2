@@ -1,7 +1,7 @@
 package com.lastabyss.carbon.blocks;
 
-import com.lastabyss.carbon.blocks.util.WrappedBlock;
 import java.util.Random;
+
 import net.minecraft.server.v1_8_R3.AxisAlignedBB;
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -11,9 +11,12 @@ import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MaterialMapColor;
 import net.minecraft.server.v1_8_R3.World;
+
 // CraftBukkit start
 import org.bukkit.event.block.BlockPhysicsEvent;
 // CraftBukkit end
+
+import com.lastabyss.carbon.blocks.util.WrappedBlock;
 
 public class BlockPlant extends WrappedBlock {
 
@@ -34,25 +37,28 @@ public class BlockPlant extends WrappedBlock {
         this.a(CreativeModeTab.c);
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
+    @Override
+	public boolean canPlace(World world, BlockPosition blockposition) {
         return super.canPlace(world, blockposition) && this.c(world.getType(blockposition.down()).getBlock());
     }
 
     protected boolean c(Block block) {
-        return block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND;
+        return (block == Blocks.GRASS) || (block == Blocks.DIRT) || (block == Blocks.FARMLAND);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    @Override
+	public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
         super.doPhysics(world, blockposition, iblockdata, block);
         this.e(world, blockposition, iblockdata);
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    @Override
+	public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         this.e(world, blockposition, iblockdata);
     }
 
     protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.f(world, blockposition, iblockdata)) {
+        if (!f(world, blockposition, iblockdata)) {
             // CraftBukkit Start
             org.bukkit.block.Block block = world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ());
             BlockPhysicsEvent event = new BlockPhysicsEvent(block, block.getTypeId());
@@ -72,15 +78,19 @@ public class BlockPlant extends WrappedBlock {
         return this.c(world.getType(blockposition.down()).getBlock());
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    @Override
+	public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }
 
-    public boolean c() {
+    @Override
+	public boolean c() {
         return false;
     }
 
-    public boolean d() {
+    @Override
+	public boolean d() {
         return false;
     }
+
 }

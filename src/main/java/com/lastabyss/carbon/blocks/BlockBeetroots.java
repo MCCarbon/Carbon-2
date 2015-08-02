@@ -1,6 +1,7 @@
 package com.lastabyss.carbon.blocks;
 
 import java.util.Random;
+
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.BlockStateInteger;
 import net.minecraft.server.v1_8_R3.BlockStateList;
