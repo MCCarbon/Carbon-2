@@ -38,18 +38,12 @@ task sourceJar (type : Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-task javadocJar (type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
 jar {
     baseName "Carbon2"
 }
 
 artifacts {
     archives sourceJar
-    archives javadocJar
     archives jar
 }
 
@@ -62,9 +56,6 @@ publishing {
             from components.java
             artifact sourceJar {
                 classifier = 'sources'
-            }
-            artifact javadocJar {
-                classifier = 'javadoc'
             }
         }
     }

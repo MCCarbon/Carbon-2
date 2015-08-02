@@ -233,7 +233,7 @@ public abstract class PerfDataBufferImpl {
      * This method returns a {@link List} of Monitor objects such that the name of each object matches the given pattern.
      *
      * @param patternString a string containing a pattern as described in {@link java.util.regex.Pattern}.
-     * @return List<Monitor> - a List of {@link Monitor} objects that can be used to monitor the instrumentation objects whose names match the given pattern. If no instrumentation objects have` names matching the given pattern, then an empty List is returned.
+     * @return List - a List of {@link Monitor} objects that can be used to monitor the instrumentation objects whose names match the given pattern. If no instrumentation objects have` names matching the given pattern, then an empty List is returned.
      * @throws MonitorException Thrown if an error occurs while communicating with the target Java Virtual Machine.
      * @see java.util.regex.Pattern
      */
@@ -289,6 +289,7 @@ public abstract class PerfDataBufferImpl {
      * get the list of inserted and removed monitors since last called.
      *
      * @param m the map of Monitors.
+     * @return 
      * @throws MonitorException Thrown if communications errors occur while communicating with the target.
      */
     protected abstract MonitorStatus getMonitorStatus(Map<String, Monitor> m) throws MonitorException;

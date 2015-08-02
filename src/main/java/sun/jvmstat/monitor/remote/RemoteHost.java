@@ -40,6 +40,7 @@ public interface RemoteHost extends Remote {
      * Remote method to attach to a remote HotSpot Java Virtual Machine identified by <code>vmid</code>.
      *
      * @param vmid The identifier for the target virtual machine.
+     * @param mode
      * @return RemoteVm - A remote object for accessing the remote Java Virtual Machine.
      *
      * @throws MonitorException Thrown when any other error is encountered while communicating with the target virtual machine.
