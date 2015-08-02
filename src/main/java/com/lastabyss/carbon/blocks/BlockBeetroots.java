@@ -15,6 +15,16 @@ public class BlockBeetroots extends BlockCrops {
 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 3);
 
+    @Override
+    public int getIntegerStateMax() {
+        return 3;
+    }
+
+    @Override
+    public BlockStateInteger getIntegerState() {
+        return AGE;
+    }
+
     // getSeedType
     @Override
     protected Item l() {

@@ -51,7 +51,7 @@ public class DynamicEnumType {
             throw new RuntimeException("class " + enumType + " is not an instance of Enum");
         }
         try {
-            Field valuesField = enumType.getDeclaredField("$VALUES");
+            Field valuesField = enumType.getDeclaredField("ENUM$VALUES");
 
             valuesField.setAccessible(true);
             T[] previousValues = (T[]) valuesField.get(enumType);

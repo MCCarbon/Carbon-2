@@ -25,7 +25,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 7);
 
     protected BlockCrops() {
-        this.j(blockStateList.getBlockData().set(BlockCrops.AGE, Integer.valueOf(0)));
+        this.j(blockStateList.getBlockData().set(getIntegerState(), 0));
         this.a(true);
         float f = 0.5F;
 
@@ -34,6 +34,14 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         this.c(0.0F);
         this.a(Block.h);
         K();
+    }
+
+    public int getIntegerStateMax() {
+        return 7;
+    }
+
+    public BlockStateInteger getIntegerState() {
+        return AGE;
     }
 
     @Override
@@ -45,14 +53,14 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         super.b(world, blockposition, iblockdata, random);
         if (world.getLightLevel(blockposition.up()) >= 9) {
-            int i = iblockdata.get(BlockCrops.AGE).intValue();
+            int i = iblockdata.get(getIntegerState());
 
-            if (i < 7) {
+            if (i < getIntegerStateMax()) {
                 float f = a(this, world, blockposition);
 
                 if (random.nextInt((int) (25.0F / f) + 1) == 0) {
                     // CraftBukkit start
-                    IBlockData data = iblockdata.set(AGE, Integer.valueOf(i + 1));
+                    IBlockData data = iblockdata.set(getIntegerState(), i + 1);
                     CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, toLegacyData(data));
                     // CraftBukkit end
                 }
@@ -62,14 +70,14 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = iblockdata.get(BlockCrops.AGE).intValue() + MathHelper.nextInt(world.random, 2, 5);
+        int i = iblockdata.get(getIntegerState()).intValue() + MathHelper.nextInt(world.random, 2, 5);
 
-        if (i > 7) {
-            i = 7;
+        if (i > getIntegerStateMax()) {
+            i = getIntegerStateMax();
         }
 
         // CraftBukkit start
-        IBlockData data = iblockdata.set(AGE, Integer.valueOf(i));
+        IBlockData data = iblockdata.set(getIntegerState(), i);
         CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, toLegacyData(data));
         // CraftBukkit end
     }
@@ -135,9 +143,9 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, 0);
         if (!world.isClientSide) {
-            int j = iblockdata.get(BlockCrops.AGE).intValue();
+            int j = iblockdata.get(getIntegerState()).intValue();
 
-            if (j >= 7) {
+            if (j >= getIntegerStateMax()) {
                 int k = 3 + i;
 
                 for (int l = 0; l < k; ++l) {
@@ -152,12 +160,12 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     @Override
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return iblockdata.get(BlockCrops.AGE).intValue() == 7 ? n() : this.l();
+        return iblockdata.get(getIntegerState()) == getIntegerStateMax() ? n() : this.l();
     }
 
     @Override
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
-        return iblockdata.get(BlockCrops.AGE).intValue() < 7;
+        return iblockdata.get(getIntegerState()) < getIntegerStateMax();
     }
 
     @Override
@@ -172,16 +180,16 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     @Override
     public IBlockData fromLegacyData(int i) {
-        return getBlockData().set(BlockCrops.AGE, Integer.valueOf(i));
+        return getBlockData().set(getIntegerState(), i);
     }
 
     @Override
     public int toLegacyData(IBlockData iblockdata) {
-        return iblockdata.get(BlockCrops.AGE).intValue();
+        return iblockdata.get(getIntegerState());
     }
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockCrops.AGE });
+        return new BlockStateList(this, new IBlockState[] { AGE });
     }
 }
