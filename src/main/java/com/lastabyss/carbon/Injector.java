@@ -14,6 +14,7 @@ import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Utils;
 
 import net.minecraft.server.v1_8_R3.Block;
@@ -23,14 +24,10 @@ import net.minecraft.server.v1_8_R3.Enchantment;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 import net.minecraft.server.v1_8_R3.EntityTypes.MonsterEggInfo;
-import net.minecraft.server.v1_8_R3.EnumProtocol;
-import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
 import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketListener;
 import net.minecraft.server.v1_8_R3.PotionBrewer;
 import net.minecraft.server.v1_8_R3.TileEntity;
 import net.minecraft.server.v1_8_R3.Material;
@@ -46,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  * The injector class is the driver behind Carbon.
@@ -55,13 +51,12 @@ import java.util.logging.Level;
  */
 public class Injector {
 
-    private Carbon plugin;
-
     public Injector(Carbon plugin) {
-        this.plugin = plugin;
     }
 
     public void registerAll() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InvocationTargetException, NoSuchMethodException {
+        //Inject network
+        NetworkInjector.inject();
         //Add new blocks
         Utils.addMaterial("END_ROD_BLOCK", 198);
         registerBlock(198, "end_rod", new BlockEndRod().setStrength(0.0F).setLightLevel(0.9375F).setStepSound(SoundUtil.WOOD).setName("endRod"));
@@ -132,9 +127,6 @@ public class Injector {
             final int stateId = (id << 4) | block.toLegacyData(blockdata);
             Block.d.a(blockdata, stateId);
         }
-        if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-            Carbon.log.log(Level.INFO, "[Carbon] Block {0} was registered into Minecraft.", name);
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -149,25 +141,16 @@ public class Injector {
         }
         Item.REGISTRY.a(id, stringkey, item);
         ((Map<Block, Item>) Utils.<Field>setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, item);
-        if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-            Carbon.log.log(Level.INFO, "[Carbon] Block {0} with item {1} was registered into Minecraft.", new Object[]{name + "(" + block.getName() + ")", item.getName()});
-        }
     }
 
     public void registerItem(int id, String name, Item item) {
         Item.REGISTRY.a(id, new MinecraftKey(name), item);
-        if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-            Carbon.log.log(Level.INFO, "[Carbon] Item {0} was registered into Minecraft.", name);
-        }
     }
 
     @SuppressWarnings("unchecked")
     public void registerTileEntity(Class<? extends TileEntity> entityClass, String name) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
         ((Map<String, Class<? extends TileEntity>>) Utils.<Field>setAccessible(TileEntity.class.getDeclaredField("f")).get(null)).put(name, entityClass);
         ((Map<Class<? extends TileEntity>, String>) Utils.<Field>setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
-        if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-            Carbon.log.log(Level.INFO, "[Carbon] Tile Entity {0} was registered into Minecraft.", entityClass.getCanonicalName());
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -175,9 +158,6 @@ public class Injector {
         Field classToIdField = DataWatcher.class.getDeclaredField("classToId");
         classToIdField.setAccessible(true);
         ((TObjectIntMap<Class<?>>) classToIdField.get(null)).put(type, id);
-        if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-            Carbon.log.log(Level.INFO, "[Carbon] DataWatcher type {0} was registered into Minecraft.", type.getCanonicalName());
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -187,9 +167,6 @@ public class Injector {
         ((Map<Integer, Class<? extends Entity>>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("e")).get(null)).put(id, entityClass);
         ((Map<Class<? extends Entity>, Integer>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("f")).get(null)).put(entityClass, id);
         ((Map<String, Integer>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("g")).get(null)).put(name, id);
-        if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-            Carbon.log.log(Level.INFO, "[Carbon] Entity {0} was registered into Minecraft.", entityClass.getCanonicalName());
-        }
     }
 
     public void registerEntity(Class<? extends Entity> entityClass, String name, int id, int monsterEgg, int monsterEggData) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -198,42 +175,17 @@ public class Injector {
     }
 
     @SuppressWarnings("unchecked")
-    public void registerPacket(EnumProtocol protocol, Class<? extends Packet<? extends PacketListener>> packetClass, int packetID, boolean isClientbound) {
-        if (plugin.getConfig().getBoolean("modify.packets." + packetID, true)) {
-            try {
-                ((Map<Class<? extends Packet<? extends PacketListener>>, EnumProtocol>) Utils.<Field>setAccessible(EnumProtocol.class.getDeclaredField("f")).get(null)).put(packetClass, protocol);
-                ((Map<EnumProtocolDirection, Map<Integer, Class<? extends Packet<? extends PacketListener>>>>) Utils.<Field>setAccessible(EnumProtocol.class.getDeclaredField("h")).get(protocol)).get(isClientbound ? EnumProtocolDirection.CLIENTBOUND : EnumProtocolDirection.SERVERBOUND).put(packetID, packetClass);
-                if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-                    Carbon.log.log(Level.INFO, "[Carbon] Packet {0} was registered into Minecraft with ID: " + packetID, packetClass.getCanonicalName());
-                }
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace(System.out);
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     public void registerPotionEffect(int effectId, String durations, String amplifier) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        if (plugin.getConfig().getBoolean("modify.potions." + effectId, true)) {
-            ((Map<Integer, String>) Utils.<Field>setAccessible(PotionBrewer.class.getDeclaredField("effectDurations")).get(null)).put(effectId, durations);
-            ((Map<Integer, String>) Utils.<Field>setAccessible(PotionBrewer.class.getDeclaredField("effectAmplifiers")).get(null)).put(effectId, amplifier);
-            if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-                Carbon.log.log(Level.INFO, "[Carbon] PoitonEffect {0} was registered into Minecraft.", effectId);
-            }
-        }
+        ((Map<Integer, String>) Utils.<Field>setAccessible(PotionBrewer.class.getDeclaredField("effectDurations")).get(null)).put(effectId, durations);
+        ((Map<Integer, String>) Utils.<Field>setAccessible(PotionBrewer.class.getDeclaredField("effectAmplifiers")).get(null)).put(effectId, amplifier);
     }
 
     public void registerEnchantment(Enchantment enhcantment) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        if (plugin.getConfig().getBoolean("modify.enchantments." + enhcantment.id)) {
-            Utils.<Field>setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, true);
-            ArrayList<Enchantment> enchants = new ArrayList<Enchantment>(Arrays.asList(Enchantment.b));
-            enchants.add(enhcantment);
-            Utils.setFinalField(Enchantment.class.getField("b"), null, enchants.toArray(new Enchantment[0]));
-            Utils.<Field>setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, false);
-            if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-                Carbon.log.log(Level.INFO, "[Carbon] Enchantment {0} was registered into Minecraft.", enhcantment);
-            }
-        }
+        Utils.<Field>setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, true);
+        ArrayList<Enchantment> enchants = new ArrayList<Enchantment>(Arrays.asList(Enchantment.b));
+        enchants.add(enhcantment);
+        Utils.setFinalField(Enchantment.class.getField("b"), null, enchants.toArray(new Enchantment[0]));
+        Utils.<Field>setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, false);
     }
 
     private void fixBlocksRefs() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -261,4 +213,5 @@ public class Injector {
             }
         }
     }
+
 }

@@ -19,6 +19,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import io.netty.buffer.ByteBuf;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -282,6 +284,18 @@ public class Utils {
         setAccessible(Field.class.getDeclaredField("root")).set(field, null);
         setAccessible(Field.class.getDeclaredField("overrideFieldAccessor")).set(field, null);
         setAccessible(field).set(obj, newValue);
+    }
+
+    /**
+     * Returns ByteBuf contents as byte array
+     * 
+     * @param buf
+     * @return
+     */
+    public static byte[] toArray(ByteBuf buf) {
+        byte[] result = new byte[buf.readableBytes()];
+        buf.readBytes(result);
+        return result;
     }
 
 }

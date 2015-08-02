@@ -1,6 +1,7 @@
 package com.lastabyss.carbon;
 
 import com.lastabyss.carbon.instrumentation.Instrumentator;
+import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Metrics;
 import com.lastabyss.carbon.utils.Utils;
 
@@ -25,12 +26,8 @@ public class Carbon extends JavaPlugin {
     private static Injector injector;
     private static Instrumentator instrumentator;
 
-    private final double localConfigVersion = 0.1;
-
     @Override
     public void onLoad() {
-		// TODO: instead of loading as a plugin, just inject into BootClassPath
-
         // call to server shutdown if worlds are already loaded, prevents various errors when loading plugin on the fly
         if (!Bukkit.getWorlds().isEmpty()) {
             log.log(Level.SEVERE, "World loaded before{0} {1}! (Was {2} loaded on the fly?)", new Object[]{pluginDescriptionFile.getName(), pluginDescriptionFile.getVersion(), pluginDescriptionFile.getName()});
@@ -70,26 +67,13 @@ public class Carbon extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        if (!this.getDataFolder().exists()) {
-            this.getDataFolder().mkdirs();
-        }
-        reloadConfig();
-
-        if (getConfig().getDouble("donottouch.configVersion", 0.0f) < localConfigVersion) {
-            log.warning("Please delete your Carbon config and let it regenerate! Yours is outdated and may cause issues with the mod!");
-        }
-
+        getServer().getPluginManager().registerEvents(new NetworkInjector(), this);
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (IOException e) {
         }
         log.info("Carbon is enabled.");
-    }
-
-    public double getLocalConfigVersion() {
-        return localConfigVersion;
     }
 
 }
