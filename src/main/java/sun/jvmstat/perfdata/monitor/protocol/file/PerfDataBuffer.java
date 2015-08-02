@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor.protocol.file;
 
 import sun.jvmstat.monitor.*;
@@ -42,38 +41,37 @@ import java.nio.channels.FileChannel;
  */
 public class PerfDataBuffer extends AbstractPerfDataBuffer {
 
-	/**
-	 * Create a PerfDataBuffer instance for accessing the specified instrumentation buffer.
-	 *
-	 * @param vmid
-	 *            the <em>file:</em> URI to the instrumentation buffer file
-	 *
-	 * @throws MonitorException
-	 */
-	public PerfDataBuffer(VmIdentifier vmid) throws MonitorException {
-		File f = new File(vmid.getURI());
-		String mode = vmid.getMode();
+    /**
+     * Create a PerfDataBuffer instance for accessing the specified instrumentation buffer.
+     *
+     * @param vmid the <em>file:</em> URI to the instrumentation buffer file
+     *
+     * @throws MonitorException
+     */
+    public PerfDataBuffer(VmIdentifier vmid) throws MonitorException {
+        File f = new File(vmid.getURI());
+        String mode = vmid.getMode();
 
-		try {
-			@SuppressWarnings("resource")
-			FileChannel fc = new RandomAccessFile(f, mode).getChannel();
-			ByteBuffer bb = null;
+        try {
+            @SuppressWarnings("resource")
+            FileChannel fc = new RandomAccessFile(f, mode).getChannel();
+            ByteBuffer bb = null;
 
-			if (mode.compareTo("r") == 0) {
-				bb = fc.map(FileChannel.MapMode.READ_ONLY, 0L, (int) fc.size());
-			} else if (mode.compareTo("rw") == 0) {
-				bb = fc.map(FileChannel.MapMode.READ_WRITE, 0L, (int) fc.size());
-			} else {
-				throw new IllegalArgumentException("Invalid mode: " + mode);
-			}
+            if (mode.compareTo("r") == 0) {
+                bb = fc.map(FileChannel.MapMode.READ_ONLY, 0L, (int) fc.size());
+            } else if (mode.compareTo("rw") == 0) {
+                bb = fc.map(FileChannel.MapMode.READ_WRITE, 0L, (int) fc.size());
+            } else {
+                throw new IllegalArgumentException("Invalid mode: " + mode);
+            }
 
-			fc.close(); // doesn't need to remain open
+            fc.close(); // doesn't need to remain open
 
-			createPerfDataBuffer(bb, 0);
-		} catch (FileNotFoundException e) {
-			throw new MonitorException("Could not find " + vmid.toString());
-		} catch (IOException e) {
-			throw new MonitorException("Could not read " + vmid.toString());
-		}
-	}
+            createPerfDataBuffer(bb, 0);
+        } catch (FileNotFoundException e) {
+            throw new MonitorException("Could not find " + vmid.toString());
+        } catch (IOException e) {
+            throw new MonitorException("Could not read " + vmid.toString());
+        }
+    }
 }

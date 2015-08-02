@@ -22,7 +22,6 @@
  * or visit www.oracle.com if you need additional information or have any
  * questions.
  */
-
 package sun.tools.attach;
 
 import com.sun.tools.attach.VirtualMachine;
@@ -37,41 +36,41 @@ import java.io.IOException;
  */
 public class LinuxAttachProvider extends HotSpotAttachProvider {
 
-	public LinuxAttachProvider() {
-	}
+    public LinuxAttachProvider() {
+    }
 
-	public String name() {
-		return "sun";
-	}
+    public String name() {
+        return "sun";
+    }
 
-	public String type() {
-		return "socket";
-	}
+    public String type() {
+        return "socket";
+    }
 
-	public VirtualMachine attachVirtualMachine(String vmid) throws AttachNotSupportedException, IOException {
-		checkAttachPermission();
+    public VirtualMachine attachVirtualMachine(String vmid) throws AttachNotSupportedException, IOException {
+        checkAttachPermission();
 
 		// AttachNotSupportedException will be thrown if the target VM can be determined
-		// to be not attachable.
-		testAttachable(vmid);
+        // to be not attachable.
+        testAttachable(vmid);
 
-		return new LinuxVirtualMachine(this, vmid);
-	}
+        return new LinuxVirtualMachine(this, vmid);
+    }
 
-	public VirtualMachine attachVirtualMachine(VirtualMachineDescriptor vmd) throws AttachNotSupportedException, IOException {
-		if (vmd.provider() != this) {
-			throw new AttachNotSupportedException("provider mismatch");
-		}
+    public VirtualMachine attachVirtualMachine(VirtualMachineDescriptor vmd) throws AttachNotSupportedException, IOException {
+        if (vmd.provider() != this) {
+            throw new AttachNotSupportedException("provider mismatch");
+        }
 		// To avoid re-checking if the VM if attachable, we check if the descriptor
-		// is for a hotspot VM - these descriptors are created by the listVirtualMachines
-		// implementation which only returns a list of attachable VMs.
-		if (vmd instanceof HotSpotVirtualMachineDescriptor) {
-			assert ((HotSpotVirtualMachineDescriptor) vmd).isAttachable();
-			checkAttachPermission();
-			return new LinuxVirtualMachine(this, vmd.id());
-		} else {
-			return attachVirtualMachine(vmd.id());
-		}
-	}
+        // is for a hotspot VM - these descriptors are created by the listVirtualMachines
+        // implementation which only returns a list of attachable VMs.
+        if (vmd instanceof HotSpotVirtualMachineDescriptor) {
+            assert ((HotSpotVirtualMachineDescriptor) vmd).isAttachable();
+            checkAttachPermission();
+            return new LinuxVirtualMachine(this, vmd.id());
+        } else {
+            return attachVirtualMachine(vmd.id());
+        }
+    }
 
 }

@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.monitor;
 
 /**
@@ -35,10 +34,10 @@ package sun.jvmstat.monitor;
  */
 public interface IntegerMonitor extends Monitor {
 
-	/**
-	 * Get the value of this Integer Instrumentation Object
-	 *
-	 * return int - the current value of this instrumentation object
-	 */
-	public int intValue();
+    /**
+     * Get the value of this Integer Instrumentation Object
+     *
+     * return int - the current value of this instrumentation object
+     */
+    public int intValue();
 }

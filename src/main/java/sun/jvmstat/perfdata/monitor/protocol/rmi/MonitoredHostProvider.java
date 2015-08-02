@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor.protocol.rmi;
 
 import sun.jvmstat.monitor.*;
@@ -41,279 +40,276 @@ import java.rmi.*;
  * @since 1.5
  */
 public class MonitoredHostProvider extends MonitoredHost {
-	private static final String serverName = "/JStatRemoteHost";
-	private static final int DEFAULT_POLLING_INTERVAL = 1000;
 
-	private ArrayList<HostListener> listeners;
-	private NotifierTask task;
-	private HashSet<Integer> activeVms;
-	private RemoteVmManager vmManager;
-	private RemoteHost remoteHost;
-	private Timer timer;
+    private static final String serverName = "/JStatRemoteHost";
+    private static final int DEFAULT_POLLING_INTERVAL = 1000;
 
-	/**
-	 * Create a MonitoredHostProvider instance using the given HostIdentifier.
-	 *
-	 * @param hostId
-	 *            the host identifier for this MonitoredHost
-	 * @throws MonitorException
-	 *             Thrown on any error encountered while communicating with the remote host.
-	 */
-	public MonitoredHostProvider(HostIdentifier hostId) throws MonitorException {
-		this.hostId = hostId;
-		this.listeners = new ArrayList<HostListener>();
-		this.interval = DEFAULT_POLLING_INTERVAL;
-		this.activeVms = new HashSet<Integer>();
+    private ArrayList<HostListener> listeners;
+    private NotifierTask task;
+    private HashSet<Integer> activeVms;
+    private RemoteVmManager vmManager;
+    private RemoteHost remoteHost;
+    private Timer timer;
 
-		String rmiName;
-		String sn = serverName;
-		String path = hostId.getPath();
+    /**
+     * Create a MonitoredHostProvider instance using the given HostIdentifier.
+     *
+     * @param hostId the host identifier for this MonitoredHost
+     * @throws MonitorException Thrown on any error encountered while communicating with the remote host.
+     */
+    public MonitoredHostProvider(HostIdentifier hostId) throws MonitorException {
+        this.hostId = hostId;
+        this.listeners = new ArrayList<HostListener>();
+        this.interval = DEFAULT_POLLING_INTERVAL;
+        this.activeVms = new HashSet<Integer>();
 
-		if ((path != null) && (path.length() > 0)) {
-			sn = path;
-		}
+        String rmiName;
+        String sn = serverName;
+        String path = hostId.getPath();
 
-		if (hostId.getPort() != -1) {
-			rmiName = "rmi://" + hostId.getHost() + ":" + hostId.getPort() + sn;
-		} else {
-			rmiName = "rmi://" + hostId.getHost() + sn;
-		}
+        if ((path != null) && (path.length() > 0)) {
+            sn = path;
+        }
 
-		try {
-			remoteHost = (RemoteHost) Naming.lookup(rmiName);
+        if (hostId.getPort() != -1) {
+            rmiName = "rmi://" + hostId.getHost() + ":" + hostId.getPort() + sn;
+        } else {
+            rmiName = "rmi://" + hostId.getHost() + sn;
+        }
 
-		} catch (RemoteException e) {
-			/*
-			 * rmi registry not available
-			 * 
-			 * Access control exceptions, where the rmi server refuses a connection based on policy file configuration, come through here on the client side. Unfortunately, the RemoteException doesn't contain enough information to determine the true cause of the exception. So, we have to output a rather generic message.
-			 */
-			String message = "RMI Registry not available at " + hostId.getHost();
+        try {
+            remoteHost = (RemoteHost) Naming.lookup(rmiName);
 
-			if (hostId.getPort() == -1) {
-				message = message + ":" + java.rmi.registry.Registry.REGISTRY_PORT;
-			} else {
-				message = message + ":" + hostId.getPort();
-			}
+        } catch (RemoteException e) {
+            /*
+             * rmi registry not available
+             * 
+             * Access control exceptions, where the rmi server refuses a connection based on policy file configuration, come through here on the client side. Unfortunately, the RemoteException doesn't contain enough information to determine the true cause of the exception. So, we have to output a rather generic message.
+             */
+            String message = "RMI Registry not available at " + hostId.getHost();
 
-			if (e.getMessage() != null) {
-				throw new MonitorException(message + "\n" + e.getMessage(), e);
-			} else {
-				throw new MonitorException(message, e);
-			}
+            if (hostId.getPort() == -1) {
+                message = message + ":" + java.rmi.registry.Registry.REGISTRY_PORT;
+            } else {
+                message = message + ":" + hostId.getPort();
+            }
 
-		} catch (NotBoundException e) {
-			// no server with given name
-			String message = e.getMessage();
-			if (message == null)
-				message = rmiName;
-			throw new MonitorException("RMI Server " + message + " not available", e);
-		} catch (MalformedURLException e) {
-			// this is a programming problem
-			e.printStackTrace(System.out);
-			throw new IllegalArgumentException("Malformed URL: " + rmiName);
-		}
-		this.vmManager = new RemoteVmManager(remoteHost);
-		this.timer = new Timer(true);
-	}
+            if (e.getMessage() != null) {
+                throw new MonitorException(message + "\n" + e.getMessage(), e);
+            } else {
+                throw new MonitorException(message, e);
+            }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public MonitoredVm getMonitoredVm(VmIdentifier vmid) throws MonitorException {
-		return getMonitoredVm(vmid, DEFAULT_POLLING_INTERVAL);
-	}
+        } catch (NotBoundException e) {
+            // no server with given name
+            String message = e.getMessage();
+            if (message == null) {
+                message = rmiName;
+            }
+            throw new MonitorException("RMI Server " + message + " not available", e);
+        } catch (MalformedURLException e) {
+            // this is a programming problem
+            e.printStackTrace(System.out);
+            throw new IllegalArgumentException("Malformed URL: " + rmiName);
+        }
+        this.vmManager = new RemoteVmManager(remoteHost);
+        this.timer = new Timer(true);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public MonitoredVm getMonitoredVm(VmIdentifier vmid, int interval) throws MonitorException {
-		VmIdentifier nvmid = null;
-		try {
-			nvmid = hostId.resolve(vmid);
-			RemoteVm rvm = remoteHost.attachVm(vmid.getLocalVmId(), vmid.getMode());
-			RemoteMonitoredVm rmvm = new RemoteMonitoredVm(rvm, nvmid, timer, interval);
-			rmvm.attach();
-			return rmvm;
+    /**
+     * {@inheritDoc}
+     */
+    public MonitoredVm getMonitoredVm(VmIdentifier vmid) throws MonitorException {
+        return getMonitoredVm(vmid, DEFAULT_POLLING_INTERVAL);
+    }
 
-		} catch (RemoteException e) {
-			throw new MonitorException("Remote Exception attaching to " + nvmid.toString(), e);
-		} catch (URISyntaxException e) {
-			/*
-			 * the VmIdentifier is expected to be a valid and should resolve easonably against the host identifier. A URISyntaxException here is most likely a programming error.
-			 */
-			throw new IllegalArgumentException("Malformed URI: " + vmid.toString(), e);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public MonitoredVm getMonitoredVm(VmIdentifier vmid, int interval) throws MonitorException {
+        VmIdentifier nvmid = null;
+        try {
+            nvmid = hostId.resolve(vmid);
+            RemoteVm rvm = remoteHost.attachVm(vmid.getLocalVmId(), vmid.getMode());
+            RemoteMonitoredVm rmvm = new RemoteMonitoredVm(rvm, nvmid, timer, interval);
+            rmvm.attach();
+            return rmvm;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void detach(MonitoredVm vm) throws MonitorException {
-		RemoteMonitoredVm rmvm = (RemoteMonitoredVm) vm;
-		rmvm.detach();
-		try {
-			remoteHost.detachVm(rmvm.getRemoteVm());
+        } catch (RemoteException e) {
+            throw new MonitorException("Remote Exception attaching to " + nvmid.toString(), e);
+        } catch (URISyntaxException e) {
+            /*
+             * the VmIdentifier is expected to be a valid and should resolve easonably against the host identifier. A URISyntaxException here is most likely a programming error.
+             */
+            throw new IllegalArgumentException("Malformed URI: " + vmid.toString(), e);
+        }
+    }
 
-		} catch (RemoteException e) {
-			throw new MonitorException("Remote Exception detaching from " + vm.getVmIdentifier().toString(), e);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void detach(MonitoredVm vm) throws MonitorException {
+        RemoteMonitoredVm rmvm = (RemoteMonitoredVm) vm;
+        rmvm.detach();
+        try {
+            remoteHost.detachVm(rmvm.getRemoteVm());
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void addHostListener(HostListener listener) {
-		synchronized (listeners) {
-			listeners.add(listener);
-			if (task == null) {
-				task = new NotifierTask();
-				timer.schedule(task, 0, interval);
-			}
-		}
-	}
+        } catch (RemoteException e) {
+            throw new MonitorException("Remote Exception detaching from " + vm.getVmIdentifier().toString(), e);
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void removeHostListener(HostListener listener) {
-		/*
-		 * XXX: if a disconnect method is added, make sure it calls this method to unregister this object from the watcher. otherwise, an unused MonitoredHostProvider instance may go uncollected.
-		 */
-		synchronized (listeners) {
-			listeners.remove(listener);
-			if (listeners.isEmpty() && (task != null)) {
-				task.cancel();
-				task = null;
-			}
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void addHostListener(HostListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
+            if (task == null) {
+                task = new NotifierTask();
+                timer.schedule(task, 0, interval);
+            }
+        }
+    }
 
-	public void setInterval(int newInterval) {
-		synchronized (listeners) {
-			if (newInterval == interval) {
-				return;
-			}
+    /**
+     * {@inheritDoc}
+     */
+    public void removeHostListener(HostListener listener) {
+        /*
+         * XXX: if a disconnect method is added, make sure it calls this method to unregister this object from the watcher. otherwise, an unused MonitoredHostProvider instance may go uncollected.
+         */
+        synchronized (listeners) {
+            listeners.remove(listener);
+            if (listeners.isEmpty() && (task != null)) {
+                task.cancel();
+                task = null;
+            }
+        }
+    }
 
-			int oldInterval = interval;
-			super.setInterval(newInterval);
+    public void setInterval(int newInterval) {
+        synchronized (listeners) {
+            if (newInterval == interval) {
+                return;
+            }
 
-			if (task != null) {
-				task.cancel();
-				NotifierTask oldTask = task;
-				task = new NotifierTask();
-				CountedTimerTaskUtils.reschedule(timer, oldTask, task, oldInterval, newInterval);
-			}
-		}
-	}
+            int oldInterval = interval;
+            super.setInterval(newInterval);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Set<Integer> activeVms() throws MonitorException {
-		return vmManager.activeVms();
-	}
+            if (task != null) {
+                task.cancel();
+                NotifierTask oldTask = task;
+                task = new NotifierTask();
+                CountedTimerTaskUtils.reschedule(timer, oldTask, task, oldInterval, newInterval);
+            }
+        }
+    }
 
-	/**
-	 * Fire VmStatusChangeEvent events to HostListener objects
-	 *
-	 * @param active
-	 *            Set of Integer objects containing the local Vm Identifiers of the active JVMs
-	 * @param started
-	 *            Set of Integer objects containing the local Vm Identifiers of new JVMs started since last interval.
-	 * @param terminated
-	 *            Set of Integer objects containing the local Vm Identifiers of terminated JVMs since last interval.
-	 */
-	@SuppressWarnings("unchecked")
-	private void fireVmStatusChangedEvents(Set<Integer> active, Set<Integer> started, Set<Object> terminated) {
-		ArrayList<HostListener> registered = null;
-		VmStatusChangeEvent ev = null;
+    /**
+     * {@inheritDoc}
+     */
+    public Set<Integer> activeVms() throws MonitorException {
+        return vmManager.activeVms();
+    }
 
-		synchronized (listeners) {
-			registered = (ArrayList<HostListener>) listeners.clone();
-		}
+    /**
+     * Fire VmStatusChangeEvent events to HostListener objects
+     *
+     * @param active Set of Integer objects containing the local Vm Identifiers of the active JVMs
+     * @param started Set of Integer objects containing the local Vm Identifiers of new JVMs started since last interval.
+     * @param terminated Set of Integer objects containing the local Vm Identifiers of terminated JVMs since last interval.
+     */
+    @SuppressWarnings("unchecked")
+    private void fireVmStatusChangedEvents(Set<Integer> active, Set<Integer> started, Set<Object> terminated) {
+        ArrayList<HostListener> registered = null;
+        VmStatusChangeEvent ev = null;
 
-		for (Iterator<HostListener> i = registered.iterator(); i.hasNext(); /* empty */) {
-			HostListener l = (HostListener) i.next();
-			if (ev == null) {
-				ev = new VmStatusChangeEvent(this, active, started, terminated);
-			}
-			l.vmStatusChanged(ev);
-		}
-	}
+        synchronized (listeners) {
+            registered = (ArrayList<HostListener>) listeners.clone();
+        }
 
-	/**
-	 * Fire hostDisconnectEvent events.
-	 */
-	@SuppressWarnings("unchecked")
-	void fireDisconnectedEvents() {
-		ArrayList<HostListener> registered = null;
-		HostEvent ev = null;
+        for (Iterator<HostListener> i = registered.iterator(); i.hasNext(); /* empty */) {
+            HostListener l = (HostListener) i.next();
+            if (ev == null) {
+                ev = new VmStatusChangeEvent(this, active, started, terminated);
+            }
+            l.vmStatusChanged(ev);
+        }
+    }
 
-		synchronized (listeners) {
-			registered = (ArrayList<HostListener>) listeners.clone();
-		}
+    /**
+     * Fire hostDisconnectEvent events.
+     */
+    @SuppressWarnings("unchecked")
+    void fireDisconnectedEvents() {
+        ArrayList<HostListener> registered = null;
+        HostEvent ev = null;
 
-		for (Iterator<HostListener> i = registered.iterator(); i.hasNext(); /* empty */) {
-			HostListener l = (HostListener) i.next();
-			if (ev == null) {
-				ev = new HostEvent(this);
-			}
-			l.disconnected(ev);
-		}
-	}
+        synchronized (listeners) {
+            registered = (ArrayList<HostListener>) listeners.clone();
+        }
 
-	/**
-	 * class to poll the remote machine and generate local event notifications.
-	 */
-	private class NotifierTask extends CountedTimerTask {
-		public void run() {
-			super.run();
+        for (Iterator<HostListener> i = registered.iterator(); i.hasNext(); /* empty */) {
+            HostListener l = (HostListener) i.next();
+            if (ev == null) {
+                ev = new HostEvent(this);
+            }
+            l.disconnected(ev);
+        }
+    }
 
-			// save the last set of active JVMs
-			Set<Integer> lastActiveVms = activeVms;
+    /**
+     * class to poll the remote machine and generate local event notifications.
+     */
+    private class NotifierTask extends CountedTimerTask {
 
-			try {
-				// get the current set of active JVMs
-				activeVms = (HashSet<Integer>) vmManager.activeVms();
+        public void run() {
+            super.run();
 
-			} catch (MonitorException e) {
-				// XXX: use logging api
-				System.err.println("MonitoredHostProvider: polling task " + "caught MonitorException:");
-				e.printStackTrace(System.out);
+            // save the last set of active JVMs
+            Set<Integer> lastActiveVms = activeVms;
 
-				// mark the HostManager as errored and notify listeners
-				setLastException(e);
-				fireDisconnectedEvents();
-			}
+            try {
+                // get the current set of active JVMs
+                activeVms = (HashSet<Integer>) vmManager.activeVms();
 
-			if (activeVms.isEmpty()) {
-				return;
-			}
+            } catch (MonitorException e) {
+                // XXX: use logging api
+                System.err.println("MonitoredHostProvider: polling task " + "caught MonitorException:");
+                e.printStackTrace(System.out);
 
-			Set<Integer> startedVms = new HashSet<Integer>();
-			Set<Object> terminatedVms = new HashSet<Object>();
+                // mark the HostManager as errored and notify listeners
+                setLastException(e);
+                fireDisconnectedEvents();
+            }
 
-			for (Iterator<Integer> i = activeVms.iterator(); i.hasNext(); /* empty */) {
-				Integer vmid = (Integer) i.next();
-				if (!lastActiveVms.contains(vmid)) {
-					// a new file has been detected, add to set
-					startedVms.add(vmid);
-				}
-			}
+            if (activeVms.isEmpty()) {
+                return;
+            }
 
-			for (Iterator<Integer> i = lastActiveVms.iterator(); i.hasNext();
-			/* empty */) {
-				Object o = i.next();
-				if (!activeVms.contains(o)) {
-					// JVM has terminated, remove it from the active list
-					terminatedVms.add(o);
-				}
-			}
+            Set<Integer> startedVms = new HashSet<Integer>();
+            Set<Object> terminatedVms = new HashSet<Object>();
 
-			if (!startedVms.isEmpty() || !terminatedVms.isEmpty()) {
-				fireVmStatusChangedEvents(activeVms, startedVms, terminatedVms);
-			}
-		}
-	}
+            for (Iterator<Integer> i = activeVms.iterator(); i.hasNext(); /* empty */) {
+                Integer vmid = (Integer) i.next();
+                if (!lastActiveVms.contains(vmid)) {
+                    // a new file has been detected, add to set
+                    startedVms.add(vmid);
+                }
+            }
+
+            for (Iterator<Integer> i = lastActiveVms.iterator(); i.hasNext(); /* empty */) {
+                Object o = i.next();
+                if (!activeVms.contains(o)) {
+                    // JVM has terminated, remove it from the active list
+                    terminatedVms.add(o);
+                }
+            }
+
+            if (!startedVms.isEmpty() || !terminatedVms.isEmpty()) {
+                fireVmStatusChangedEvents(activeVms, startedVms, terminatedVms);
+            }
+        }
+    }
 }

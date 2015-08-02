@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor;
 
 import java.net.*;
@@ -35,120 +34,122 @@ import java.util.*;
  * alias name [alias]*
  *
  * Java style comments can occur anywhere within the file.
- * 
+ *
  * @author Brian Doherty
  * @since 1.5
  */
 public class AliasFileParser {
-	private static final String ALIAS = "alias";
-	private static final boolean DEBUG = false;
 
-	// other variables
-	private URL inputfile;
-	private StreamTokenizer st;
-	private Token currentToken;
+    private static final String ALIAS = "alias";
+    private static final boolean DEBUG = false;
 
-	AliasFileParser(URL inputfile) {
-		this.inputfile = inputfile;
-	}
+    // other variables
+    private URL inputfile;
+    private StreamTokenizer st;
+    private Token currentToken;
 
-	// value class to hold StreamTokenizer token values
-	private class Token {
-		public String sval;
-		public int ttype;
+    AliasFileParser(URL inputfile) {
+        this.inputfile = inputfile;
+    }
 
-		public Token(int ttype, String sval) {
-			this.ttype = ttype;
-			this.sval = sval;
-		}
-	}
+    // value class to hold StreamTokenizer token values
+    private class Token {
 
-	private void logln(String s) {
-		if (DEBUG) {
-			System.err.println(s);
-		}
-	}
+        public String sval;
+        public int ttype;
 
-	/**
-	 * method to get the next token as a Token type
-	 */
-	private void nextToken() throws IOException {
-		st.nextToken();
-		currentToken = new Token(st.ttype, st.sval);
+        public Token(int ttype, String sval) {
+            this.ttype = ttype;
+            this.sval = sval;
+        }
+    }
 
-		logln("Read token: type = " + currentToken.ttype + " string = " + currentToken.sval);
-	}
+    private void logln(String s) {
+        if (DEBUG) {
+            System.err.println(s);
+        }
+    }
 
-	/**
-	 * method to match the current Token to a specified token type and value Throws a SyntaxException if token doesn't match.
-	 */
-	private void match(int ttype, String token) throws IOException, SyntaxException {
+    /**
+     * method to get the next token as a Token type
+     */
+    private void nextToken() throws IOException {
+        st.nextToken();
+        currentToken = new Token(st.ttype, st.sval);
 
-		if ((currentToken.ttype == ttype) && (currentToken.sval.compareTo(token) == 0)) {
-			logln("matched type: " + ttype + " and token = " + currentToken.sval);
-			nextToken();
-		} else {
-			throw new SyntaxException(st.lineno());
-		}
-	}
+        logln("Read token: type = " + currentToken.ttype + " string = " + currentToken.sval);
+    }
 
-	/*
-	 * method to match the current Token to a specified token type. Throws a SyntaxException if token doesn't match.
-	 */
-	private void match(int ttype) throws IOException, SyntaxException {
-		if (currentToken.ttype == ttype) {
-			logln("matched type: " + ttype + ", token = " + currentToken.sval);
-			nextToken();
-		} else {
-			throw new SyntaxException(st.lineno());
-		}
-	}
+    /**
+     * method to match the current Token to a specified token type and value Throws a SyntaxException if token doesn't match.
+     */
+    private void match(int ttype, String token) throws IOException, SyntaxException {
 
-	private void match(String token) throws IOException, SyntaxException {
-		match(StreamTokenizer.TT_WORD, token);
-	}
+        if ((currentToken.ttype == ttype) && (currentToken.sval.compareTo(token) == 0)) {
+            logln("matched type: " + ttype + " and token = " + currentToken.sval);
+            nextToken();
+        } else {
+            throw new SyntaxException(st.lineno());
+        }
+    }
 
-	/**
-	 * method to parse the given input file.
-	 */
-	public void parse(Map<String, ArrayList<String>> map) throws SyntaxException, IOException {
+    /*
+     * method to match the current Token to a specified token type. Throws a SyntaxException if token doesn't match.
+     */
+    private void match(int ttype) throws IOException, SyntaxException {
+        if (currentToken.ttype == ttype) {
+            logln("matched type: " + ttype + ", token = " + currentToken.sval);
+            nextToken();
+        } else {
+            throw new SyntaxException(st.lineno());
+        }
+    }
 
-		if (inputfile == null) {
-			return;
-		}
+    private void match(String token) throws IOException, SyntaxException {
+        match(StreamTokenizer.TT_WORD, token);
+    }
 
-		BufferedReader r = new BufferedReader(new InputStreamReader(inputfile.openStream()));
-		st = new StreamTokenizer(r);
+    /**
+     * method to parse the given input file.
+     */
+    public void parse(Map<String, ArrayList<String>> map) throws SyntaxException, IOException {
 
-		// allow both forms of commenting styles
-		st.slashSlashComments(true);
-		st.slashStarComments(true);
-		st.wordChars('_', '_');
+        if (inputfile == null) {
+            return;
+        }
 
-		nextToken();
+        BufferedReader r = new BufferedReader(new InputStreamReader(inputfile.openStream()));
+        st = new StreamTokenizer(r);
 
-		while (currentToken.ttype != StreamTokenizer.TT_EOF) {
-			// look for the start symbol
-			if ((currentToken.ttype != StreamTokenizer.TT_WORD) || (currentToken.sval.compareTo(ALIAS) != 0)) {
-				nextToken();
-				continue;
-			}
+        // allow both forms of commenting styles
+        st.slashSlashComments(true);
+        st.slashStarComments(true);
+        st.wordChars('_', '_');
 
-			match(ALIAS);
-			String name = currentToken.sval;
-			match(StreamTokenizer.TT_WORD);
+        nextToken();
 
-			ArrayList<String> aliases = new ArrayList<String>();
+        while (currentToken.ttype != StreamTokenizer.TT_EOF) {
+            // look for the start symbol
+            if ((currentToken.ttype != StreamTokenizer.TT_WORD) || (currentToken.sval.compareTo(ALIAS) != 0)) {
+                nextToken();
+                continue;
+            }
 
-			do {
-				aliases.add(currentToken.sval);
-				match(StreamTokenizer.TT_WORD);
+            match(ALIAS);
+            String name = currentToken.sval;
+            match(StreamTokenizer.TT_WORD);
 
-			} while ((currentToken.ttype != StreamTokenizer.TT_EOF) && (currentToken.sval.compareTo(ALIAS) != 0));
+            ArrayList<String> aliases = new ArrayList<String>();
 
-			logln("adding map entry for " + name + " values = " + aliases);
+            do {
+                aliases.add(currentToken.sval);
+                match(StreamTokenizer.TT_WORD);
 
-			map.put(name, aliases);
-		}
-	}
+            } while ((currentToken.ttype != StreamTokenizer.TT_EOF) && (currentToken.sval.compareTo(ALIAS) != 0));
+
+            logln("adding map entry for " + name + " values = " + aliases);
+
+            map.put(name, aliases);
+        }
+    }
 }

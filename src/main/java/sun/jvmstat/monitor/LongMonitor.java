@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.monitor;
 
 /**
@@ -34,10 +33,10 @@ package sun.jvmstat.monitor;
  */
 public interface LongMonitor extends Monitor {
 
-	/**
-	 * Get the current value of this LongInstrument object.
-	 *
-	 * @return long - the current value of the associated LongInstrument object.
-	 */
-	public long longValue();
+    /**
+     * Get the current value of this LongInstrument object.
+     *
+     * @return long - the current value of the associated LongInstrument object.
+     */
+    public long longValue();
 }

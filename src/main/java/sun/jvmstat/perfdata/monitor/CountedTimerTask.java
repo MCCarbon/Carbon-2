@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor;
 
 import java.util.*;
@@ -35,13 +34,13 @@ import java.util.*;
  */
 public class CountedTimerTask extends TimerTask {
 
-	volatile long executionCount;
+    volatile long executionCount;
 
-	public long executionCount() {
-		return executionCount;
-	}
+    public long executionCount() {
+        return executionCount;
+    }
 
-	public void run() {
-		executionCount++;
-	}
+    public void run() {
+        executionCount++;
+    }
 }
