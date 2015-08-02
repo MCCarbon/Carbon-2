@@ -37,12 +37,12 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     @Override
-	protected boolean c(Block block) {
+    protected boolean c(Block block) {
         return block == Blocks.FARMLAND;
     }
 
     @Override
-	public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         super.b(world, blockposition, iblockdata, random);
         if (world.getLightLevel(blockposition.up()) >= 9) {
             int i = iblockdata.get(BlockCrops.AGE).intValue();
@@ -119,7 +119,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     @Override
-	public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return ((world.k(blockposition) >= 8) || world.i(blockposition)) && this.c(world.getType(blockposition.down()).getBlock());
     }
 
@@ -132,7 +132,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     @Override
-	public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
+    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, 0);
         if (!world.isClientSide) {
             int j = iblockdata.get(BlockCrops.AGE).intValue();
@@ -151,37 +151,37 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     @Override
-	public Item getDropType(IBlockData iblockdata, Random random, int i) {
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return iblockdata.get(BlockCrops.AGE).intValue() == 7 ? n() : this.l();
     }
 
     @Override
-	public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return iblockdata.get(BlockCrops.AGE).intValue() < 7;
     }
 
     @Override
-	public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+    public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         return true;
     }
 
     @Override
-	public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         this.g(world, blockposition, iblockdata);
     }
 
     @Override
-	public IBlockData fromLegacyData(int i) {
+    public IBlockData fromLegacyData(int i) {
         return getBlockData().set(BlockCrops.AGE, Integer.valueOf(i));
     }
 
     @Override
-	public int toLegacyData(IBlockData iblockdata) {
+    public int toLegacyData(IBlockData iblockdata) {
         return iblockdata.get(BlockCrops.AGE).intValue();
     }
 
     @Override
-	protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[]{BlockCrops.AGE});
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockCrops.AGE });
     }
 }

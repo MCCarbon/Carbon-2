@@ -30,7 +30,16 @@ public class BlockRotatable extends WrappedBlock {
 
     @Override
     public int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
-        return super.a(iblockaccess, blockposition, iblockdata, enumdirection); //To change body of generated methods, choose Tools | Templates.
+        return super.a(iblockaccess, blockposition, iblockdata, enumdirection); // To
+                                                                                // change
+                                                                                // body
+                                                                                // of
+                                                                                // generated
+                                                                                // methods,
+                                                                                // choose
+                                                                                // Tools
+                                                                                // |
+                                                                                // Templates.
     }
 
     @Override
@@ -61,7 +70,7 @@ public class BlockRotatable extends WrappedBlock {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[]{AXIS});
+        return new BlockStateList(this, new IBlockState[] { AXIS });
     }
 
     @Override

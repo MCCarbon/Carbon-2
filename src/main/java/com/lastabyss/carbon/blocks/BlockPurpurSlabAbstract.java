@@ -1,6 +1,5 @@
 package com.lastabyss.carbon.blocks;
 
-import com.lastabyss.carbon.blocks.util.CreativeTabUtil;
 import net.minecraft.server.v1_8_R3.BlockStateEnum;
 import net.minecraft.server.v1_8_R3.BlockStateList;
 import net.minecraft.server.v1_8_R3.IBlockData;
@@ -21,7 +20,6 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
         }
 
         setBlockData(var1.set(VARIANT, BlockPurpurSlabAbstract.EnumPurpurSlabType.DEFAULT));
-        setCreativeTab(CreativeTabUtil.BUILDING_BLOCKS);
     }
 
     @Override
@@ -46,7 +44,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
 
     @Override
     protected BlockStateList getStateList() {
-        return l() ? new BlockStateList(this, new IBlockState[]{VARIANT}) : new BlockStateList(this, new IBlockState[]{HALF, VARIANT});
+        return l() ? new BlockStateList(this, new IBlockState[] { VARIANT }) : new BlockStateList(this, new IBlockState[] { HALF, VARIANT });
     }
 
     @Override

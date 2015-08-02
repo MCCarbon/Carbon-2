@@ -199,7 +199,7 @@ public class BlockChorusFlower extends WrappedBlock {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[]{AGE});
+        return new BlockStateList(this, new IBlockState[] { AGE });
     }
 
     @Override

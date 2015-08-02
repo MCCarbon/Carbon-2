@@ -15,16 +15,18 @@ public class BlockBeetroots extends BlockCrops {
 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 3);
 
-    //getSeedType
+    // getSeedType
     @Override
     protected Item l() {
-        return Items.WHEAT_SEEDS; //Wheat seeds for now until we implement the correct items
+        return Items.WHEAT_SEEDS; // Wheat seeds for now until we implement the
+                                  // correct items
     }
 
-    //getPlantItem
+    // getPlantItem
     @Override
     protected Item n() {
-        return Items.WHEAT_SEEDS; //Wheat seeds for now until we implement the correct items
+        return Items.WHEAT_SEEDS; // Wheat seeds for now until we implement the
+                                  // correct items
     }
 
     @Override
@@ -36,14 +38,14 @@ public class BlockBeetroots extends BlockCrops {
         }
     }
 
-//No clue what this does
-//    @Override
-//    protected int b(World var1) {
-//        return super.b(var1) / 3;
-//    }
+    // No clue what this does
+    // @Override
+    // protected int b(World var1) {
+    // return super.b(var1) / 3;
+    // }
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[]{AGE});
+        return new BlockStateList(this, new IBlockState[] { AGE });
     }
 
 }

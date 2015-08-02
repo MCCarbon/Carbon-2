@@ -38,7 +38,7 @@ public class BlockPlant extends WrappedBlock {
     }
 
     @Override
-	public boolean canPlace(World world, BlockPosition blockposition) {
+    public boolean canPlace(World world, BlockPosition blockposition) {
         return super.canPlace(world, blockposition) && this.c(world.getType(blockposition.down()).getBlock());
     }
 
@@ -47,13 +47,13 @@ public class BlockPlant extends WrappedBlock {
     }
 
     @Override
-	public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
         super.doPhysics(world, blockposition, iblockdata, block);
         this.e(world, blockposition, iblockdata);
     }
 
     @Override
-	public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -79,17 +79,17 @@ public class BlockPlant extends WrappedBlock {
     }
 
     @Override
-	public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }
 
     @Override
-	public boolean c() {
+    public boolean c() {
         return false;
     }
 
     @Override
-	public boolean d() {
+    public boolean d() {
         return false;
     }
 

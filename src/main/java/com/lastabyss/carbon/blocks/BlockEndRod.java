@@ -26,23 +26,22 @@ public class BlockEndRod extends UnknownBlockAHI {
         setBlockData(blockStateList.getBlockData().set(FACING, EnumDirection.UP));
     }
 
-    //Has something to do with worldgen
-	/*@Override
-     public IBlockData a(IBlockData blockdata, Block.EnumRotation rotation) {
-     return blockdata.getBlock() != this ? blockdata : blockdata.set(FACING, rotation.a(blockdata.get(FACING)));
-     }
-
-     @Override
-     public IBlockData a(IBlockData blockdata, Block.class_a_in_class_agj var2) {
-     return blockdata.getBlock() != this ? blockdata : blockdata.set(FACING, var2.b(blockdata.get(FACING)));
-     }*/
+    // Has something to do with worldgen
+    /*
+     * @Override public IBlockData a(IBlockData blockdata, Block.EnumRotation
+     * rotation) { return blockdata.getBlock() != this ? blockdata :
+     * blockdata.set(FACING, rotation.a(blockdata.get(FACING))); }
+     * 
+     * @Override public IBlockData a(IBlockData blockdata,
+     * Block.class_a_in_class_agj var2) { return blockdata.getBlock() != this ?
+     * blockdata : blockdata.set(FACING, var2.b(blockdata.get(FACING))); }
+     */
     @Override
     public AxisAlignedBB getBoundingBox(World var1, BlockPosition var2, IBlockData var3) {
         EnumDirection var4 = var3.get(FACING);
         float var5 = 0.4375F;
         float var6 = 0.5625F;
-        return (var4 != EnumDirection.EAST) && (var4 != EnumDirection.WEST) ? ((var4 != EnumDirection.SOUTH) && (var4 != EnumDirection.NORTH) ? new AxisAlignedBB(var2.getX() + var5, var2.getY() + 0, var2.getZ() + var5, var2.getX() + var6, var2.getY() + 1, var2.getZ() + var6) : new AxisAlignedBB(var2.getX() + var5, var2.getY() + var5, var2.getZ() + 0,
-                var2.getX() + var6, var2.getY() + var6, var2.getZ() + 1)) : new AxisAlignedBB(var2.getX() + 0, var2.getY() + var5, var2.getZ() + var5, var2.getX() + 1, var2.getY() + var6, var2.getZ() + var6);
+        return (var4 != EnumDirection.EAST) && (var4 != EnumDirection.WEST) ? ((var4 != EnumDirection.SOUTH) && (var4 != EnumDirection.NORTH) ? new AxisAlignedBB(var2.getX() + var5, var2.getY() + 0, var2.getZ() + var5, var2.getX() + var6, var2.getY() + 1, var2.getZ() + var6) : new AxisAlignedBB(var2.getX() + var5, var2.getY() + var5, var2.getZ() + 0, var2.getX() + var6, var2.getY() + var6, var2.getZ() + 1)) : new AxisAlignedBB(var2.getX() + 0, var2.getY() + var5, var2.getZ() + var5, var2.getX() + 1, var2.getY() + var6, var2.getZ() + var6);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class BlockEndRod extends UnknownBlockAHI {
         return true;
     }
 
-    //WTF??????
+    // WTF??????
     private boolean a(World var1, BlockPosition var2, EnumDirection var3) {
         return true;
     }
@@ -127,7 +126,7 @@ public class BlockEndRod extends UnknownBlockAHI {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[]{FACING});
+        return new BlockStateList(this, new IBlockState[] { FACING });
     }
 
     @Override

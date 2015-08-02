@@ -12,7 +12,6 @@ import com.lastabyss.carbon.blocks.BlockStairs;
 import com.lastabyss.carbon.blocks.BlockStructureBlock;
 import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
-import com.lastabyss.carbon.blocks.util.CreativeTabUtil;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
 import com.lastabyss.carbon.utils.Utils;
@@ -65,45 +64,44 @@ public class Injector {
     public void registerAll() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InvocationTargetException, NoSuchMethodException {
         //Add new blocks
         Utils.addMaterial("END_ROD_BLOCK", 198);
-        registerBlock(198, "end_rod", new BlockEndRod().setStrength(0.0F).setLightLevel(0.9375F).setStepSound(Block.f).setName("endRod"));
+        registerBlock(198, "end_rod", new BlockEndRod().setStrength(0.0F).setLightLevel(0.9375F).setStepSound(SoundUtil.WOOD).setName("endRod"));
 
         Utils.addMaterial("CHORUS_PLANT_BLOCK", 199);
-        registerBlock(199, "chorus_plant", new BlockChorusPlant().setStrength(0.4F).setStepSound(Block.f).setName("chorusPlant"));
+        registerBlock(199, "chorus_plant", new BlockChorusPlant().setStrength(0.4F).setStepSound(SoundUtil.WOOD).setName("chorusPlant"));
 
         Utils.addMaterial("CHORUS_FLOWER_MATERIAL", 200);
-        registerBlock(200, "chorus_flower", new BlockChorusFlower().setStrength(0.4F).setStepSound(Block.f).setName("chorusFlower"));
+        registerBlock(200, "chorus_flower", new BlockChorusFlower().setStrength(0.4F).setStepSound(SoundUtil.WOOD).setName("chorusFlower"));
 
         Utils.addMaterial("PURPUR_BLOCK", 201);
-        Block purpur = (new WrappedBlock(Material.STONE)).setStrength(1.5F).setExplosionResist(10.0F).setCreativeTab(CreativeTabUtil.BUILDING_BLOCKS).setStepSound(SoundUtil.STONE2).setName("purpurBlock");
+        Block purpur = new WrappedBlock(Material.STONE).setStrength(1.5F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurBlock");
         registerBlock(201, "purpur_block", purpur);
 
         Utils.addMaterial("PURPUR_PILLAR", 202);
-        registerBlock(202, "purpur_pillar", (new BlockRotatable(Material.STONE)).setStrength(1.5F).setExplosionResist(10.0F).setCreativeTab(CreativeTabUtil.BUILDING_BLOCKS).setStepSound(SoundUtil.STONE2).setName("purpurPillar"));
+        registerBlock(202, "purpur_pillar", new BlockRotatable(Material.STONE).setStrength(1.5F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurPillar"));
 
         Utils.addMaterial("PURPUR_STAIRS", 203);
-        registerBlock(203, "purpur_stairs", (new BlockStairs(purpur.getBlockData())).setName("stairsPurpur"));
+        registerBlock(203, "purpur_stairs", new BlockStairs(purpur.getBlockData()).setName("stairsPurpur"));
 
         Utils.addMaterial("PURPUR_DOUBLE_SLAB", 204);
-        registerBlock(204, "purpur_double_slab", (new BlockPurpurSlabAbstract.BlockPurpurDoubleSlab()).setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab"));
+        registerBlock(204, "purpur_double_slab", new BlockPurpurSlabAbstract.BlockPurpurDoubleSlab().setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab"));
 
         Utils.addMaterial("PURPUR_SLAB", 205);
-        registerBlock(205, "purpur_slab", (new BlockPurpurSlabAbstract.BlockPuprpurSlab()).setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab"));
+        registerBlock(205, "purpur_slab", new BlockPurpurSlabAbstract.BlockPuprpurSlab().setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab"));
 
         Utils.addMaterial("END_BRICKS", 206);
-        registerBlock(206, "end_bricks", (new WrappedBlock(Material.STONE)).setStepSound(SoundUtil.STONE2).setStrength(0.8F).setCreativeTab(CreativeTabUtil.BUILDING_BLOCKS).setName("endBricks"));
+        registerBlock(206, "end_bricks", new WrappedBlock(Material.STONE).setStepSound(SoundUtil.STONE2).setStrength(0.8F).setName("endBricks"));
 
         Utils.addMaterial("BEETROOTS", 207);
-        registerBlock(207, "beetroots", (new BlockBeetroots()).setName("beetroots"));
+        registerBlock(207, "beetroots", new BlockBeetroots().setName("beetroots"));
 
         Utils.addMaterial("GRASS_PATH", 208);
-        Block grass_path = (new BlockGrassPath()).setStrength(0.65F).setStepSound(SoundUtil.GRASS).setName("grassPath").setUnbreakable();
-        registerBlock(208, "grass_path", grass_path);
+        registerBlock(208, "grass_path", new BlockGrassPath().setStrength(0.65F).setStepSound(SoundUtil.GRASS).setName("grassPath").setUnbreakable());
 
         Utils.addMaterial("END_GATEWAY", 209);
-        registerBlock(209, "end_gateway", (new BlockEndGateway(Material.PORTAL)).setStrength(-1.0F).setExplosionResist(6000000.0F));
+        registerBlock(209, "end_gateway", new BlockEndGateway(Material.PORTAL).setStrength(-1.0F).setExplosionResist(6000000.0F));
 
         Utils.addMaterial("STRUCTURE_BLOCK", 255);
-        registerBlock(255, "structure_block", (new BlockStructureBlock()).setUnbreakable().setExplosionResist(6000000.0F).setName("structureBlock").setLightLevel(1.0F));
+        registerBlock(255, "structure_block", new BlockStructureBlock().setUnbreakable().setExplosionResist(6000000.0F).setName("structureBlock").setLightLevel(1.0F));
 
         //Add new tile entities
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");

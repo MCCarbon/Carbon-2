@@ -35,12 +35,12 @@ public abstract class BlockStepAbstract extends WrappedBlock {
     }
 
     @Override
-	public boolean I() {
+    public boolean I() {
         return false;
     }
 
     @Override
-	public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
         if (this.l()) {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else {
@@ -58,7 +58,7 @@ public abstract class BlockStepAbstract extends WrappedBlock {
     }
 
     @Override
-	public void j() {
+    public void j() {
         if (this.l()) {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else {
@@ -68,37 +68,37 @@ public abstract class BlockStepAbstract extends WrappedBlock {
     }
 
     @Override
-	public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         updateShape(world, blockposition);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
     }
 
     @Override
-	public boolean c() {
+    public boolean c() {
         return this.l();
     }
 
     @Override
-	public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
+    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         IBlockData iblockdata = super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
 
         return this.l() ? iblockdata : ((enumdirection != EnumDirection.DOWN) && ((enumdirection == EnumDirection.UP) || (f1 <= 0.5D)) ? iblockdata : iblockdata.set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.TOP));
     }
 
     @Override
-	public int a(Random random) {
+    public int a(Random random) {
         return this.l() ? 2 : 1;
     }
 
     @Override
-	public boolean d() {
+    public boolean d() {
         return this.l();
     }
 
     public abstract String b(int i);
 
     @Override
-	public int getDropData(World world, BlockPosition blockposition) {
+    public int getDropData(World world, BlockPosition blockposition) {
         return super.getDropData(world, blockposition) & 7;
     }
 
@@ -119,12 +119,12 @@ public abstract class BlockStepAbstract extends WrappedBlock {
         }
 
         @Override
-		public String toString() {
+        public String toString() {
             return c;
         }
 
         @Override
-		public String getName() {
+        public String getName() {
             return c;
         }
     }

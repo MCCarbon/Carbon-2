@@ -60,8 +60,8 @@ public class BlockChorusPlant extends WrappedBlock {
     @Override
     public Item getDropType(IBlockData var1, Random var2, int var3) {
         return null;
-        //TODO: return chorus fruit
-        //return Items.cI;
+        // TODO: return chorus fruit
+        // return Items.cI;
     }
 
     @Override
@@ -132,7 +132,7 @@ public class BlockChorusPlant extends WrappedBlock {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[]{NORTH, EAST, SOUTH, WEST, UP, DOWN});
+        return new BlockStateList(this, new IBlockState[] { NORTH, EAST, SOUTH, WEST, UP, DOWN });
     }
 
 }

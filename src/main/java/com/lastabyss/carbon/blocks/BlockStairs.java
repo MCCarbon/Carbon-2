@@ -34,7 +34,7 @@ public class BlockStairs extends WrappedBlock {
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing", EnumDirectionLimit.HORIZONTAL);
     public static final BlockStateEnum<BlockStairs.EnumHalf> HALF = BlockStateEnum.of("half", BlockStairs.EnumHalf.class);
     public static final BlockStateEnum<BlockStairs.EnumStairShape> SHAPE = BlockStateEnum.of("shape", BlockStairs.EnumStairShape.class);
-    private static final int[][] O = new int[][]{{4, 5}, {5, 7}, {6, 7}, {4, 6}, {0, 1}, {1, 3}, {2, 3}, {0, 2}};
+    private static final int[][] O = new int[][] { { 4, 5 }, { 5, 7 }, { 6, 7 }, { 4, 6 }, { 0, 1 }, { 1, 3 }, { 2, 3 }, { 0, 2 } };
     private final WrappedBlock P;
     private final IBlockData Q;
     private boolean R;
@@ -53,7 +53,7 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
         if (R) {
             this.a(0.5F * (S % 2), 0.5F * ((S / 4) % 2), 0.5F * ((S / 2) % 2), 0.5F + (0.5F * (S % 2)), 0.5F + (0.5F * ((S / 4) % 2)), 0.5F + (0.5F * ((S / 2) % 2)));
         } else {
@@ -63,12 +63,12 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public boolean c() {
+    public boolean c() {
         return false;
     }
 
     @Override
-	public boolean d() {
+    public boolean d() {
         return false;
     }
 
@@ -402,7 +402,7 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         this.e(world, blockposition);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         boolean flag = h(world, blockposition);
@@ -416,83 +416,83 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
+    public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
         P.attack(world, blockposition, entityhuman);
     }
 
     @Override
-	public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
         P.postBreak(world, blockposition, iblockdata);
     }
 
     @Override
-	public float a(Entity entity) {
+    public float a(Entity entity) {
         return P.a(entity);
     }
 
     @Override
-	public int a(World world) {
+    public int a(World world) {
         return P.a(world);
     }
 
     @Override
-	public Vec3D a(World world, BlockPosition blockposition, Entity entity, Vec3D vec3d) {
+    public Vec3D a(World world, BlockPosition blockposition, Entity entity, Vec3D vec3d) {
         return P.a(world, blockposition, entity, vec3d);
     }
 
     @Override
-	public boolean A() {
+    public boolean A() {
         return P.A();
     }
 
     @Override
-	public boolean a(IBlockData iblockdata, boolean flag) {
+    public boolean a(IBlockData iblockdata, boolean flag) {
         return P.a(iblockdata, flag);
     }
 
     @Override
-	public boolean canPlace(World world, BlockPosition blockposition) {
+    public boolean canPlace(World world, BlockPosition blockposition) {
         return P.canPlace(world, blockposition);
     }
 
     @Override
-	public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
         doPhysics(world, blockposition, Q, Blocks.AIR);
         P.onPlace(world, blockposition, Q);
     }
 
     @Override
-	public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         P.remove(world, blockposition, Q);
     }
 
     @Override
-	public void a(World world, BlockPosition blockposition, Entity entity) {
+    public void a(World world, BlockPosition blockposition, Entity entity) {
         P.a(world, blockposition, entity);
     }
 
     @Override
-	public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         P.b(world, blockposition, iblockdata, random);
     }
 
     @Override
-	public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
         return P.interact(world, blockposition, Q, entityhuman, EnumDirection.DOWN, 0.0F, 0.0F, 0.0F);
     }
 
     @Override
-	public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
+    public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
         P.wasExploded(world, blockposition, explosion);
     }
 
     @Override
-	public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor g(IBlockData iblockdata) {
         return P.g(Q);
     }
 
     @Override
-	public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
+    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         IBlockData iblockdata = super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving);
 
         iblockdata = iblockdata.set(BlockStairs.FACING, entityliving.getDirection()).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT);
@@ -500,7 +500,7 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
+    public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
         MovingObjectPosition[] amovingobjectposition = new MovingObjectPosition[8];
         IBlockData iblockdata = world.getType(blockposition);
         int i = iblockdata.get(BlockStairs.FACING).b();
@@ -547,7 +547,7 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public IBlockData fromLegacyData(int i) {
+    public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = getBlockData().set(BlockStairs.HALF, (i & 4) > 0 ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM);
 
         iblockdata = iblockdata.set(BlockStairs.FACING, EnumDirection.fromType1(5 - (i & 3)));
@@ -555,7 +555,7 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public int toLegacyData(IBlockData iblockdata) {
+    public int toLegacyData(IBlockData iblockdata) {
         int i = 0;
 
         if (iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP) {
@@ -567,32 +567,32 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         if (h(iblockaccess, blockposition)) {
             switch (this.g(iblockaccess, blockposition)) {
-                case 0:
-                    iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT);
-                    break;
+            case 0:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT);
+                break;
 
-                case 1:
-                    iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_RIGHT);
-                    break;
+            case 1:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_RIGHT);
+                break;
 
-                case 2:
-                    iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_LEFT);
+            case 2:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_LEFT);
             }
         } else {
             switch (f(iblockaccess, blockposition)) {
-                case 0:
-                    iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT);
-                    break;
+            case 0:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT);
+                break;
 
-                case 1:
-                    iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_RIGHT);
-                    break;
+            case 1:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_RIGHT);
+                break;
 
-                case 2:
-                    iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_LEFT);
+            case 2:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_LEFT);
             }
         }
 
@@ -600,8 +600,8 @@ public class BlockStairs extends WrappedBlock {
     }
 
     @Override
-	protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[]{BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE});
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE });
     }
 
     public static enum EnumStairShape implements INamable {
@@ -615,12 +615,12 @@ public class BlockStairs extends WrappedBlock {
         }
 
         @Override
-		public String toString() {
+        public String toString() {
             return f;
         }
 
         @Override
-		public String getName() {
+        public String getName() {
             return f;
         }
     }
@@ -636,12 +636,12 @@ public class BlockStairs extends WrappedBlock {
         }
 
         @Override
-		public String toString() {
+        public String toString() {
             return c;
         }
 
         @Override
-		public String getName() {
+        public String getName() {
             return c;
         }
     }
