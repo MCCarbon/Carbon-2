@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.monitor;
 
 /**
@@ -36,17 +35,17 @@ package sun.jvmstat.monitor;
  */
 public interface ByteArrayMonitor extends Monitor {
 
-	/**
-	 * Get a copy of the current values of the elements of the ByteArrayInstrument object.
-	 *
-	 * @return byte[] - a copy of the bytes in the associated instrumenattion object.
-	 */
-	public byte[] byteArrayValue();
+    /**
+     * Get a copy of the current values of the elements of the ByteArrayInstrument object.
+     *
+     * @return byte[] - a copy of the bytes in the associated instrumenattion object.
+     */
+    public byte[] byteArrayValue();
 
-	/**
-	 * Get the current value of an element of the ByteArrayInstrument object.
-	 *
-	 * @return byte - the byte value at the specified index in the associated instrumentation object.
-	 */
-	public byte byteAt(int index);
+    /**
+     * Get the current value of an element of the ByteArrayInstrument object.
+     *
+     * @return byte - the byte value at the specified index in the associated instrumentation object.
+     */
+    public byte byteAt(int index);
 }

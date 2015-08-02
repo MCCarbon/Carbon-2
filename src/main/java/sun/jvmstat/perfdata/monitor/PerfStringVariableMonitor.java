@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor;
 
 import sun.jvmstat.monitor.*;
@@ -37,34 +36,27 @@ import java.nio.ByteBuffer;
  */
 public class PerfStringVariableMonitor extends PerfStringMonitor {
 
-	/**
-	 * Constructor to create a StringMonitor object for the variable string instrument represented by the data in the given buffer.
-	 *
-	 * @param name
-	 *            the name of the string instrument
-	 * @param supported
-	 *            support level indicator
-	 * @param bb
-	 *            the buffer containing the string instrument data.
-	 */
-	public PerfStringVariableMonitor(String name, boolean supported, ByteBuffer bb) {
-		this(name, supported, bb, bb.limit());
-	}
+    /**
+     * Constructor to create a StringMonitor object for the variable string instrument represented by the data in the given buffer.
+     *
+     * @param name the name of the string instrument
+     * @param supported support level indicator
+     * @param bb the buffer containing the string instrument data.
+     */
+    public PerfStringVariableMonitor(String name, boolean supported, ByteBuffer bb) {
+        this(name, supported, bb, bb.limit());
+    }
 
-	/**
-	 * Constructor to create a StringMonitor object for the variable string instrument represented by the data in the given buffer.
-	 *
-	 * @param name
-	 *            the name of the string instrument
-	 * @param bb
-	 *            the buffer containing the string instrument data.
-	 * @param supported
-	 *            support level indicator
-	 * @param maxLength
-	 *            the maximum length of the string data.
-	 */
-	public PerfStringVariableMonitor(String name, boolean supported, ByteBuffer bb, int maxLength) {
-		// account for the null terminator by adding 1 to maxLength
-		super(name, Variability.VARIABLE, supported, bb, maxLength + 1);
-	}
+    /**
+     * Constructor to create a StringMonitor object for the variable string instrument represented by the data in the given buffer.
+     *
+     * @param name the name of the string instrument
+     * @param bb the buffer containing the string instrument data.
+     * @param supported support level indicator
+     * @param maxLength the maximum length of the string data.
+     */
+    public PerfStringVariableMonitor(String name, boolean supported, ByteBuffer bb, int maxLength) {
+        // account for the null terminator by adding 1 to maxLength
+        super(name, Variability.VARIABLE, supported, bb, maxLength + 1);
+    }
 }

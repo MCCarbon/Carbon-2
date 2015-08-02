@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor.protocol.file;
 
 import sun.jvmstat.monitor.*;
@@ -39,32 +38,30 @@ import sun.jvmstat.perfdata.monitor.*;
  */
 public class FileMonitoredVm extends AbstractMonitoredVm {
 
-	/**
-	 * Create a FileMonitoredVm instance.
-	 *
-	 * @param vmid
-	 *            the vm identifier referring to the file
-	 * @param interval
-	 *            sampling interval (unused in this protocol).
-	 */
-	public FileMonitoredVm(VmIdentifier vmid, int interval) throws MonitorException {
-		super(vmid, interval);
-		this.pdb = new PerfDataBuffer(vmid);
-	}
+    /**
+     * Create a FileMonitoredVm instance.
+     *
+     * @param vmid the vm identifier referring to the file
+     * @param interval sampling interval (unused in this protocol).
+     */
+    public FileMonitoredVm(VmIdentifier vmid, int interval) throws MonitorException {
+        super(vmid, interval);
+        this.pdb = new PerfDataBuffer(vmid);
+    }
 
-	/**
-	 * {@inheritDoc}.
-	 * <p>
-	 * Note - the <em>file:</em> protocol currently does not support the registration or notification of listeners.
-	 */
-	public void addVmListener(VmListener l) {
-	}
+    /**
+     * {@inheritDoc}.
+     * <p>
+     * Note - the <em>file:</em> protocol currently does not support the registration or notification of listeners.
+     */
+    public void addVmListener(VmListener l) {
+    }
 
-	/**
-	 * {@inheritDoc}.
-	 * <p>
-	 * Note - the <em>file:</em> protocol currently does not support the registration or notification of listeners.
-	 */
-	public void removeVmListener(VmListener l) {
-	}
+    /**
+     * {@inheritDoc}.
+     * <p>
+     * Note - the <em>file:</em> protocol currently does not support the registration or notification of listeners.
+     */
+    public void removeVmListener(VmListener l) {
+    }
 }

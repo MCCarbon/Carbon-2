@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor.protocol.local;
 
 import sun.jvmstat.monitor.*;
@@ -39,179 +38,176 @@ import java.net.*;
  * @since 1.5
  */
 public class MonitoredHostProvider extends MonitoredHost {
-	private static final int DEFAULT_POLLING_INTERVAL = 1000;
 
-	private ArrayList<HostListener> listeners;
-	private NotifierTask task;
-	private HashSet<Integer> activeVms;
-	private LocalVmManager vmManager;
+    private static final int DEFAULT_POLLING_INTERVAL = 1000;
 
-	/**
-	 * Create a MonitoredHostProvider instance using the given HostIdentifier.
-	 *
-	 * @param hostId
-	 *            the host identifier for this MonitoredHost
-	 */
-	public MonitoredHostProvider(HostIdentifier hostId) {
-		this.hostId = hostId;
-		this.listeners = new ArrayList<HostListener>();
-		this.interval = DEFAULT_POLLING_INTERVAL;
-		this.activeVms = new HashSet<Integer>();
-		this.vmManager = new LocalVmManager();
-	}
+    private ArrayList<HostListener> listeners;
+    private NotifierTask task;
+    private HashSet<Integer> activeVms;
+    private LocalVmManager vmManager;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public MonitoredVm getMonitoredVm(VmIdentifier vmid) throws MonitorException {
-		return getMonitoredVm(vmid, DEFAULT_POLLING_INTERVAL);
-	}
+    /**
+     * Create a MonitoredHostProvider instance using the given HostIdentifier.
+     *
+     * @param hostId the host identifier for this MonitoredHost
+     */
+    public MonitoredHostProvider(HostIdentifier hostId) {
+        this.hostId = hostId;
+        this.listeners = new ArrayList<HostListener>();
+        this.interval = DEFAULT_POLLING_INTERVAL;
+        this.activeVms = new HashSet<Integer>();
+        this.vmManager = new LocalVmManager();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public MonitoredVm getMonitoredVm(VmIdentifier vmid, int interval) throws MonitorException {
-		try {
-			VmIdentifier nvmid = hostId.resolve(vmid);
-			return new LocalMonitoredVm(nvmid, interval);
-		} catch (URISyntaxException e) {
-			/*
-			 * the VmIdentifier is expected to be a valid and it should resolve reasonably against the host identifier. A URISyntaxException here is most likely a programming error.
-			 */
-			throw new IllegalArgumentException("Malformed URI: " + vmid.toString(), e);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public MonitoredVm getMonitoredVm(VmIdentifier vmid) throws MonitorException {
+        return getMonitoredVm(vmid, DEFAULT_POLLING_INTERVAL);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void detach(MonitoredVm vm) {
-		vm.detach();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public MonitoredVm getMonitoredVm(VmIdentifier vmid, int interval) throws MonitorException {
+        try {
+            VmIdentifier nvmid = hostId.resolve(vmid);
+            return new LocalMonitoredVm(nvmid, interval);
+        } catch (URISyntaxException e) {
+            /*
+             * the VmIdentifier is expected to be a valid and it should resolve reasonably against the host identifier. A URISyntaxException here is most likely a programming error.
+             */
+            throw new IllegalArgumentException("Malformed URI: " + vmid.toString(), e);
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void addHostListener(HostListener listener) {
-		synchronized (listeners) {
-			listeners.add(listener);
-			if (task == null) {
-				task = new NotifierTask();
-				LocalEventTimer timer = LocalEventTimer.getInstance();
-				timer.schedule(task, interval, interval);
-			}
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void detach(MonitoredVm vm) {
+        vm.detach();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void removeHostListener(HostListener listener) {
-		synchronized (listeners) {
-			listeners.remove(listener);
-			if (listeners.isEmpty() && (task != null)) {
-				task.cancel();
-				task = null;
-			}
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void addHostListener(HostListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
+            if (task == null) {
+                task = new NotifierTask();
+                LocalEventTimer timer = LocalEventTimer.getInstance();
+                timer.schedule(task, interval, interval);
+            }
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setInterval(int newInterval) {
-		synchronized (listeners) {
-			if (newInterval == interval) {
-				return;
-			}
+    /**
+     * {@inheritDoc}
+     */
+    public void removeHostListener(HostListener listener) {
+        synchronized (listeners) {
+            listeners.remove(listener);
+            if (listeners.isEmpty() && (task != null)) {
+                task.cancel();
+                task = null;
+            }
+        }
+    }
 
-			int oldInterval = interval;
-			super.setInterval(newInterval);
+    /**
+     * {@inheritDoc}
+     */
+    public void setInterval(int newInterval) {
+        synchronized (listeners) {
+            if (newInterval == interval) {
+                return;
+            }
 
-			if (task != null) {
-				task.cancel();
-				NotifierTask oldTask = task;
-				task = new NotifierTask();
-				LocalEventTimer timer = LocalEventTimer.getInstance();
-				CountedTimerTaskUtils.reschedule(timer, oldTask, task, oldInterval, newInterval);
-			}
-		}
-	}
+            int oldInterval = interval;
+            super.setInterval(newInterval);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Set<Integer> activeVms() {
-		return vmManager.activeVms();
-	}
+            if (task != null) {
+                task.cancel();
+                NotifierTask oldTask = task;
+                task = new NotifierTask();
+                LocalEventTimer timer = LocalEventTimer.getInstance();
+                CountedTimerTaskUtils.reschedule(timer, oldTask, task, oldInterval, newInterval);
+            }
+        }
+    }
 
-	/**
-	 * Fire VmEvent events.
-	 *
-	 * @param active
-	 *            a set of Integer objects containing the vmid of the active Vms
-	 * @param started
-	 *            a set of Integer objects containing the vmid of new Vms started since last interval.
-	 * @param terminated
-	 *            a set of Integer objects containing the vmid of terminated Vms since last interval.
-	 */
-	@SuppressWarnings("unchecked")
-	private void fireVmStatusChangedEvents(Set<Integer> active, Set<Integer> started, Set<Object> terminated) {
-		ArrayList<HostListener> registered = null;
-		VmStatusChangeEvent ev = null;
+    /**
+     * {@inheritDoc}
+     */
+    public Set<Integer> activeVms() {
+        return vmManager.activeVms();
+    }
 
-		synchronized (listeners) {
-			registered = (ArrayList<HostListener>) listeners.clone();
-		}
+    /**
+     * Fire VmEvent events.
+     *
+     * @param active a set of Integer objects containing the vmid of the active Vms
+     * @param started a set of Integer objects containing the vmid of new Vms started since last interval.
+     * @param terminated a set of Integer objects containing the vmid of terminated Vms since last interval.
+     */
+    @SuppressWarnings("unchecked")
+    private void fireVmStatusChangedEvents(Set<Integer> active, Set<Integer> started, Set<Object> terminated) {
+        ArrayList<HostListener> registered = null;
+        VmStatusChangeEvent ev = null;
 
-		for (Iterator<HostListener> i = registered.iterator(); i.hasNext(); /* empty */) {
-			HostListener l = (HostListener) i.next();
-			if (ev == null) {
-				ev = new VmStatusChangeEvent(this, active, started, terminated);
-			}
-			l.vmStatusChanged(ev);
-		}
-	}
+        synchronized (listeners) {
+            registered = (ArrayList<HostListener>) listeners.clone();
+        }
 
-	/**
-	 * Class to poll the local system and generate event notifications.
-	 */
-	private class NotifierTask extends CountedTimerTask {
-		public void run() {
-			super.run();
+        for (Iterator<HostListener> i = registered.iterator(); i.hasNext(); /* empty */) {
+            HostListener l = (HostListener) i.next();
+            if (ev == null) {
+                ev = new VmStatusChangeEvent(this, active, started, terminated);
+            }
+            l.vmStatusChanged(ev);
+        }
+    }
 
-			// save the last set of active JVMs
-			Set<Integer> lastActiveVms = activeVms;
+    /**
+     * Class to poll the local system and generate event notifications.
+     */
+    private class NotifierTask extends CountedTimerTask {
 
-			// get the current set of active JVMs
-			activeVms = (HashSet<Integer>) vmManager.activeVms();
+        public void run() {
+            super.run();
 
-			if (activeVms.isEmpty()) {
-				return;
-			}
-			Set<Integer> startedVms = new HashSet<Integer>();
-			Set<Object> terminatedVms = new HashSet<Object>();
+            // save the last set of active JVMs
+            Set<Integer> lastActiveVms = activeVms;
 
-			for (Iterator<Integer> i = activeVms.iterator(); i.hasNext(); /* empty */) {
-				Integer vmid = (Integer) i.next();
-				if (!lastActiveVms.contains(vmid)) {
-					// a new file has been detected, add to set
-					startedVms.add(vmid);
-				}
-			}
+            // get the current set of active JVMs
+            activeVms = (HashSet<Integer>) vmManager.activeVms();
 
-			for (Iterator<Integer> i = lastActiveVms.iterator(); i.hasNext();
-			/* empty */) {
-				Object o = i.next();
-				if (!activeVms.contains(o)) {
-					// JVM has terminated, remove it from the active list
-					terminatedVms.add(o);
-				}
-			}
+            if (activeVms.isEmpty()) {
+                return;
+            }
+            Set<Integer> startedVms = new HashSet<Integer>();
+            Set<Object> terminatedVms = new HashSet<Object>();
 
-			if (!startedVms.isEmpty() || !terminatedVms.isEmpty()) {
-				fireVmStatusChangedEvents(activeVms, startedVms, terminatedVms);
-			}
-		}
-	}
+            for (Iterator<Integer> i = activeVms.iterator(); i.hasNext(); /* empty */) {
+                Integer vmid = (Integer) i.next();
+                if (!lastActiveVms.contains(vmid)) {
+                    // a new file has been detected, add to set
+                    startedVms.add(vmid);
+                }
+            }
+
+            for (Iterator<Integer> i = lastActiveVms.iterator(); i.hasNext(); /* empty */) {
+                Object o = i.next();
+                if (!activeVms.contains(o)) {
+                    // JVM has terminated, remove it from the active list
+                    terminatedVms.add(o);
+                }
+            }
+
+            if (!startedVms.isEmpty() || !terminatedVms.isEmpty()) {
+                fireVmStatusChangedEvents(activeVms, startedVms, terminatedVms);
+            }
+        }
+    }
 }

@@ -22,19 +22,18 @@
  *
  *
  */
-
 package com.sun.tools.attach;
 
 public class AgentLoadException extends Exception {
 
-	static final long serialVersionUID = 688047862952114238L;
+    static final long serialVersionUID = 688047862952114238L;
 
-	public AgentLoadException() {
-		super();
-	}
+    public AgentLoadException() {
+        super();
+    }
 
-	public AgentLoadException(String s) {
-		super(s);
-	}
+    public AgentLoadException(String s) {
+        super(s);
+    }
 
 }

@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor;
 
 import sun.jvmstat.monitor.MonitorException;
@@ -36,20 +35,19 @@ import sun.jvmstat.monitor.MonitorException;
 @SuppressWarnings("serial")
 public class MonitorVersionException extends MonitorException {
 
-	/**
-	 * Create a MonitorVersionException
-	 */
-	public MonitorVersionException() {
-		super();
-	}
+    /**
+     * Create a MonitorVersionException
+     */
+    public MonitorVersionException() {
+        super();
+    }
 
-	/**
-	 * Create a MonitorVersionException with the given message.
-	 *
-	 * @param message
-	 *            the message to associate with the exception.
-	 */
-	public MonitorVersionException(String message) {
-		super(message);
-	}
+    /**
+     * Create a MonitorVersionException with the given message.
+     *
+     * @param message the message to associate with the exception.
+     */
+    public MonitorVersionException(String message) {
+        super(message);
+    }
 }

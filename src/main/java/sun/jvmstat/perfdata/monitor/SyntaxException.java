@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor;
 
 /**
@@ -33,13 +32,14 @@ package sun.jvmstat.perfdata.monitor;
  */
 @SuppressWarnings("serial")
 public class SyntaxException extends Exception {
-	int lineno;
 
-	public SyntaxException(int lineno) {
-		this.lineno = lineno;
-	}
+    int lineno;
 
-	public String getMessage() {
-		return "syntax error at line " + lineno;
-	}
+    public SyntaxException(int lineno) {
+        this.lineno = lineno;
+    }
+
+    public String getMessage() {
+        return "syntax error at line " + lineno;
+    }
 }

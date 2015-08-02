@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.monitor.event;
 
 import java.util.EventObject;
@@ -38,22 +37,21 @@ import sun.jvmstat.monitor.MonitoredHost;
 @SuppressWarnings("serial")
 public class HostEvent extends EventObject {
 
-	/**
-	 * Construct a new HostEvent instance.
-	 *
-	 * @param host
-	 *            the MonitoredHost source of the event.
-	 */
-	public HostEvent(MonitoredHost host) {
-		super(host);
-	}
+    /**
+     * Construct a new HostEvent instance.
+     *
+     * @param host the MonitoredHost source of the event.
+     */
+    public HostEvent(MonitoredHost host) {
+        super(host);
+    }
 
-	/**
-	 * Return the MonitoredHost source of this event.
-	 *
-	 * @return MonitoredHost - the source of this event.
-	 */
-	public MonitoredHost getMonitoredHost() {
-		return (MonitoredHost) source;
-	}
+    /**
+     * Return the MonitoredHost source of this event.
+     *
+     * @return MonitoredHost - the source of this event.
+     */
+    public MonitoredHost getMonitoredHost() {
+        return (MonitoredHost) source;
+    }
 }

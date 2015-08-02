@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor.protocol.rmi;
 
 import java.util.*;
@@ -40,56 +39,54 @@ import sun.jvmstat.monitor.remote.*;
  */
 public class RemoteVmManager {
 
-	private RemoteHost remoteHost;
-	/**
-	 * Creates a RemoteVmManager instance for the remote system.
-	 * <p>
-	 * Manages RemoteMonitordVm instances for which the principal running the remote server has appropriate permissions.
-	 *
-	 * @param remoteHost
-	 *            the remote proxy object to the RMI server on the remote system.
-	 */
-	public RemoteVmManager(RemoteHost remoteHost) {
-		this(remoteHost, null);
-	}
+    private RemoteHost remoteHost;
 
-	/**
-	 * Creates a RemoteVmManager instance for the given user.
-	 * <p>
-	 * Manages RemoteMonitoredVm instances for all remote Java Virtual machines owned by the specified user on the remote system. The RMI server on the remote system must have the appropriate permissions to access the named users Java Virtual Machines.
-	 *
-	 * @param remoteHost
-	 *            the remote proxy object to the RMI server on the remote system.
-	 * @param user
-	 *            the name of the user
-	 */
-	public RemoteVmManager(RemoteHost remoteHost, String user) {
-		this.remoteHost = remoteHost;
-	}
+    /**
+     * Creates a RemoteVmManager instance for the remote system.
+     * <p>
+     * Manages RemoteMonitordVm instances for which the principal running the remote server has appropriate permissions.
+     *
+     * @param remoteHost the remote proxy object to the RMI server on the remote system.
+     */
+    public RemoteVmManager(RemoteHost remoteHost) {
+        this(remoteHost, null);
+    }
 
-	/**
-	 * Return the current set of monitorable Java Virtual Machines.
-	 * <p>
-	 * The set returned by this method depends on the user name passed to the constructor. If no user name was specified, then this method will return all candidate JVMs on the system. Otherwise, only the JVMs for the given user will be returned. This assumes that the RMI server process has the appropriate permissions to access the target set of JVMs.
-	 *
-	 * @return Set - the Set of monitorable Java Virtual Machines
-	 */
-	public Set<Integer> activeVms() throws MonitorException {
-		int[] active = null;
+    /**
+     * Creates a RemoteVmManager instance for the given user.
+     * <p>
+     * Manages RemoteMonitoredVm instances for all remote Java Virtual machines owned by the specified user on the remote system. The RMI server on the remote system must have the appropriate permissions to access the named users Java Virtual Machines.
+     *
+     * @param remoteHost the remote proxy object to the RMI server on the remote system.
+     * @param user the name of the user
+     */
+    public RemoteVmManager(RemoteHost remoteHost, String user) {
+        this.remoteHost = remoteHost;
+    }
 
-		try {
-			active = remoteHost.activeVms();
+    /**
+     * Return the current set of monitorable Java Virtual Machines.
+     * <p>
+     * The set returned by this method depends on the user name passed to the constructor. If no user name was specified, then this method will return all candidate JVMs on the system. Otherwise, only the JVMs for the given user will be returned. This assumes that the RMI server process has the appropriate permissions to access the target set of JVMs.
+     *
+     * @return Set - the Set of monitorable Java Virtual Machines
+     */
+    public Set<Integer> activeVms() throws MonitorException {
+        int[] active = null;
 
-		} catch (RemoteException e) {
-			throw new MonitorException("Error communicating with remote host: " + e.getMessage(), e);
-		}
+        try {
+            active = remoteHost.activeVms();
 
-		Set<Integer> activeSet = new HashSet<Integer>(active.length);
+        } catch (RemoteException e) {
+            throw new MonitorException("Error communicating with remote host: " + e.getMessage(), e);
+        }
 
-		for (int i = 0; i < active.length; i++) {
-			activeSet.add(new Integer(active[i]));
-		}
+        Set<Integer> activeSet = new HashSet<Integer>(active.length);
 
-		return activeSet;
-	}
+        for (int i = 0; i < active.length; i++) {
+            activeSet.add(new Integer(active[i]));
+        }
+
+        return activeSet;
+    }
 }

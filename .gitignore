@@ -9,6 +9,7 @@
 /.externalToolBuilders
 /dist
 /.nb-gradle
+gradle.properties
 
 /bin
 /build

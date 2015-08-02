@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.perfdata.monitor.protocol.local;
 
 import java.util.*;
@@ -34,24 +33,25 @@ import java.util.*;
  * @since 1.5
  */
 public class LocalEventTimer extends Timer {
-	private static LocalEventTimer instance; // singleton instance
 
-	/**
-	 * Creates the singleton LocalEventTimer instance.
-	 */
-	private LocalEventTimer() {
-		super(true);
-	}
+    private static LocalEventTimer instance; // singleton instance
 
-	/**
-	 * Get the singleton LocalEventTimer instance
-	 *
-	 * @return LocalEventTimer - the singleton LocalEventTimer instance
-	 */
-	public static synchronized LocalEventTimer getInstance() {
-		if (instance == null) {
-			instance = new LocalEventTimer();
-		}
-		return instance;
-	}
+    /**
+     * Creates the singleton LocalEventTimer instance.
+     */
+    private LocalEventTimer() {
+        super(true);
+    }
+
+    /**
+     * Get the singleton LocalEventTimer instance
+     *
+     * @return LocalEventTimer - the singleton LocalEventTimer instance
+     */
+    public static synchronized LocalEventTimer getInstance() {
+        if (instance == null) {
+            instance = new LocalEventTimer();
+        }
+        return instance;
+    }
 }

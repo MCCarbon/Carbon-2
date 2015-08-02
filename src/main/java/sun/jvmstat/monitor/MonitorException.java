@@ -22,7 +22,6 @@
  *
  *
  */
-
 package sun.jvmstat.monitor;
 
 /**
@@ -34,42 +33,38 @@ package sun.jvmstat.monitor;
 @SuppressWarnings("serial")
 public class MonitorException extends Exception {
 
-	/**
-	 * Create a MonitorException
-	 */
-	public MonitorException() {
-		super();
-	}
+    /**
+     * Create a MonitorException
+     */
+    public MonitorException() {
+        super();
+    }
 
-	/**
-	 * Create a MonitorException with the given message.
-	 *
-	 * @param message
-	 *            the message to associate with the exception.
-	 */
-	public MonitorException(String message) {
-		super(message);
-	}
+    /**
+     * Create a MonitorException with the given message.
+     *
+     * @param message the message to associate with the exception.
+     */
+    public MonitorException(String message) {
+        super(message);
+    }
 
-	/**
-	 * Create a MonitorException with the given message and cause.
-	 *
-	 * @param message
-	 *            the message to associate with the exception.
-	 * @param cause
-	 *            the exception causing this exception.
-	 */
-	public MonitorException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Create a MonitorException with the given message and cause.
+     *
+     * @param message the message to associate with the exception.
+     * @param cause the exception causing this exception.
+     */
+    public MonitorException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Create an InstrumentationException with the given cause.
-	 *
-	 * @param cause
-	 *            the exception causing this exception.
-	 */
-	public MonitorException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Create an InstrumentationException with the given cause.
+     *
+     * @param cause the exception causing this exception.
+     */
+    public MonitorException(Throwable cause) {
+        super(cause);
+    }
 }

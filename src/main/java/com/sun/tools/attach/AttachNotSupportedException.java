@@ -22,19 +22,18 @@
  *
  *
  */
-
 package com.sun.tools.attach;
 
 public class AttachNotSupportedException extends Exception {
 
-	static final long serialVersionUID = 3391824968260177264L;
+    static final long serialVersionUID = 3391824968260177264L;
 
-	public AttachNotSupportedException() {
-		super();
-	}
+    public AttachNotSupportedException() {
+        super();
+    }
 
-	public AttachNotSupportedException(String s) {
-		super(s);
-	}
+    public AttachNotSupportedException(String s) {
+        super(s);
+    }
 
 }
