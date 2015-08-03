@@ -135,7 +135,8 @@ public class Injector {
 
     public void registerRecipes() {
         Bukkit.resetRecipes();
-        addRecipe(new ShapedRecipe(new ItemStack(436)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', org.bukkit.Material.valueOf("BEETROOT")).setIngredient('b', org.bukkit.Material.BOWL));
+        //remove that recipe for now, we don't have all needed items yet
+        //addRecipe(new ShapedRecipe(new ItemStack(436)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', org.bukkit.Material.valueOf("BEETROOT")).setIngredient('b', org.bukkit.Material.BOWL));
     }
 
     private void addRecipe(Recipe recipe) {

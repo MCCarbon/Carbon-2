@@ -12,6 +12,7 @@ import net.minecraft.server.v1_8_R3.MovingObjectPosition;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig;
 import net.minecraft.server.v1_8_R3.PacketPlayInBlockPlace;
+import net.minecraft.server.v1_8_R3.PacketPlayInWindowClick;
 import net.minecraft.server.v1_8_R3.PacketPlayOutBlockChange;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R3.PacketPlayOutSetSlot;
@@ -54,6 +55,78 @@ public class CarbonPlayerConnection extends PlayerConnection {
         player.inventory.setItem(player.inventory.itemInHandIndex, temp);
         sendPacket(new PacketPlayOutSetSlot(player.activeContainer.windowId, player.activeContainer.c.size(), offhandItem));
         sendPacket(new PacketPlayOutSetSlot(player.activeContainer.windowId, player.activeContainer.getSlot(player.inventory, player.inventory.itemInHandIndex).rawSlotIndex, player.inventory.getItemInHand()));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void a(PacketPlayInWindowClick packet) {
+        PlayerConnectionUtils.ensureMainThread(packet, this, player.u());
+        int containersize = player.activeContainer.c.size();
+        if (packet.b() != containersize) {
+            super.a(packet);
+            return;
+        }
+        if (player.dead) {
+            return;
+        }
+        player.resetIdleTimer();
+        if (player.activeContainer.windowId == packet.a() && player.activeContainer.c(player)) {
+            int mode = packet.f();
+            int button = packet.c();
+            ItemStack carried = player.inventory.getCarried();
+            switch (mode) {
+                //TODO: cleanup
+                case 0: {
+                    if ((offhandItem == null || offhandItem.count <= 0) && (carried == null || carried.count <= 0)) {
+                        break;
+                    }
+                    if (button == 0) {
+                        if (offhandItem == null) {
+                            player.inventory.setCarried(null);
+                            offhandItem = carried;
+                        } else if (carried == null) {
+                            player.inventory.setCarried(offhandItem);
+                            offhandItem = null;
+                        } else if (offhandItem.getItem() != carried.getItem()) {
+                            player.inventory.setCarried(offhandItem);
+                            offhandItem = carried;
+                        } else {
+                            int addamount = Math.min(carried.count, offhandItem.getMaxStackSize() - offhandItem.count);
+                            offhandItem.count += addamount;
+                            carried.count -= addamount;
+                        }
+                    } else if (button == 1) {
+                        if (offhandItem == null) {
+                            offhandItem = carried.cloneItemStack();
+                            offhandItem.count = 1;
+                            carried.count -= 1;
+                        } else if (carried == null) {
+                            carried = offhandItem.cloneItemStack();
+                            offhandItem.count /= 2;
+                            carried.count -= offhandItem.count;
+                            player.inventory.setCarried(carried);
+                        } else if (offhandItem.getItem() != carried.getItem()) {
+                            player.inventory.setCarried(offhandItem);
+                            offhandItem = carried;
+                        } else {
+                            int addamount = Math.min(1, offhandItem.getMaxStackSize() - offhandItem.count);
+                            offhandItem.count += addamount;
+                            carried.count -= addamount;
+                        }
+                    }
+                    if (carried != null && carried.count == 0) {
+                        player.inventory.setCarried(null);
+                    }
+                    if (offhandItem != null && offhandItem.count == 0) {
+                        offhandItem = null;
+                    }
+                    break;
+                }
+                default: {
+                    player.getBukkitEntity().updateInventory();
+                }
+            }
+        }
     }
 
     @Override
