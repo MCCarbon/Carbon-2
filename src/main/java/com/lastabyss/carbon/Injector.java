@@ -43,8 +43,11 @@ import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.items.ItemBeetrootSeeds;
 import com.lastabyss.carbon.items.ItemBeetrootSoup;
 import com.lastabyss.carbon.items.ItemBeetroot;
+import com.lastabyss.carbon.items.ItemChorusFruit;
+import com.lastabyss.carbon.items.ItemPoppedChorusFruit;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Utils;
 
@@ -62,6 +65,8 @@ public class Injector {
         //Inject network
         NetworkInjector.inject();
         //Add new blocks
+        Block beetroots = new BlockBeetroots().setName("beetroots");
+        
         Utils.addMaterial("END_ROD_BLOCK", 198);
         registerBlock(198, "end_rod", new BlockEndRod().setStrength(0.0F).setLightLevel(0.9375F).setStepSound(SoundUtil.WOOD).setName("endRod"));
 
@@ -91,7 +96,7 @@ public class Injector {
         registerBlock(206, "end_bricks", new WrappedBlock(Material.STONE).setStepSound(SoundUtil.STONE2).setStrength(0.8F).setName("endBricks"));
 
         Utils.addMaterial("BEETROOTS", 207);
-        registerBlock(207, "beetroots", new BlockBeetroots().setName("beetroots"));
+        registerBlock(207, "beetroots", beetroots);
         
         Utils.addMaterial("GRASS_PATH", 208);
         registerBlock(208, "grass_path", new BlockGrassPath().setStrength(0.65F).setStepSound(SoundUtil.GRASS).setName("grassPath").setUnbreakable());
@@ -102,11 +107,20 @@ public class Injector {
         Utils.addMaterial("STRUCTURE_BLOCK", 255);
         registerBlock(255, "structure_block", new BlockStructureBlock().setUnbreakable().setExplosionResist(6000000.0F).setName("structureBlock").setLightLevel(1.0F));
 
+        Utils.addMaterial("CHORUS_FRUIT", 432);
+        registerItem(432, "chorus_fruit", new ItemChorusFruit());
+        
+        Utils.addMaterial("CHORUS_FRUIT_POPPED", 433);
+        registerItem(433, "chorus_fruit_popped", new ItemPoppedChorusFruit());
+        
+        Utils.addMaterial("BEETROOT_SEEDS", 434);
+        registerItem(434, "beetroot_seeds", new ItemBeetrootSeeds(beetroots));
+        
+        Utils.addMaterial("CHORUS_FRUIT", 435);
+        registerItem(435, "chorus_fruit", new ItemChorusFruit());
+        
         Utils.addMaterial("BEETROOT_SOUP", 436);
         registerItem(436, "beetroot_soup", new ItemBeetrootSoup());
-        
-        Utils.addMaterial("BEETROOT", 434);
-        registerItem(434, "beetroot", new ItemBeetroot());
         
         //Add new tile entities
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");
