@@ -3,8 +3,10 @@ package com.lastabyss.carbon.network;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
@@ -47,9 +49,10 @@ public class NetworkInjector implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
-        NetworkManager networkManager = ((CraftPlayer) event.getPlayer()).getHandle().playerConnection.networkManager;
+        EntityPlayer nmsplayer = ((CraftPlayer) event.getPlayer()).getHandle();
+        NetworkManager networkManager = nmsplayer.playerConnection.networkManager;
         if (networkManager.channel.attr(InjectingHandsahkePacket.IS_SNAPSHOT) != null) {
-            CarbonOutTransformer outransformer = new CarbonOutTransformer();
+            CarbonOutTransformer outransformer = new CarbonOutTransformer(new CarbonPlayerConnection(MinecraftServer.getServer(), networkManager, nmsplayer));
             outransformer.setPlayerId(event.getPlayer().getEntityId());
             networkManager.channel.pipeline()
             .addAfter("compress", "carbon-out-transformer", outransformer)

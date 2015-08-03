@@ -2,6 +2,7 @@ package com.lastabyss.carbon.network.pipeline;
 
 import java.util.UUID;
 
+import com.lastabyss.carbon.network.CarbonPlayerConnection;
 import com.lastabyss.carbon.network.DataWatcherTransformer;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 import com.lastabyss.carbon.utils.Utils;
@@ -15,6 +16,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
 public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
+
+    private CarbonPlayerConnection connection;
+    public CarbonOutTransformer(CarbonPlayerConnection connection) {
+        this.connection = connection;
+    }
 
     private final TIntObjectHashMap<WatchedEntity> entities = new TIntObjectHashMap<WatchedEntity>();
     private WatchedPlayer player;

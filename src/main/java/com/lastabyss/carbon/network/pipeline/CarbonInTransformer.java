@@ -18,11 +18,11 @@ public class CarbonInTransformer extends MessageToMessageDecoder<ByteBuf> {
         }
         PacketDataSerializerHelper serializer = new PacketDataSerializerHelper(message);
         int packetId = serializer.readVarInt();
+        if (packetId == 0x08) {
+            packetId = 100;
+        }
         if (packetId > 0x08) {
             packetId--;
-        }
-        if (packetId == 0x08) {
-            packetId = 99;
         }
         PacketDataSerializerHelper packetdataserializer = new PacketDataSerializerHelper(Unpooled.buffer());
         packetdataserializer.writeVarInt(packetId);
