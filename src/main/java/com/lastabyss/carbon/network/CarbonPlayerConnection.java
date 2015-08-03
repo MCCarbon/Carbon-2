@@ -142,6 +142,10 @@ public class CarbonPlayerConnection extends PlayerConnection {
         if (itemstack == null) {
             return;
         }
+        player.resetIdleTimer();
+        if (itemstack == null) {
+            return;
+        }
         final float pitch = player.pitch;
         final float yaw = player.yaw;
         final double x = player.locX;
@@ -168,8 +172,8 @@ public class CarbonPlayerConnection extends PlayerConnection {
             final PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, movingobjectposition.a(), movingobjectposition.direction, itemstack, true);
             cancelled = (event.useItemInHand() == PlayerInteractEvent.Result.DENY);
         }
-        if (!cancelled && itemstack != null) {
-            player.playerInteractManager.useItem(player, player.world, itemstack);
+        if (!cancelled) {
+            useItem(itemstack, packet.getHand());
         }
         validateHandItems();
     }
