@@ -1,6 +1,7 @@
 package com.lastabyss.carbon;
 
 import com.lastabyss.carbon.instrumentation.Instrumentator;
+import com.lastabyss.carbon.listeners.PlayerListener;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Metrics;
 import com.lastabyss.carbon.utils.Utils;
@@ -68,6 +69,7 @@ public class Carbon extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new NetworkInjector(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
