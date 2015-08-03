@@ -1,6 +1,9 @@
 package com.lastabyss.carbon.network.pipeline;
 
+import java.util.ArrayList;
 import java.util.UUID;
+
+import net.minecraft.server.v1_8_R3.ItemStack;
 
 import com.lastabyss.carbon.network.CarbonPlayerConnection;
 import com.lastabyss.carbon.network.DataWatcherTransformer;
@@ -110,6 +113,20 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                 message.resetReaderIndex();
                 out.writeBytes(message);
                 return;
+            }
+            case 0x30: { //WindowItems - add offhand slot to the end
+                packetdataserializer.writeByte(messageserializer.readByte());
+                int count = messageserializer.readShort();
+                packetdataserializer.writeShort(count + 1);
+                ArrayList<ItemStack> items = new ArrayList<ItemStack>(count * 2);
+                for (int i = 0; i < count; i++) {
+                    items.add(messageserializer.readItemStack());
+                }
+                items.add(connection.getOffHandItem());
+                for (ItemStack itemstack : items) {
+                    packetdataserializer.writeItemStack(itemstack);
+                }
+                break;
             }
             case 0x49: { //UpdateEntityNBT - was removed in 1.9, just skip
                 return;

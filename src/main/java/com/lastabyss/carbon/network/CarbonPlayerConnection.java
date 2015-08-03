@@ -10,9 +10,11 @@ import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.MovingObjectPosition;
 import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig;
 import net.minecraft.server.v1_8_R3.PacketPlayInBlockPlace;
 import net.minecraft.server.v1_8_R3.PacketPlayOutBlockChange;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R3.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import net.minecraft.server.v1_8_R3.PlayerConnectionUtils;
 import net.minecraft.server.v1_8_R3.Vec3D;
@@ -39,6 +41,20 @@ public class CarbonPlayerConnection extends PlayerConnection {
     }
 
     private ItemStack offhandItem;
+
+    @Override
+    public void a(PacketPlayInBlockDig packet) {
+        PlayerConnectionUtils.ensureMainThread(packet, this, player.u());
+        if (packet.c() != NetworkInjector.SWAP_HELD_ITEMS) {
+            super.a(packet);
+            return;
+        }
+        ItemStack temp = offhandItem;
+        offhandItem = player.inventory.getItemInHand();
+        player.inventory.setItem(player.inventory.itemInHandIndex, temp);
+        sendPacket(new PacketPlayOutSetSlot(player.activeContainer.windowId, player.activeContainer.c.size(), offhandItem));
+        sendPacket(new PacketPlayOutSetSlot(player.activeContainer.windowId, player.activeContainer.getSlot(player.inventory, player.inventory.itemInHandIndex).rawSlotIndex, player.inventory.getItemInHand()));
+    }
 
     @Override
     public void a(PacketPlayInBlockPlace packet) {
@@ -88,7 +104,7 @@ public class CarbonPlayerConnection extends PlayerConnection {
                 cancelled = (event.useItemInHand() == PlayerInteractEvent.Result.DENY);
             }
             if (!cancelled) {
-                player.playerInteractManager.useItem(player, player.world, itemstack);
+                useItem(itemstack, carbonpacket.getHand());
             }
         } else if ((blockposition.getY() >= (minecraftServer.getMaxBuildHeight() - 1)) && ((enumdirection == EnumDirection.UP) || (blockposition.getY() >= minecraftServer.getMaxBuildHeight()))) {
             final ChatMessage chatmessage = new ChatMessage("build.tooHigh", new Object[] { minecraftServer.getMaxBuildHeight() });
@@ -149,9 +165,36 @@ public class CarbonPlayerConnection extends PlayerConnection {
             cancelled = (event.useItemInHand() == PlayerInteractEvent.Result.DENY);
         }
         if (!cancelled) {
-            player.playerInteractManager.useItem(player, player.world, itemstack);
+            useItem(itemstack, packet.getHand());
         }
         validateHandItems();
+    }
+
+    private boolean useItem(ItemStack itemstack, EnumUsedHand hand) {
+        if (player.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.SPECTATOR) {
+            return false;
+        }
+        final int count = itemstack.count;
+        final int data = itemstack.getData();
+        final ItemStack afterUse = itemstack.a(player.world, player);
+        if (afterUse == itemstack && (afterUse == null || (afterUse.count == count && afterUse.l() <= 0 && afterUse.getData() == data))) {
+            return false;
+        }
+        if (hand == EnumUsedHand.MAIN_HAND) {
+            player.inventory.items[player.inventory.itemInHandIndex] = afterUse;
+        } else {
+            offhandItem = afterUse;
+        }
+        if (player.playerInteractManager.isCreative()) {
+            afterUse.count = count;
+            if (afterUse.e()) {
+                afterUse.setData(data);
+            }
+        }
+        if (!player.bS()) {
+            player.updateInventory(player.defaultContainer);
+        }
+        return true;
     }
 
     private void validateHandItems() {
@@ -160,7 +203,7 @@ public class CarbonPlayerConnection extends PlayerConnection {
             player.inventory.items[player.inventory.itemInHandIndex] = null;
             mainhandItem = null;
         }
-        if ((offhandItem != null) && (offhandItem.count <= 0)) {
+        if ((offhandItem != null) && (offhandItem.count == 0)) {
             offhandItem = null;
         }
     }

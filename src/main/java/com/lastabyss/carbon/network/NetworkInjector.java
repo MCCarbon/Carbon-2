@@ -10,6 +10,7 @@ import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig.EnumPlayerDigType;
 
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.lastabyss.carbon.DynamicEnumType;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInAnimation;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInSettings;
@@ -27,6 +29,8 @@ import com.lastabyss.carbon.network.pipeline.CarbonOutTransformer;
 import com.lastabyss.carbon.utils.Utils;
 
 public class NetworkInjector implements Listener {
+
+    public static final Enum<EnumPlayerDigType> SWAP_HELD_ITEMS = DynamicEnumType.addEnum(EnumPlayerDigType.class, "SWAP_HELD_ITEMS", new Class<?>[0], new Object[0]);
 
     public static void inject() {
         registerPacket(EnumProtocol.HANDSHAKING, InjectingHandshakePacket.class, 0, false);
