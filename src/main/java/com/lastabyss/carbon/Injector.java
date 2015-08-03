@@ -1,5 +1,34 @@
 package com.lastabyss.carbon;
 
+import gnu.trove.map.TObjectIntMap;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+
+import net.minecraft.server.v1_8_R3.Block;
+import net.minecraft.server.v1_8_R3.Blocks;
+import net.minecraft.server.v1_8_R3.DataWatcher;
+import net.minecraft.server.v1_8_R3.Enchantment;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityTypes;
+import net.minecraft.server.v1_8_R3.EntityTypes.MonsterEggInfo;
+import net.minecraft.server.v1_8_R3.IBlockData;
+import net.minecraft.server.v1_8_R3.Item;
+import net.minecraft.server.v1_8_R3.Items;
+import net.minecraft.server.v1_8_R3.Material;
+import net.minecraft.server.v1_8_R3.MinecraftKey;
+import net.minecraft.server.v1_8_R3.PotionBrewer;
+import net.minecraft.server.v1_8_R3.TileEntity;
+
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+
 import com.lastabyss.carbon.blocks.BlockBeetroots;
 import com.lastabyss.carbon.blocks.BlockChorusFlower;
 import com.lastabyss.carbon.blocks.BlockChorusPlant;
@@ -14,35 +43,10 @@ import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.items.ItemBeetrootSoup;
+import com.lastabyss.carbon.items.ItemBeetroot;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Utils;
-
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.Blocks;
-import net.minecraft.server.v1_8_R3.DataWatcher;
-import net.minecraft.server.v1_8_R3.Enchantment;
-import net.minecraft.server.v1_8_R3.Entity;
-import net.minecraft.server.v1_8_R3.EntityTypes;
-import net.minecraft.server.v1_8_R3.EntityTypes.MonsterEggInfo;
-import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.Items;
-import net.minecraft.server.v1_8_R3.MinecraftKey;
-import net.minecraft.server.v1_8_R3.PotionBrewer;
-import net.minecraft.server.v1_8_R3.TileEntity;
-import net.minecraft.server.v1_8_R3.Material;
-
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.Recipe;
-
-import gnu.trove.map.TObjectIntMap;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * The injector class is the driver behind Carbon.
@@ -88,7 +92,7 @@ public class Injector {
 
         Utils.addMaterial("BEETROOTS", 207);
         registerBlock(207, "beetroots", new BlockBeetroots().setName("beetroots"));
-
+        
         Utils.addMaterial("GRASS_PATH", 208);
         registerBlock(208, "grass_path", new BlockGrassPath().setStrength(0.65F).setStepSound(SoundUtil.GRASS).setName("grassPath").setUnbreakable());
 
@@ -98,6 +102,12 @@ public class Injector {
         Utils.addMaterial("STRUCTURE_BLOCK", 255);
         registerBlock(255, "structure_block", new BlockStructureBlock().setUnbreakable().setExplosionResist(6000000.0F).setName("structureBlock").setLightLevel(1.0F));
 
+        Utils.addMaterial("BEETROOT_SOUP", 436);
+        registerItem(436, "beetroot_soup", new ItemBeetrootSoup());
+        
+        Utils.addMaterial("BEETROOT", 434);
+        registerItem(434, "beetroot", new ItemBeetroot());
+        
         //Add new tile entities
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");
         registerTileEntity(TileEntityStructure.class, "Structure");
@@ -111,7 +121,7 @@ public class Injector {
 
     public void registerRecipes() {
         Bukkit.resetRecipes();
-
+        addRecipe(new ShapedRecipe(new ItemStack(436)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', org.bukkit.Material.valueOf("BEETROOT")).setIngredient('b', org.bukkit.Material.BOWL));
     }
 
     private void addRecipe(Recipe recipe) {
