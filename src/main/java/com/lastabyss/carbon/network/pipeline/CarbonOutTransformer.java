@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
 import com.lastabyss.carbon.network.CarbonPlayerConnection;
 import com.lastabyss.carbon.network.DataWatcherTransformer;
@@ -34,97 +35,98 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, ByteBuf message, ByteBuf out) throws Exception {
-        PacketDataSerializerHelper packetdataserializer = new PacketDataSerializerHelper(Unpooled.buffer());
-        PacketDataSerializerHelper messageserializer = new PacketDataSerializerHelper(message);
-        int packetId = messageserializer.readVarInt();
-        packetdataserializer.writeVarInt(packetId);
+    protected void encode(ChannelHandlerContext ctx, ByteBuf messagebuf, ByteBuf out) throws Exception {
+        ByteBuf buffer = Unpooled.buffer();
+        PacketDataSerializer packetdata = new PacketDataSerializer(buffer);
+        PacketDataSerializer message = new PacketDataSerializer(messagebuf);
+        int packetId = PacketDataSerializerHelper.readVarInt(message);
+        PacketDataSerializerHelper.writeVarInt(packetdata, packetId);
         switch (packetId) {
             case 0x04: { //EntitEquip - fix slot id (left hand now has id == 1, and other parts 2-5, main hand id remain untouched)
-                packetdataserializer.writeVarInt(messageserializer.readVarInt());
-                int slot = messageserializer.readShort();
+                PacketDataSerializerHelper.writeVarInt(packetdata, PacketDataSerializerHelper.readVarInt(message));
+                int slot = message.readShort();
                 if (slot > 0) {
                     slot++;
                 }
-                packetdataserializer.writeVarInt(slot);
-                packetdataserializer.writeBytes(messageserializer);
+                PacketDataSerializerHelper.writeVarInt(packetdata, slot);
+                packetdata.writeBytes(message);
                 break;
             }
             case 0x0C: { //PlayerSpawn - add random uuid and transform entity metadata
-                int entityId = messageserializer.readVarInt();
+                int entityId = PacketDataSerializerHelper.readVarInt(message);
                 entities.put(entityId, new WatchedPlayer(entityId));
-                packetdataserializer.writeVarInt(entityId);
-                packetdataserializer.writeUUID(messageserializer.readUUID());
-                packetdataserializer.writeInt(messageserializer.readInt());
-                packetdataserializer.writeInt(messageserializer.readInt());
-                packetdataserializer.writeInt(messageserializer.readInt());
-                packetdataserializer.writeByte(messageserializer.readByte());
-                packetdataserializer.writeByte(messageserializer.readByte());
-                messageserializer.readShort();
-                packetdataserializer.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(messageserializer)));
+                PacketDataSerializerHelper.writeVarInt(packetdata, entityId);
+                PacketDataSerializerHelper.writeUUID(packetdata, PacketDataSerializerHelper.readUUID(message));
+                packetdata.writeInt(message.readInt());
+                packetdata.writeInt(message.readInt());
+                packetdata.writeInt(message.readInt());
+                packetdata.writeByte(message.readByte());
+                packetdata.writeByte(message.readByte());
+                message.readShort();
+                packetdata.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(message)));
                 break;
             }
             case 0x0E: { //SpawnObject - add random uuid
-                packetdataserializer.writeVarInt(messageserializer.readVarInt());
-                packetdataserializer.writeUUID(UUID.randomUUID()); //TODO: check if it is safe
-                packetdataserializer.writeByte(messageserializer.readByte());
-                packetdataserializer.writeInt(messageserializer.readInt());
-                packetdataserializer.writeInt(messageserializer.readInt());
-                packetdataserializer.writeInt(messageserializer.readInt());
-                packetdataserializer.writeByte(messageserializer.readByte());
-                packetdataserializer.writeByte(messageserializer.readByte());
-                int data = messageserializer.readInt();
-                packetdataserializer.writeInt(data);
+                PacketDataSerializerHelper.writeVarInt(packetdata, PacketDataSerializerHelper.readVarInt(message));
+                PacketDataSerializerHelper.writeUUID(packetdata, UUID.randomUUID());
+                packetdata.writeByte(message.readByte());
+                packetdata.writeInt(message.readInt());
+                packetdata.writeInt(message.readInt());
+                packetdata.writeInt(message.readInt());
+                packetdata.writeByte(message.readByte());
+                packetdata.writeByte(message.readByte());
+                int data = message.readInt();
+                packetdata.writeInt(data);
                 if (data != 0) {
-                    packetdataserializer.writeShort(messageserializer.readShort());
-                    packetdataserializer.writeShort(messageserializer.readShort());
-                    packetdataserializer.writeShort(messageserializer.readShort());
+                    packetdata.writeShort(message.readShort());
+                    packetdata.writeShort(message.readShort());
+                    packetdata.writeShort(message.readShort());
                 } else {
-                    packetdataserializer.writeShort(0);
-                    packetdataserializer.writeShort(0);
-                    packetdataserializer.writeShort(0);
+                    packetdata.writeShort(0);
+                    packetdata.writeShort(0);
+                    packetdata.writeShort(0);
                 }
                 break;
             }
             case 0x0F: { //SpawnMob - add random uuid
-                packetdataserializer.writeVarInt(messageserializer.readVarInt());
-                packetdataserializer.writeUUID(UUID.randomUUID()); //TODO: check if it is safe
-                packetdataserializer.writeBytes(messageserializer);
+                PacketDataSerializerHelper.writeVarInt(packetdata, PacketDataSerializerHelper.readVarInt(message));
+                PacketDataSerializerHelper.writeUUID(packetdata, UUID.randomUUID());
+                packetdata.writeBytes(message);
                 break;
             }
             case 0x1C: { //EntityMetadata - transform entity metadata
-                int entityId = messageserializer.readVarInt();
-                packetdataserializer.writeVarInt(entityId);
-                packetdataserializer.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(messageserializer)));
+                int entityId = PacketDataSerializerHelper.readVarInt(message);
+                PacketDataSerializerHelper.writeVarInt(packetdata, entityId);
+                packetdata.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(message)));
                 break;
             }
             case 0x07: { //Respawn - reset watched entity map, and send original packet
                 entities.clear();
                 entities.put(player.getId(), player);
-                message.resetReaderIndex();
-                out.writeBytes(message);
+                messagebuf.resetReaderIndex();
+                out.writeBytes(messagebuf);
                 return;
             }
             case 0x13: { //DestroyEntities - remove entries from watched entity map and send original packet
-                int count = messageserializer.readVarInt();
+                int count = PacketDataSerializerHelper.readVarInt(message);
                 for (int i = 0; i < count; i++) {
-                    entities.remove(messageserializer.readVarInt());
+                    entities.remove(PacketDataSerializerHelper.readVarInt(message));
                 }
-                message.resetReaderIndex();
-                out.writeBytes(message);
+                messagebuf.resetReaderIndex();
+                out.writeBytes(messagebuf);
                 return;
             }
             case 0x30: { //WindowItems - add offhand slot to the end
-                packetdataserializer.writeByte(messageserializer.readByte());
-                int count = messageserializer.readShort();
-                packetdataserializer.writeShort(count + 1);
+                packetdata.writeByte(message.readByte());
+                int count = message.readShort();
+                packetdata.writeShort(count + 1);
                 ArrayList<ItemStack> items = new ArrayList<ItemStack>(count * 2);
                 for (int i = 0; i < count; i++) {
-                    items.add(messageserializer.readItemStack());
+                    items.add(PacketDataSerializerHelper.readItemStack(message));
                 }
                 items.add(connection.getOffHandItem());
                 for (ItemStack itemstack : items) {
-                    packetdataserializer.writeItemStack(itemstack);
+                    PacketDataSerializerHelper.writeItemStack(packetdata, itemstack);
                 }
                 break;
             }
@@ -132,13 +134,13 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                 return;
             }
             default: { //Any other - just send original packet
-                message.resetReaderIndex();
-                out.writeBytes(message);
+                messagebuf.resetReaderIndex();
+                out.writeBytes(messagebuf);
                 return;
             }
         }
         //add transformed packet
-        out.writeBytes(packetdataserializer.getInternalByteBuf());
+        out.writeBytes(buffer);
     }
 
 }
