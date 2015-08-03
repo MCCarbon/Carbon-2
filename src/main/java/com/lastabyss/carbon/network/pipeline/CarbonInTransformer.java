@@ -2,6 +2,7 @@ package com.lastabyss.carbon.network.pipeline;
 
 import java.util.List;
 
+import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUse;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 
 import io.netty.buffer.ByteBuf;
@@ -19,7 +20,7 @@ public class CarbonInTransformer extends MessageToMessageDecoder<ByteBuf> {
         PacketDataSerializerHelper serializer = new PacketDataSerializerHelper(message);
         int packetId = serializer.readVarInt();
         if (packetId == 0x08) {
-            packetId = 100;
+            packetId = CarbonPacketPlayInUse.ID + 1;
         }
         if (packetId > 0x08) {
             packetId--;

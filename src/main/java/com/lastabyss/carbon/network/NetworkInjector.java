@@ -30,7 +30,7 @@ public class NetworkInjector implements Listener {
 
     public static void inject() {
         registerPacket(EnumProtocol.HANDSHAKING, InjectingHandsahkePacket.class, 0, false);
-        registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUse.class, 99, false);
+        registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUse.class, CarbonPacketPlayInUse.ID, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUseEntity.class, 0x02, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInBlockPlace.class, 0x08, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInAnimation.class, 0x0A, false);

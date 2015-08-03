@@ -10,6 +10,8 @@ import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
 public class CarbonPacketPlayInUse implements Packet<CarbonPlayerConnection> {
 
+    public static final int ID = 99;
+
     private EnumUsedHand hand;
 
     @Override
