@@ -42,5 +42,4 @@ public class PlayerListener implements Listener {
 		}
 		event.getClickedBlock().setType(Material.valueOf("GRASS_PATH"));
 	}
-
 }
