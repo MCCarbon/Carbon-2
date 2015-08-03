@@ -146,6 +146,10 @@ public class CarbonPlayerConnection extends PlayerConnection {
         if (itemstack == null) {
             return;
         }
+        player.resetIdleTimer();
+        if (itemstack == null) {
+            return;
+        }
         final float pitch = player.pitch;
         final float yaw = player.yaw;
         final double x = player.locX;
