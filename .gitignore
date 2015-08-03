@@ -16,6 +16,7 @@ gradle.properties
 /build
 /target
 /out
+.settings
 
 /dependency-reduced-pom.xml
 *-private.sh
