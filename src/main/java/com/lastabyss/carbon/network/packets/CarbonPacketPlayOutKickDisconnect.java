@@ -8,15 +8,14 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 import net.minecraft.server.v1_8_R3.PacketListener;
+import net.minecraft.server.v1_8_R3.PacketListenerPlayOut;
 
 import com.google.common.base.Charsets;
-import com.lastabyss.carbon.network.CarbonPlayerConnection;
 
-public class CarbonPacketPlayOutKickDisconnect implements Packet<CarbonPlayerConnection>{
+public class CarbonPacketPlayOutKickDisconnect implements Packet {
 	
 	   private IChatBaseComponent a;
 
-	   //register packet
 	   public CarbonPacketPlayOutKickDisconnect(IChatBaseComponent var1) {
 	      this.a = var1;
 	   }
@@ -41,12 +40,8 @@ public class CarbonPacketPlayOutKickDisconnect implements Packet<CarbonPlayerCon
 			}
 	   }
 
-	   public void a(CarbonPlayerConnection listener) {
-		   //listener.handle(this);
-	   }
-
-	   public void handle(PacketListener var1) {
-	      //this.a((PacketListenerPlayOut)var1);
+	   public void a(PacketListener var1) {
+	      this.a((PacketListenerPlayOut)var1);
 	   }
 	   
 		public int readVarInt(PacketDataSerializer var1) {
