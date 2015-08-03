@@ -1,10 +1,12 @@
 package com.lastabyss.carbon.network;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.ChatMessage;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumChatFormat;
 import net.minecraft.server.v1_8_R3.EnumDirection;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
@@ -18,10 +20,13 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R3.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import net.minecraft.server.v1_8_R3.PlayerConnectionUtils;
+import net.minecraft.server.v1_8_R3.TileEntity;
+import net.minecraft.server.v1_8_R3.TileEntitySign;
 import net.minecraft.server.v1_8_R3.Vec3D;
 import net.minecraft.server.v1_8_R3.WorldServer;
 import net.minecraft.server.v1_8_R3.WorldSettings;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
@@ -30,12 +35,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.NumberConversions;
 
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
+import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUpdateSign;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
 import com.lastabyss.carbon.types.EnumUsedHand;
 
 public class CarbonPlayerConnection extends PlayerConnection {
 
     private MinecraftServer minecraftServer;
+    
     public CarbonPlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
         super(minecraftserver, networkmanager, entityplayer);
         minecraftServer = minecraftserver;
@@ -316,5 +323,34 @@ public class CarbonPlayerConnection extends PlayerConnection {
     public ItemStack getOffHandItem() {
         return offhandItem;
     }
+
+	public void handle(CarbonPacketPlayInUpdateSign carbonPacketPlayInUpdateSign) {
+		//class_fh.a(carbonPacketPlayInUpdateSign, this, player.u());
+		player.resetIdleTimer();
+		WorldServer worldServer = minecraftServer.getWorldServer(player.dimension);
+		BlockPosition blockPosition = carbonPacketPlayInUpdateSign.getPosition();
+		if (worldServer.isLoaded(blockPosition)) {
+			TileEntity tileEntity = worldServer.getTileEntity(blockPosition);
+			if (!(tileEntity instanceof TileEntitySign)) {
+				return;
+			}
+
+			TileEntitySign signTileEntity = (TileEntitySign) tileEntity;
+			if (!signTileEntity.b() || (signTileEntity.c() != player)) {
+				minecraftServer.info("Player " + player.getName() + " just tried to change non-editable sign");
+				return;
+			}
+
+			IChatBaseComponent[] lines = carbonPacketPlayInUpdateSign.getLines();
+
+			for (int i = 0; i < lines.length; ++i) {
+				signTileEntity.lines[i] = new ChatComponentText(ChatColor.stripColor(lines[i].c()));
+			}
+
+			signTileEntity.update();
+			worldServer.notify(blockPosition);
+		}
+		
+	}
 
 }
