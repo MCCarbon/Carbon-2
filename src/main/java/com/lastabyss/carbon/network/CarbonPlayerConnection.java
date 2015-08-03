@@ -27,7 +27,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.NumberConversions;
 
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
-import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUse;
+import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
 import com.lastabyss.carbon.types.EnumUsedHand;
 
 public class CarbonPlayerConnection extends PlayerConnection {
@@ -116,7 +116,7 @@ public class CarbonPlayerConnection extends PlayerConnection {
         validateHandItems();
     }
 
-    public void handle(CarbonPacketPlayInUse packet) {
+    public void handle(CarbonPacketPlayInUseItem packet) {
         PlayerConnectionUtils.ensureMainThread(packet, this, player.u());
         ItemStack itemstack = packet.getHand() == EnumUsedHand.MAIN_HAND ? player.inventory.getItemInHand() : offhandItem;
         if (player.dead) {

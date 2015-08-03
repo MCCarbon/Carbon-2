@@ -8,7 +8,7 @@ import com.lastabyss.carbon.types.EnumUsedHand;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
-public class CarbonPacketPlayInUse implements Packet<CarbonPlayerConnection> {
+public class CarbonPacketPlayInUseItem implements Packet<CarbonPlayerConnection> {
 
     public static final int ID = 99;
 

@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInAnimation;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInSettings;
-import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUse;
+import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseEntity;
 import com.lastabyss.carbon.network.pipeline.CarbonInTransformer;
 import com.lastabyss.carbon.network.pipeline.CarbonOutTransformer;
@@ -30,7 +30,7 @@ public class NetworkInjector implements Listener {
 
     public static void inject() {
         registerPacket(EnumProtocol.HANDSHAKING, InjectingHandshakePacket.class, 0, false);
-        registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUse.class, CarbonPacketPlayInUse.ID, false);
+        registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUseItem.class, CarbonPacketPlayInUseItem.ID, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUseEntity.class, 0x02, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInBlockPlace.class, 0x08, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInAnimation.class, 0x0A, false);
