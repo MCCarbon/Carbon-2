@@ -1,5 +1,6 @@
 package com.lastabyss.carbon;
 
+import com.lastabyss.carbon.items.*;
 import gnu.trove.map.TObjectIntMap;
 
 import java.lang.reflect.Field;
@@ -9,25 +10,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.Blocks;
-import net.minecraft.server.v1_8_R3.DataWatcher;
-import net.minecraft.server.v1_8_R3.Enchantment;
-import net.minecraft.server.v1_8_R3.Entity;
-import net.minecraft.server.v1_8_R3.EntityTypes;
+import net.minecraft.server.v1_8_R3.*;
 import net.minecraft.server.v1_8_R3.EntityTypes.MonsterEggInfo;
-import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.Items;
-import net.minecraft.server.v1_8_R3.Material;
-import net.minecraft.server.v1_8_R3.MinecraftKey;
-import net.minecraft.server.v1_8_R3.PotionBrewer;
-import net.minecraft.server.v1_8_R3.TileEntity;
 
 import org.bukkit.Bukkit;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
 
 import com.lastabyss.carbon.blocks.BlockBeetroots;
 import com.lastabyss.carbon.blocks.BlockChorusFlower;
@@ -43,11 +30,6 @@ import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
-import com.lastabyss.carbon.items.ItemBeetrootSeeds;
-import com.lastabyss.carbon.items.ItemBeetrootSoup;
-import com.lastabyss.carbon.items.ItemBeetroot;
-import com.lastabyss.carbon.items.ItemChorusFruit;
-import com.lastabyss.carbon.items.ItemPoppedChorusFruit;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Utils;
 
@@ -64,9 +46,10 @@ public class Injector {
     public void registerAll() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InvocationTargetException, NoSuchMethodException {
         //Inject network
         NetworkInjector.inject();
+
         //Add new blocks
         Block beetroots = new BlockBeetroots().setName("beetroots");
-        
+
         Utils.addMaterial("END_ROD_BLOCK", 198);
         registerBlock(198, "end_rod", new BlockEndRod().setStrength(0.0F).setLightLevel(0.9375F).setStepSound(SoundUtil.WOOD).setName("endRod"));
 
@@ -107,21 +90,36 @@ public class Injector {
         Utils.addMaterial("STRUCTURE_BLOCK", 255);
         registerBlock(255, "structure_block", new BlockStructureBlock().setUnbreakable().setExplosionResist(6000000.0F).setName("structureBlock").setLightLevel(1.0F));
 
+        //Add new items
+
+        registerItem(262, "arrow", (new ItemArrow()).c("arrow")); //Replace arrow with new arrow
+
         Utils.addMaterial("CHORUS_FRUIT", 432);
         registerItem(432, "chorus_fruit", new ItemChorusFruit());
         
         Utils.addMaterial("CHORUS_FRUIT_POPPED", 433);
-        registerItem(433, "chorus_fruit_popped", new ItemPoppedChorusFruit());
+        registerItem(433, "chorus_fruit_popped", (new Item()).c("chorusFruitPopped"));
+
+        Utils.addMaterial("BEETROOT", 434);
+        registerItem(434, "chorus_fruit_popped", (new ItemFood(1, 0.6F, false)).c("beetroot"));
         
-        Utils.addMaterial("BEETROOT_SEEDS", 434);
-        registerItem(434, "beetroot_seeds", new ItemBeetrootSeeds(beetroots));
-        
-        Utils.addMaterial("CHORUS_FRUIT", 435);
-        registerItem(435, "chorus_fruit", new ItemChorusFruit());
+        Utils.addMaterial("BEETROOT_SEEDS", 435);
+        registerItem(435, "beetroot_seeds", new ItemSeeds(beetroots, Blocks.FARMLAND));
         
         Utils.addMaterial("BEETROOT_SOUP", 436);
-        registerItem(436, "beetroot_soup", new ItemBeetrootSoup());
-        
+        registerItem(436, "beetroot_soup", (new ItemSoup(6)).c("beetroot_soup"));
+
+        //Skip 437 because there is nothing there apparently... spooky
+
+        Utils.addMaterial("SPLASH_POTION", 438);
+        registerItem(436, "splash_potion", (new ItemSplashPotion()).c("splash_potion"));
+
+        Utils.addMaterial("SPECTRAL_ARROW", 439);
+        registerItem(436, "spectral_arrow", (new ItemSpectralArrow()).c("spectral_arrow"));
+
+        Utils.addMaterial("TIPPED_ARROW", 440);
+        registerItem(436, "tipped_arrow", (new ItemTippedArrow()).c("tipped_arrow"));
+
         //Add new tile entities
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");
         registerTileEntity(TileEntityStructure.class, "Structure");
@@ -146,9 +144,7 @@ public class Injector {
     public void registerBlock(int id, String name, Block block) {
         MinecraftKey stringkey = new MinecraftKey(name);
         Block.REGISTRY.a(id, stringkey, block);
-        Iterator<IBlockData> blockdataiterator = block.P().a().iterator();
-        while (blockdataiterator.hasNext()) {
-            IBlockData blockdata = blockdataiterator.next();
+        for (IBlockData blockdata : block.P().a()) {
             final int stateId = (id << 4) | block.toLegacyData(blockdata);
             Block.d.a(blockdata, stateId);
         }
@@ -158,14 +154,12 @@ public class Injector {
     public void registerBlock(int id, String name, Block block, Item item) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
         MinecraftKey stringkey = new MinecraftKey(name);
         Block.REGISTRY.a(id, stringkey, block);
-        Iterator<IBlockData> blockdataiterator = block.P().a().iterator();
-        while (blockdataiterator.hasNext()) {
-            IBlockData blockdata = blockdataiterator.next();
+        for (IBlockData blockdata : block.P().a()) {
             final int stateId = (id << 4) | block.toLegacyData(blockdata);
             Block.d.a(blockdata, stateId);
         }
         Item.REGISTRY.a(id, stringkey, item);
-        ((Map<Block, Item>) Utils.<Field>setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, item);
+        ((Map<Block, Item>) Utils.setAccessible(Item.class.getDeclaredField("a")).get(null)).put(block, item);
     }
 
     public void registerItem(int id, String name, Item item) {
@@ -174,8 +168,8 @@ public class Injector {
 
     @SuppressWarnings("unchecked")
     public void registerTileEntity(Class<? extends TileEntity> entityClass, String name) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        ((Map<String, Class<? extends TileEntity>>) Utils.<Field>setAccessible(TileEntity.class.getDeclaredField("f")).get(null)).put(name, entityClass);
-        ((Map<Class<? extends TileEntity>, String>) Utils.<Field>setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
+        ((Map<String, Class<? extends TileEntity>>) Utils.setAccessible(TileEntity.class.getDeclaredField("f")).get(null)).put(name, entityClass);
+        ((Map<Class<? extends TileEntity>, String>) Utils.setAccessible(TileEntity.class.getDeclaredField("g")).get(null)).put(entityClass, name);
     }
 
     @SuppressWarnings("unchecked")
@@ -187,11 +181,11 @@ public class Injector {
 
     @SuppressWarnings("unchecked")
     public void registerEntity(Class<? extends Entity> entityClass, String name, int id) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        ((Map<String, Class<? extends Entity>>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("c")).get(null)).put(name, entityClass);
-        ((Map<Class<? extends Entity>, String>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("d")).get(null)).put(entityClass, name);
-        ((Map<Integer, Class<? extends Entity>>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("e")).get(null)).put(id, entityClass);
-        ((Map<Class<? extends Entity>, Integer>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("f")).get(null)).put(entityClass, id);
-        ((Map<String, Integer>) Utils.<Field>setAccessible(EntityTypes.class.getDeclaredField("g")).get(null)).put(name, id);
+        ((Map<String, Class<? extends Entity>>) Utils.setAccessible(EntityTypes.class.getDeclaredField("c")).get(null)).put(name, entityClass);
+        ((Map<Class<? extends Entity>, String>) Utils.setAccessible(EntityTypes.class.getDeclaredField("d")).get(null)).put(entityClass, name);
+        ((Map<Integer, Class<? extends Entity>>) Utils.setAccessible(EntityTypes.class.getDeclaredField("e")).get(null)).put(id, entityClass);
+        ((Map<Class<? extends Entity>, Integer>) Utils.setAccessible(EntityTypes.class.getDeclaredField("f")).get(null)).put(entityClass, id);
+        ((Map<String, Integer>) Utils.setAccessible(EntityTypes.class.getDeclaredField("g")).get(null)).put(name, id);
     }
 
     public void registerEntity(Class<? extends Entity> entityClass, String name, int id, int monsterEgg, int monsterEggData) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -201,16 +195,16 @@ public class Injector {
 
     @SuppressWarnings("unchecked")
     public void registerPotionEffect(int effectId, String durations, String amplifier) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        ((Map<Integer, String>) Utils.<Field>setAccessible(PotionBrewer.class.getDeclaredField("effectDurations")).get(null)).put(effectId, durations);
-        ((Map<Integer, String>) Utils.<Field>setAccessible(PotionBrewer.class.getDeclaredField("effectAmplifiers")).get(null)).put(effectId, amplifier);
+        ((Map<Integer, String>) Utils.setAccessible(PotionBrewer.class.getDeclaredField("effectDurations")).get(null)).put(effectId, durations);
+        ((Map<Integer, String>) Utils.setAccessible(PotionBrewer.class.getDeclaredField("effectAmplifiers")).get(null)).put(effectId, amplifier);
     }
 
     public void registerEnchantment(Enchantment enhcantment) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        Utils.<Field>setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, true);
-        ArrayList<Enchantment> enchants = new ArrayList<Enchantment>(Arrays.asList(Enchantment.b));
+        Utils.setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, true);
+        ArrayList<Enchantment> enchants = new ArrayList<>(Arrays.asList(Enchantment.b));
         enchants.add(enhcantment);
-        Utils.setFinalField(Enchantment.class.getField("b"), null, enchants.toArray(new Enchantment[0]));
-        Utils.<Field>setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, false);
+        Utils.setFinalField(Enchantment.class.getField("b"), null, enchants.toArray(new Enchantment[enchants.size()]));
+        Utils.setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, false);
     }
 
     private void fixBlocksRefs() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
