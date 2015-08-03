@@ -29,7 +29,7 @@ import com.lastabyss.carbon.utils.Utils;
 public class NetworkInjector implements Listener {
 
     public static void inject() {
-        registerPacket(EnumProtocol.HANDSHAKING, InjectingHandsahkePacket.class, 0, false);
+        registerPacket(EnumProtocol.HANDSHAKING, InjectingHandshakePacket.class, 0, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUse.class, CarbonPacketPlayInUse.ID, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUseEntity.class, 0x02, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInBlockPlace.class, 0x08, false);
@@ -51,7 +51,7 @@ public class NetworkInjector implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         EntityPlayer nmsplayer = ((CraftPlayer) event.getPlayer()).getHandle();
         NetworkManager networkManager = nmsplayer.playerConnection.networkManager;
-        if (networkManager.channel.attr(InjectingHandsahkePacket.IS_SNAPSHOT) != null) {
+        if (networkManager.channel.attr(InjectingHandshakePacket.IS_SNAPSHOT) != null) {
             CarbonOutTransformer outransformer = new CarbonOutTransformer(new CarbonPlayerConnection(MinecraftServer.getServer(), networkManager, nmsplayer));
             outransformer.setPlayerId(event.getPlayer().getEntityId());
             networkManager.channel.pipeline()

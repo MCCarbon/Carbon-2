@@ -10,7 +10,7 @@ import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PacketHandshakingInListener;
 import net.minecraft.server.v1_8_R3.PacketHandshakingInSetProtocol;
 
-public class InjectingHandsahkePacket extends PacketHandshakingInSetProtocol {
+public class InjectingHandshakePacket extends PacketHandshakingInSetProtocol {
 
     public static final AttributeKey<Boolean> IS_SNAPSHOT = AttributeKey.valueOf("IS_SNAPSHOT");
 
