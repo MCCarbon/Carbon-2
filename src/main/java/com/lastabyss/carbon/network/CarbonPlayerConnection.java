@@ -1,7 +1,6 @@
 package com.lastabyss.carbon.network;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
-import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.ChatMessage;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumChatFormat;
@@ -23,18 +22,15 @@ import net.minecraft.server.v1_8_R3.Vec3D;
 import net.minecraft.server.v1_8_R3.WorldServer;
 import net.minecraft.server.v1_8_R3.WorldSettings;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.util.NumberConversions;
 
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
-import com.lastabyss.carbon.network.packets.CarbonPacketPlayOutKickDisconnect;
 import com.lastabyss.carbon.types.EnumUsedHand;
 
 public class CarbonPlayerConnection extends PlayerConnection {
@@ -320,34 +316,5 @@ public class CarbonPlayerConnection extends PlayerConnection {
     public ItemStack getOffHandItem() {
         return offhandItem;
     }
-    
-	@Override
-	public void disconnect(String s) {
-		String leaveMessage = EnumChatFormat.YELLOW + this.player.getName() + " left the game.";
-
-		PlayerKickEvent event = new PlayerKickEvent(player.getBukkitEntity(), s, leaveMessage);
-
-		if (MinecraftServer.getServer().isRunning()) {
-			Bukkit.getServer().getPluginManager().callEvent(event);
-		}
-
-		if (event.isCancelled()) {
-			return;
-		}
-
-		s = event.getReason();
-
-		ChatComponentText chatcomponenttext = new ChatComponentText(s);
-
-		this.networkManager.handle(new CarbonPacketPlayOutKickDisconnect(chatcomponenttext));
-		a(chatcomponenttext);
-		this.networkManager.k();
-
-		this.minecraftServer.postToMainThread(new Runnable() {
-			public void run() {
-				networkManager.l();
-			}
-		});
-	}
 
 }
