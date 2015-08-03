@@ -17,7 +17,7 @@ import net.minecraft.server.v1_8_R3.Vector3f;
 public class DataWatcherSerializer {
 
 	public static TIntObjectMap<DataWatcherObject> decodeData(byte[] data) throws IOException {
-		TIntObjectMap<DataWatcherObject> map = new TIntObjectHashMap<DataWatcherObject>(10, 0.5f, -1);
+		TIntObjectMap<DataWatcherObject> map = new TIntObjectHashMap<>(10, 0.5f, -1);
 		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.wrappedBuffer(data));
 		do {
 			final int b0 = serializer.readUnsignedByte();
@@ -155,14 +155,10 @@ public class DataWatcherSerializer {
 
 		@Override
 		public String toString() {
-			return
-				new StringBuilder()
-				.append("type: ").append(type).append(" ")
-				.append("value: ").append(value)
-				.toString();
+			return "type: " + type + " " + "value: " + value;
 		}
 
-		public static enum ValueType {
+		public enum ValueType {
 			BYTE, SHORT, INT, FLOAT, STRING, ITEMSTACK, VECTOR3I, VECTOR3F;
 
 			public int getId() {
