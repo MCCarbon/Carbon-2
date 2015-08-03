@@ -511,27 +511,21 @@ public class BlockStairs extends WrappedBlock {
         for (int j = 0; j < 8; ++j) {
             S = j;
             if (Arrays.binarySearch(aint, j) < 0) {
-                amovingobjectposition[j] = super.a(world, blockposition, vec3d, vec3d1);
+                amovingobjectposition[j] = super.rayTraceCollision(world, blockposition, vec3d, vec3d1);
             }
         }
 
-        int[] aint1 = aint;
         int k = aint.length;
 
-        for (int l = 0; l < k; ++l) {
-            int i1 = aint1[l];
-
+        for (int i1 : aint) {
             amovingobjectposition[i1] = null;
         }
 
         MovingObjectPosition movingobjectposition = null;
         double d0 = 0.0D;
-        MovingObjectPosition[] amovingobjectposition1 = amovingobjectposition;
         int j1 = amovingobjectposition.length;
 
-        for (int k1 = 0; k1 < j1; ++k1) {
-            MovingObjectPosition movingobjectposition1 = amovingobjectposition1[k1];
-
+        for (MovingObjectPosition movingobjectposition1 : amovingobjectposition) {
             if (movingobjectposition1 != null) {
                 double d1 = movingobjectposition1.pos.distanceSquared(vec3d1);
 
@@ -600,16 +594,16 @@ public class BlockStairs extends WrappedBlock {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE });
+        return new BlockStateList(this, BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE);
     }
 
-    public static enum EnumStairShape implements INamable {
+    public enum EnumStairShape implements INamable {
 
         STRAIGHT("straight"), INNER_LEFT("inner_left"), INNER_RIGHT("inner_right"), OUTER_LEFT("outer_left"), OUTER_RIGHT("outer_right");
 
         private final String f;
 
-        private EnumStairShape(String s) {
+        EnumStairShape(String s) {
             f = s;
         }
 
@@ -624,13 +618,13 @@ public class BlockStairs extends WrappedBlock {
         }
     }
 
-    public static enum EnumHalf implements INamable {
+    public enum EnumHalf implements INamable {
 
         TOP("top"), BOTTOM("bottom");
 
         private final String c;
 
-        private EnumHalf(String s) {
+        EnumHalf(String s) {
             c = s;
         }
 

@@ -3,11 +3,13 @@ plugins {
   id 'maven-publish'
   id "com.jfrog.artifactory" version "3.1.1"
 }
-println 'Compiling Carbon 2 via Gradle ver. ' + gradle.gradleVersion
 
-sourceCompatibility = '1.7'
+sourceCompatibility = JavaVersion.VERSION_1_7
 ext.spigotVersion = '1.8.8-R0.1-SNAPSHOT'
 ext.carbonVersion = '2.0'
+
+println 'Compiling Carbon 2 via Gradle ver. ' + gradle.gradleVersion
+println 'Compiling for Java source version: ' + sourceCompatibility
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -86,6 +88,6 @@ ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigot.jar', 
 
 dependencies {
     compile files('libs/spigot.jar')
-    compile 'org.bukkit:bukkit:' + project.ext.spigotVersion
+    compile "org.bukkit:bukkit:$project.ext.spigotVersion"
     compile 'com.comphenix.protocol:ProtocolLib:3.6.5-SNAPSHOT'
 }

@@ -2,6 +2,7 @@ package com.lastabyss.carbon.listeners;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -41,6 +42,7 @@ public class PlayerListener implements Listener {
 			}
 		}
 		event.getClickedBlock().setType(Material.valueOf("GRASS_PATH"));
+		event.getPlayer().getWorld().playSound(event.getClickedBlock().getLocation(), Sound.DIG_GRAVEL, 1, 1);
 	}
 
 }

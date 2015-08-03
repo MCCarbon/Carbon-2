@@ -12,6 +12,8 @@ gradle.properties
 .nb-gradle-properties
 /.gradle
 /.nb-gradle
+/gradle
+/*.
 /bin
 /build
 /target

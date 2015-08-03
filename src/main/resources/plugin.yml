@@ -4,7 +4,7 @@ description: Transforms a 1.8 Spigot server into 1.9
 softdepend: [ProtocolLib]
 loadbefore: [LWC, NoCheatPlus, NoCheatPlusCompat]
 load: STARTUP
-version: 1.8
+version: 2.0
 authors: [Navid K., _Shevchik_, Aust1n46]
 
 commands:

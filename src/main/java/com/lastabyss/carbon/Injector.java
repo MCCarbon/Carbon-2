@@ -1,21 +1,5 @@
 package com.lastabyss.carbon;
 
-import com.lastabyss.carbon.items.*;
-import gnu.trove.map.TObjectIntMap;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-
-import net.minecraft.server.v1_8_R3.*;
-import net.minecraft.server.v1_8_R3.EntityTypes.MonsterEggInfo;
-
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.Recipe;
-
 import com.lastabyss.carbon.blocks.BlockBeetroots;
 import com.lastabyss.carbon.blocks.BlockChorusFlower;
 import com.lastabyss.carbon.blocks.BlockChorusPlant;
@@ -25,13 +9,46 @@ import com.lastabyss.carbon.blocks.BlockGrassPath;
 import com.lastabyss.carbon.blocks.BlockPurpurSlabAbstract;
 import com.lastabyss.carbon.blocks.BlockRotatable;
 import com.lastabyss.carbon.blocks.BlockStairs;
+import com.lastabyss.carbon.blocks.BlockStepAbstract;
 import com.lastabyss.carbon.blocks.BlockStructureBlock;
 import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.items.ItemArrow;
+import com.lastabyss.carbon.items.ItemChorusFruit;
+import com.lastabyss.carbon.items.ItemSpectralArrow;
+import com.lastabyss.carbon.items.ItemSplashPotion;
+import com.lastabyss.carbon.items.ItemStep;
+import com.lastabyss.carbon.items.ItemTippedArrow;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Utils;
+import gnu.trove.map.TObjectIntMap;
+import net.minecraft.server.v1_8_R3.Block;
+import net.minecraft.server.v1_8_R3.Blocks;
+import net.minecraft.server.v1_8_R3.DataWatcher;
+import net.minecraft.server.v1_8_R3.Enchantment;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityTypes;
+import net.minecraft.server.v1_8_R3.IBlockData;
+import net.minecraft.server.v1_8_R3.Item;
+import net.minecraft.server.v1_8_R3.ItemBlock;
+import net.minecraft.server.v1_8_R3.ItemFood;
+import net.minecraft.server.v1_8_R3.ItemSeeds;
+import net.minecraft.server.v1_8_R3.ItemSoup;
+import net.minecraft.server.v1_8_R3.Items;
+import net.minecraft.server.v1_8_R3.Material;
+import net.minecraft.server.v1_8_R3.MinecraftKey;
+import net.minecraft.server.v1_8_R3.PotionBrewer;
+import net.minecraft.server.v1_8_R3.TileEntity;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.Recipe;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * The injector class is the driver behind Carbon.
@@ -47,78 +64,69 @@ public class Injector {
         //Inject network
         NetworkInjector.inject();
 
-        //Add new blocks
-        Block beetroots = new BlockBeetroots().setName("beetroots");
-
+        //Inject all materials into Spigot
         Utils.addMaterial("END_ROD_BLOCK", 198);
-        registerBlock(198, "end_rod", new BlockEndRod().setStrength(0.0F).setLightLevel(0.9375F).setStepSound(SoundUtil.WOOD).setName("endRod"));
-
         Utils.addMaterial("CHORUS_PLANT_BLOCK", 199);
-        registerBlock(199, "chorus_plant", new BlockChorusPlant().setStrength(0.4F).setStepSound(SoundUtil.WOOD).setName("chorusPlant"));
-
         Utils.addMaterial("CHORUS_FLOWER_MATERIAL", 200);
-        registerBlock(200, "chorus_flower", new BlockChorusFlower().setStrength(0.4F).setStepSound(SoundUtil.WOOD).setName("chorusFlower"));
-
         Utils.addMaterial("PURPUR_BLOCK", 201);
-        Block purpur = new WrappedBlock(Material.STONE).setStrength(1.5F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurBlock");
-        registerBlock(201, "purpur_block", purpur);
-
         Utils.addMaterial("PURPUR_PILLAR", 202);
-        registerBlock(202, "purpur_pillar", new BlockRotatable(Material.STONE).setStrength(1.5F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurPillar"));
-
         Utils.addMaterial("PURPUR_STAIRS", 203);
-        registerBlock(203, "purpur_stairs", new BlockStairs(purpur.getBlockData()).setName("stairsPurpur"));
-
         Utils.addMaterial("PURPUR_DOUBLE_SLAB", 204);
-        registerBlock(204, "purpur_double_slab", new BlockPurpurSlabAbstract.BlockPurpurDoubleSlab().setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab"));
-
         Utils.addMaterial("PURPUR_SLAB", 205);
-        registerBlock(205, "purpur_slab", new BlockPurpurSlabAbstract.BlockPuprpurSlab().setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab"));
-
         Utils.addMaterial("END_BRICKS", 206);
-        registerBlock(206, "end_bricks", new WrappedBlock(Material.STONE).setStepSound(SoundUtil.STONE2).setStrength(0.8F).setName("endBricks"));
-
         Utils.addMaterial("BEETROOTS", 207);
-        registerBlock(207, "beetroots", beetroots);
-        
         Utils.addMaterial("GRASS_PATH", 208);
-        registerBlock(208, "grass_path", new BlockGrassPath().setStrength(0.65F).setStepSound(SoundUtil.GRASS).setName("grassPath").setUnbreakable());
-
         Utils.addMaterial("END_GATEWAY", 209);
-        registerBlock(209, "end_gateway", new BlockEndGateway(Material.PORTAL).setStrength(-1.0F).setExplosionResist(6000000.0F));
-
         Utils.addMaterial("STRUCTURE_BLOCK", 255);
-        registerBlock(255, "structure_block", new BlockStructureBlock().setUnbreakable().setExplosionResist(6000000.0F).setName("structureBlock").setLightLevel(1.0F));
+        Utils.addMaterial("CHORUS_FRUIT", 432);
+        Utils.addMaterial("CHORUS_FRUIT_POPPED", 433);
+        Utils.addMaterial("BEETROOT", 434);
+        Utils.addMaterial("BEETROOT_SEEDS", 435);
+        Utils.addMaterial("BEETROOT_SOUP", 436);
+        Utils.addMaterial("SPLASH_POTION", 438);
+        Utils.addMaterial("SPECTRAL_ARROW", 439);
+        Utils.addMaterial("TIPPED_ARROW", 440);
+
+        //Add new blocks
+        Block endrod = new BlockEndRod().setStrength(0.0F).setLightLevel(0.9375F).setStepSound(SoundUtil.WOOD).setName("endRod");
+        Block chorusPlant = new BlockChorusPlant().setStrength(0.4F).setStepSound(SoundUtil.WOOD).setName("chorusPlant");
+        Block chorusFlower = new BlockChorusFlower().setStrength(0.4F).setStepSound(SoundUtil.WOOD).setName("chorusFlower");
+        Block purpur = new WrappedBlock(Material.STONE).setStrength(1.5F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurBlock");
+        Block purpurPillar = new BlockRotatable(Material.STONE).setStrength(1.5F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurPillar");
+        Block purpurStairs = new BlockStairs(purpur.getBlockData()).setName("stairsPurpur");
+        BlockStepAbstract purpurDoubleSlab = (BlockStepAbstract) new BlockPurpurSlabAbstract.BlockPurpurDoubleSlab().setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab");
+        BlockStepAbstract purpurSlab = (BlockStepAbstract) new BlockPurpurSlabAbstract.BlockPurpurSlab().setStrength(2.0F).setExplosionResist(10.0F).setStepSound(SoundUtil.STONE2).setName("purpurSlab");
+        Block endBricks = new WrappedBlock(Material.STONE).setStepSound(SoundUtil.STONE2).setStrength(0.8F).setName("endBricks");
+        Block beetroots = new BlockBeetroots().setName("beetroots");
+        Block grassPath = new BlockGrassPath().setStrength(0.65F).setStepSound(SoundUtil.GRASS).setName("grassPath").setUnbreakable();
+        Block endGateway = new BlockEndGateway(Material.PORTAL).setStrength(-1.0F).setExplosionResist(6000000.0F);
+        Block structureBlock = new BlockStructureBlock().setUnbreakable().setExplosionResist(6000000.0F).setName("structureBlock").setLightLevel(1.0F);
+
+        registerBlock(198, "end_rod", endrod, new ItemBlock(endrod));
+        registerBlock(199, "chorus_plant", chorusPlant, new ItemBlock(chorusPlant));
+        registerBlock(200, "chorus_flower", chorusFlower, new ItemBlock(chorusFlower));
+        registerBlock(201, "purpur_block", purpur, new ItemBlock(purpur));
+        registerBlock(202, "purpur_pillar", purpurPillar, new ItemBlock(purpurPillar));
+        registerBlock(203, "purpur_stairs", purpurStairs, new ItemBlock(purpurStairs));
+        registerBlock(204, "purpur_double_slab", purpurDoubleSlab);
+        registerBlock(205, "purpur_slab", purpurSlab, new ItemStep(purpurSlab, purpurSlab, purpurDoubleSlab).b("purpurSlab"));
+        registerBlock(206, "end_bricks", endBricks, new ItemBlock(purpurPillar));
+        registerBlock(207, "beetroots", beetroots, new ItemBlock(beetroots));
+        registerBlock(208, "grass_path", grassPath, new ItemBlock(grassPath));
+        registerBlock(209, "end_gateway", endGateway, new ItemBlock(endGateway));
+        registerBlock(255, "structure_block", structureBlock, new ItemBlock(structureBlock));
 
         //Add new items
-
-        registerItem(262, "arrow", (new ItemArrow()).c("arrow")); //Replace arrow with new arrow
-
-        Utils.addMaterial("CHORUS_FRUIT", 432);
+        registerItem(262, "arrow", new ItemArrow().c("arrow")); //Replace arrow with new arrow
         registerItem(432, "chorus_fruit", new ItemChorusFruit());
-        
-        Utils.addMaterial("CHORUS_FRUIT_POPPED", 433);
         registerItem(433, "chorus_fruit_popped", (new Item()).c("chorusFruitPopped"));
-
-        Utils.addMaterial("BEETROOT", 434);
-        registerItem(434, "chorus_fruit_popped", (new ItemFood(1, 0.6F, false)).c("beetroot"));
-        
-        Utils.addMaterial("BEETROOT_SEEDS", 435);
+        registerItem(434, "beetroot", (new ItemFood(1, 0.6F, false)).c("beetroot"));
         registerItem(435, "beetroot_seeds", new ItemSeeds(beetroots, Blocks.FARMLAND));
-        
-        Utils.addMaterial("BEETROOT_SOUP", 436);
-        registerItem(436, "beetroot_soup", (new ItemSoup(6)).c("beetroot_soup"));
-
+        registerItem(436, "beetroot_soup", new ItemSoup(6).c("beetroot_soup"));
         //Skip 437 because there is nothing there apparently... spooky
-
-        Utils.addMaterial("SPLASH_POTION", 438);
-        registerItem(436, "splash_potion", (new ItemSplashPotion()).c("splash_potion"));
-
-        Utils.addMaterial("SPECTRAL_ARROW", 439);
-        registerItem(436, "spectral_arrow", (new ItemSpectralArrow()).c("spectral_arrow"));
-
-        Utils.addMaterial("TIPPED_ARROW", 440);
-        registerItem(436, "tipped_arrow", (new ItemTippedArrow()).c("tipped_arrow"));
+        registerItem(438, "splash_potion", new ItemSplashPotion().c("splash_potion"));
+        registerItem(439, "spectral_arrow", new ItemSpectralArrow().c("spectral_arrow"));
+        registerItem(440, "tipped_arrow", new ItemTippedArrow().c("tipped_arrow"));
 
         //Add new tile entities
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");
@@ -190,7 +198,7 @@ public class Injector {
 
     public void registerEntity(Class<? extends Entity> entityClass, String name, int id, int monsterEgg, int monsterEggData) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
         registerEntity(entityClass, name, id);
-        EntityTypes.eggInfo.put(id, new MonsterEggInfo(id, monsterEgg, monsterEggData));
+        EntityTypes.eggInfo.put(id, new EntityTypes.MonsterEggInfo(id, monsterEgg, monsterEggData));
     }
 
     @SuppressWarnings("unchecked")

@@ -44,7 +44,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
 
     @Override
     protected BlockStateList getStateList() {
-        return isDouble() ? new BlockStateList(this, new IBlockState[] { VARIANT }) : new BlockStateList(this, new IBlockState[] { HALF, VARIANT });
+        return isDouble() ? new BlockStateList(this, VARIANT) : new BlockStateList(this, HALF, VARIANT);
     }
 
     @Override
@@ -62,7 +62,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
         return BlockPurpurSlabAbstract.EnumPurpurSlabType.DEFAULT;
     }
 
-    public static enum EnumPurpurSlabType implements INamable {
+    public enum EnumPurpurSlabType implements INamable {
 
         DEFAULT;
 
@@ -80,7 +80,7 @@ public abstract class BlockPurpurSlabAbstract extends BlockStepAbstract {
         }
     }
 
-    public static class BlockPuprpurSlab extends BlockPurpurSlabAbstract {
+    public static class BlockPurpurSlab extends BlockPurpurSlabAbstract {
 
         @Override
         public boolean isDouble() {
