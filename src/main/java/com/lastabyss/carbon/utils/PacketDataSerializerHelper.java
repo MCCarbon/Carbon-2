@@ -3,60 +3,49 @@ package com.lastabyss.carbon.utils;
 import java.io.IOException;
 import java.util.UUID;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
-public class PacketDataSerializerHelper extends PacketDataSerializer {
+public class PacketDataSerializerHelper {
 
-    private ByteBuf bytebuf;
-    public PacketDataSerializerHelper(ByteBuf bytebuf) {
-        super(bytebuf);
-        this.bytebuf = bytebuf;
+    public static int readVarInt(PacketDataSerializer serializer) {
+        return serializer.e();
     }
 
-    public int readVarInt() {
-        return e();
+    public static void writeVarInt(PacketDataSerializer serializer, int varInt) {
+        serializer.b(varInt);
     }
 
-    public void writeVarInt(int varInt) {
-        b(varInt);
+    public static String readString(PacketDataSerializer serializer, int limit) {
+        return serializer.c(limit);
     }
 
-    public String readString(int limit) {
-        return c(limit);
+    public static void writeString(PacketDataSerializer serializer, String string) {
+        serializer.a(string);
     }
 
-    public void writeString(String string) {
-        a(string);
+    public static ItemStack readItemStack(PacketDataSerializer serializer) throws IOException {
+        return serializer.i();
     }
 
-    public ItemStack readItemStack() throws IOException {
-        return i();
+    public static void writeItemStack(PacketDataSerializer serializer, ItemStack itemstack) {
+        serializer.a(itemstack);
     }
 
-    public void writeItemStack(ItemStack itemstack) {
-        a(itemstack);
+    public static byte[] readArray(PacketDataSerializer serializer) {
+        return serializer.a();
     }
 
-    public byte[] readArray() {
-        return a();
+    public static void writeArray(PacketDataSerializer serializer, byte[] array) {
+        serializer.a(array);
     }
 
-    public void writeArray(byte[] array) {
-        a(array);
+    public static UUID readUUID(PacketDataSerializer serializer) {
+        return serializer.g();
     }
 
-    public UUID readUUID() {
-        return g();
-    }
-
-    public void writeUUID(UUID uuid) {
-        a(uuid);
-    }
-
-    public ByteBuf getInternalByteBuf() {
-        return bytebuf;
+    public static void writeUUID(PacketDataSerializer serializer, UUID uuid) {
+        serializer.a(uuid);
     }
 
 }

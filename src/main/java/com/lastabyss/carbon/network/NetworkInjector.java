@@ -55,7 +55,7 @@ public class NetworkInjector implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         EntityPlayer nmsplayer = ((CraftPlayer) event.getPlayer()).getHandle();
         NetworkManager networkManager = nmsplayer.playerConnection.networkManager;
-        if (networkManager.channel.attr(InjectingHandshakePacket.IS_SNAPSHOT) != null) {
+        if (networkManager.channel.attr(InjectingHandshakePacket.IS_SNAPSHOT).get()) {
             CarbonOutTransformer outransformer = new CarbonOutTransformer(new CarbonPlayerConnection(MinecraftServer.getServer(), networkManager, nmsplayer));
             outransformer.setPlayerId(event.getPlayer().getEntityId());
             networkManager.channel.pipeline()

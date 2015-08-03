@@ -44,5 +44,4 @@ public class PlayerListener implements Listener {
 		event.getClickedBlock().setType(Material.valueOf("GRASS_PATH"));
 		event.getPlayer().getWorld().playSound(event.getClickedBlock().getLocation(), Sound.DIG_GRAVEL, 1, 1);
 	}
-
 }

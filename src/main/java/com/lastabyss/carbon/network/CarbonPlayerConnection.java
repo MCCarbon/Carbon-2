@@ -73,17 +73,16 @@ public class CarbonPlayerConnection extends PlayerConnection {
         if (player.activeContainer.windowId == packet.a() && player.activeContainer.c(player)) {
             int mode = packet.f();
             int button = packet.c();
-            ItemStack carried = player.inventory.getCarried();
             switch (mode) {
-                //TODO: cleanup
-                case 0: {
+                case 0: { //Left, Right click
+                    ItemStack carried = player.inventory.getCarried();
                     if ((offhandItem == null || offhandItem.count <= 0) && (carried == null || carried.count <= 0)) {
                         break;
                     }
                     if (button == 0) {
                         if (offhandItem == null) {
-                            player.inventory.setCarried(null);
                             offhandItem = carried;
+                            player.inventory.setCarried(null);
                         } else if (carried == null) {
                             player.inventory.setCarried(offhandItem);
                             offhandItem = null;
@@ -117,15 +116,44 @@ public class CarbonPlayerConnection extends PlayerConnection {
                     if (carried != null && carried.count == 0) {
                         player.inventory.setCarried(null);
                     }
-                    if (offhandItem != null && offhandItem.count == 0) {
+                    break;
+                }
+                case 1: { //Shift left/right click
+                    if (offhandItem == null || offhandItem.count <= 0) {
+                        break;
+                    }
+                    int emptySlot = -1;
+                    for (int i = 0; i < 9; i++) {
+                        ItemStack item = player.inventory.items[i];
+                        if (item == null) {
+                            if (emptySlot == -1) {
+                                emptySlot = i;
+                            }
+                            continue;
+                        }
+                        if (item.getItem() == offhandItem.getItem()) {
+                            int addamount = Math.min(offhandItem.count, item.getMaxStackSize() - item.count);
+                            item.count += addamount;
+                            offhandItem.count -= addamount;
+                        }
+                        if (offhandItem.count == 0) {
+                            break;
+                        }
+                    }
+                    if (offhandItem.count > 0 && emptySlot != -1) {
+                        player.inventory.items[emptySlot] = offhandItem;
                         offhandItem = null;
                     }
                     break;
                 }
                 default: {
-                    player.getBukkitEntity().updateInventory();
+                    break;
                 }
             }
+            if (offhandItem != null && offhandItem.count == 0) {
+                offhandItem = null;
+            }
+            player.getBukkitEntity().updateInventory();
         }
     }
 
