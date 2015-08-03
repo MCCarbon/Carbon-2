@@ -21,10 +21,6 @@ public class CarbonPacketPlayInUseItem implements Packet<CarbonPlayerConnection>
 
     @Override
     public void a(CarbonPlayerConnection listener) {
-    	if(hand == EnumUsedHand.OFF_HAND) {
-    		//TODO:
-    		return;
-    	}
         listener.handle(this);
     }
 
