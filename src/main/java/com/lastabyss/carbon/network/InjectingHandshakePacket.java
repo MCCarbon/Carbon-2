@@ -18,14 +18,16 @@ public class InjectingHandshakePacket extends PacketHandshakingInSetProtocol {
 
     @Override
     public void a(PacketHandshakingInListener listener) {
-        if (b() == 51) {
-            try {
-                NetworkManager manager = findNetworkManager(listener);
+        try {
+            NetworkManager manager = findNetworkManager(listener);
+            if (b() == 51) {
                 manager.channel.attr(IS_SNAPSHOT).set(Boolean.TRUE);
                 injected = true;
-            } catch (Throwable t) {
-                SneakyThrow.sneaky(t);
+            } else {
+                manager.channel.attr(IS_SNAPSHOT).set(Boolean.FALSE);
             }
+        } catch (Throwable t) {
+            SneakyThrow.sneaky(t);
         }
         super.a(listener);
     }

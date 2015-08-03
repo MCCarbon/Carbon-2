@@ -18,20 +18,19 @@ public class CarbonPacketPlayInBlockPlace extends PacketPlayInBlockPlace {
     @Override
     public void a(PacketDataSerializer serializer) throws IOException {
         //try to read packet and find out if we have new field or not
-        PacketDataSerializerHelper helper = new PacketDataSerializerHelper(serializer);
-        PacketDataSerializerHelper newdata = new PacketDataSerializerHelper(Unpooled.buffer());
-        newdata.a(helper.c());
-        if (helper.readableBytes() == 5) {
-            newdata.writeByte(helper.a(EnumDirection.class).ordinal());
-            hand = helper.a(EnumUsedHand.class);
-            newdata.writeItemStack(null);
+        PacketDataSerializer newdata = new PacketDataSerializer(Unpooled.buffer());
+        newdata.a(serializer.c());
+        if (serializer.readableBytes() == 5) {
+            newdata.writeByte(serializer.a(EnumDirection.class).ordinal());
+            hand = serializer.a(EnumUsedHand.class);
+            PacketDataSerializerHelper.writeItemStack(newdata, null);
         } else {
-            newdata.writeByte(helper.readByte());
-            newdata.writeItemStack(helper.readItemStack());
+            newdata.writeByte(serializer.readByte());
+            PacketDataSerializerHelper.writeItemStack(newdata, PacketDataSerializerHelper.readItemStack(serializer));
         }
-        newdata.writeByte(helper.readByte());
-        newdata.writeByte(helper.readByte());
-        newdata.writeByte(helper.readByte());
+        newdata.writeByte(serializer.readByte());
+        newdata.writeByte(serializer.readByte());
+        newdata.writeByte(serializer.readByte());
         //reset reader index and call read packet read
         super.a(newdata);
     }

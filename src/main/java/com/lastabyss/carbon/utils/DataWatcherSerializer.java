@@ -11,13 +11,14 @@ import com.lastabyss.carbon.utils.DataWatcherSerializer.DataWatcherObject.ValueT
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 import net.minecraft.server.v1_8_R3.Vector3f;
 
 public class DataWatcherSerializer {
 
 	public static TIntObjectMap<DataWatcherObject> decodeData(byte[] data) throws IOException {
 		TIntObjectMap<DataWatcherObject> map = new TIntObjectHashMap<DataWatcherObject>(10, 0.5f, -1);
-		PacketDataSerializerHelper serializer = new PacketDataSerializerHelper(Unpooled.wrappedBuffer(data));
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.wrappedBuffer(data));
 		do {
 			final int b0 = serializer.readUnsignedByte();
 			if (b0 == 127) {
@@ -43,11 +44,11 @@ public class DataWatcherSerializer {
 					break;
 				}
 				case STRING: {
-					map.put(key, new DataWatcherObject(type, serializer.readString(32767)));
+					map.put(key, new DataWatcherObject(type, PacketDataSerializerHelper.readString(serializer, 32767)));
 					break;
 				}
 				case ITEMSTACK: {
-					map.put(key, new DataWatcherObject(type, serializer.readItemStack()));
+					map.put(key, new DataWatcherObject(type, PacketDataSerializerHelper.readItemStack(serializer)));
 					break;
 				}
 				case VECTOR3I: {
@@ -70,7 +71,7 @@ public class DataWatcherSerializer {
 	}
 
 	public static byte[] encodeData(TIntObjectMap<DataWatcherObject> objects) {
-		PacketDataSerializerHelper serializer = new PacketDataSerializerHelper(Unpooled.buffer());
+		PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer());
 		TIntObjectIterator<DataWatcherObject> iterator = objects.iterator();
 		while (iterator.hasNext()) {
 			iterator.advance();
@@ -95,11 +96,11 @@ public class DataWatcherSerializer {
 					break;
 				}
 				case STRING: {
-					serializer.writeString((String) object.value);
+				    PacketDataSerializerHelper.writeString(serializer, (String) object.value);
 					break;
 				}
 				case ITEMSTACK: {
-					serializer.writeItemStack((ItemStack) object.value);
+				    PacketDataSerializerHelper.writeItemStack(serializer, (ItemStack) object.value);
 					break;
 				}
 				case VECTOR3I: {

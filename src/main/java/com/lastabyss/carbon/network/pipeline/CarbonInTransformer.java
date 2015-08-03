@@ -2,6 +2,8 @@ package com.lastabyss.carbon.network.pipeline;
 
 import java.util.List;
 
+import net.minecraft.server.v1_8_R3.PacketDataSerializer;
+
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 
@@ -17,18 +19,19 @@ public class CarbonInTransformer extends MessageToMessageDecoder<ByteBuf> {
         if (!message.isReadable()) { //Skip empty buffers
             return;
         }
-        PacketDataSerializerHelper serializer = new PacketDataSerializerHelper(message);
-        int packetId = serializer.readVarInt();
+        PacketDataSerializer serializer = new PacketDataSerializer(message);
+        int packetId = PacketDataSerializerHelper.readVarInt(serializer);
         if (packetId == 0x08) {
             packetId = CarbonPacketPlayInUseItem.ID + 1;
         }
         if (packetId > 0x08) {
             packetId--;
         }
-        PacketDataSerializerHelper packetdataserializer = new PacketDataSerializerHelper(Unpooled.buffer());
-        packetdataserializer.writeVarInt(packetId);
+        ByteBuf buffer = Unpooled.buffer();
+        PacketDataSerializer packetdataserializer = new PacketDataSerializer(buffer);
+        PacketDataSerializerHelper.writeVarInt(packetdataserializer, packetId);
         packetdataserializer.writeBytes(message);
-        list.add(packetdataserializer.getInternalByteBuf());
+        list.add(buffer);
     }
 
 }
