@@ -1,6 +1,7 @@
 package com.lastabyss.carbon;
 
 import com.lastabyss.carbon.items.*;
+
 import gnu.trove.map.TObjectIntMap;
 
 import java.lang.reflect.Field;
@@ -30,6 +31,7 @@ import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.entities.EntitySpectralArrow;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Utils;
 
@@ -112,13 +114,16 @@ public class Injector {
         //Skip 437 because there is nothing there apparently... spooky
 
         Utils.addMaterial("SPLASH_POTION", 438);
-        registerItem(436, "splash_potion", (new ItemSplashPotion()).c("splash_potion"));
+        registerItem(438, "splash_potion", (new ItemSplashPotion()).c("splash_potion"));
 
         Utils.addMaterial("SPECTRAL_ARROW", 439);
-        registerItem(436, "spectral_arrow", (new ItemSpectralArrow()).c("spectral_arrow"));
+        registerItem(439, "spectral_arrow", (new ItemSpectralArrow()).c("spectral_arrow"));
 
         Utils.addMaterial("TIPPED_ARROW", 440);
-        registerItem(436, "tipped_arrow", (new ItemTippedArrow()).c("tipped_arrow"));
+        registerItem(440, "tipped_arrow", (new ItemTippedArrow()).c("tipped_arrow"));
+        
+        //Add new entities
+        registerEntity(EntitySpectralArrow.class, "SpectralArrow", 197); //TODO: add correct id
 
         //Add new tile entities
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");
