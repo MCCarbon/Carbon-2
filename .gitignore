@@ -8,9 +8,10 @@
 /libs
 /.externalToolBuilders
 /dist
-/.nb-gradle
 gradle.properties
-
+.nb-gradle-properties
+/.gradle
+/.nb-gradle
 /bin
 /build
 /target

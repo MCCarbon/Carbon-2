@@ -34,7 +34,6 @@ import java.nio.ByteBuffer;
  *
  * @author Brian Doherty
  * @since 1.5
- * @see sun.jvmstat.instrument.ByteArrayInstrument
  */
 public class PerfByteArrayMonitor extends AbstractMonitor implements ByteArrayMonitor {
 
@@ -63,6 +62,7 @@ public class PerfByteArrayMonitor extends AbstractMonitor implements ByteArrayMo
      *
      * @return Object - a copy of the current value of the elements of the byte array instrument. The return type is guaranteed to be of type byte[].
      */
+    @Override
     public Object getValue() {
         return byteArrayValue();
     }
@@ -72,6 +72,7 @@ public class PerfByteArrayMonitor extends AbstractMonitor implements ByteArrayMo
      *
      * @return byte[] - a copy of the current value of the elements of the byte array instrument.
      */
+    @Override
     public byte[] byteArrayValue() {
         bb.position(0);
         byte[] b = new byte[bb.limit()];
@@ -85,8 +86,10 @@ public class PerfByteArrayMonitor extends AbstractMonitor implements ByteArrayMo
     /**
      * Get the current value of an element of the byte array instrument.
      *
+     * @param index
      * @return byte - a copy of the current value of the element at index <tt>index</tt> of the byte array instrument.
      */
+    @Override
     public byte byteAt(int index) {
         bb.position(index);
         return bb.get();

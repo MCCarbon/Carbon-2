@@ -69,7 +69,7 @@ public class AgentInitializationException extends Exception {
     }
 
     /**
-     * If the exception was created with the return value from the agent <code>Agent_OnAttach</code> function then this returns that value, otherwise returns <code>0</code>. </p>
+     * <p>If the exception was created with the return value from the agent <code>Agent_OnAttach</code> function then this returns that value, otherwise returns <code>0</code>. </p>
      *
      * @return the return value
      */

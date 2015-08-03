@@ -7,7 +7,7 @@ println 'Compiling Carbon 2 via Gradle ver. ' + gradle.gradleVersion
 
 sourceCompatibility = '1.7'
 ext.spigotVersion = '1.8.8-R0.1-SNAPSHOT'
-ext.version = '2.0'
+ext.carbonVersion = '2.0'
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -38,18 +38,12 @@ task sourceJar (type : Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-task javadocJar (type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
 jar {
     baseName "Carbon2"
 }
 
 artifacts {
     archives sourceJar
-    archives javadocJar
     archives jar
 }
 
@@ -58,13 +52,10 @@ publishing {
         mavenJava(MavenPublication) {
             groupId 'com.lastabyss'
             artifactId 'Carbon2'
-            version version + '-SNAPSHOT'
+            version carbonVersion + '-SNAPSHOT'
             from components.java
             artifact sourceJar {
                 classifier = 'sources'
-            }
-            artifact javadocJar {
-                classifier = 'javadoc'
             }
         }
     }
