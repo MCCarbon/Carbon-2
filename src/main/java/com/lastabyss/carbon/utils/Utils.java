@@ -17,30 +17,22 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.spigotmc.SneakyThrow;
 
 import io.netty.buffer.ByteBuf;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Navid
  */
 public class Utils {
-
-    public final static SecureRandom random = new SecureRandom();
-
-    private Utils() {
-        throw new UnsupportedOperationException("No, bad!");
-    }
 
     /**
      * Registers a bukkit command without the need for a plugin.yml entry.
@@ -49,20 +41,8 @@ public class Utils {
      * @param cmd
      */
     public static void registerBukkitCommand(String fallbackPrefix, Command cmd) {
-        try {
-            if (Bukkit.getServer() instanceof CraftServer) {
-                Field f = CraftServer.class.getDeclaredField("commandMap");
-                f.setAccessible(true);
-                CommandMap cmap = (CommandMap) f.get(Bukkit.getServer());
-                cmap.register(fallbackPrefix, cmd);
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace(System.out);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        CommandMap cmap = getFieldValue(CraftServer.class, "commandMap", Bukkit.getServer());
+        cmap.register(fallbackPrefix, cmd);
     }
 
     /**
@@ -73,27 +53,10 @@ public class Utils {
      * @param entityClass - entity class
      * @return
      */
-    @SuppressWarnings("unchecked")
     public static EntityType addEntity(String name, int id, Class<? extends Entity> entityClass) {
         EntityType entityType = DynamicEnumType.addEnum(EntityType.class, name, new Class[]{String.class, entityClass.getClass(), Integer.TYPE}, new Object[]{name, entityClass.getClass(), id});
-        try {
-            Field field = EntityType.class.getDeclaredField("NAME_MAP");
-            field.setAccessible(true);
-            Object object = field.get(null);
-            Map<String, EntityType> NAME_MAP = (Map<String, EntityType>) object;
-            NAME_MAP.put(name, entityType);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
-        try {
-            Field field = EntityType.class.getDeclaredField("ID_MAP");
-            field.setAccessible(true);
-            Object object = field.get(null);
-            Map<Short, EntityType> ID_MAP = (Map<Short, EntityType>) object;
-            ID_MAP.put((short) id, entityType);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
+        Utils.<Map<String, EntityType>>getFieldValue(EntityType.class, "NAME_MAP", null).put(name, entityType);
+        Utils.<Map<Short, EntityType>>getFieldValue(EntityType.class, "ID_MAP", null).put((short) id, entityType);
         return entityType;
     }
 
@@ -104,28 +67,12 @@ public class Utils {
      * @param id - id of the material
      * @return
      */
-    @SuppressWarnings("unchecked")
     public static Material addMaterial(String name, int id) {
         Material material = DynamicEnumType.addEnum(Material.class, name, new Class[]{Integer.TYPE}, new Object[]{id});
-        try {
-            Field field = Material.class.getDeclaredField("BY_NAME");
-            field.setAccessible(true);
-            Object object = field.get(null);
-            Map<String, Material> BY_NAME = (Map<String, Material>) object;
-            BY_NAME.put(name, material);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
-        try {
-            Field field = Material.class.getDeclaredField("byId");
-            field.setAccessible(true);
-            Object object = field.get(0);
-            Material[] byId = (Material[]) object;
-            byId[id] = material;
-            field.set(object, byId);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
+        Utils.<Map<String, Material>>getFieldValue(Material.class, "BY_NAME", null).put(name, material);
+        Material[] byId = getFieldValue(Material.class, "byId", null);
+        byId[id] = material;
+        setFieldValue(Material.class, "byId", null, byId);
         return material;
     }
 
@@ -137,38 +84,15 @@ public class Utils {
      * @param data
      * @return
      */
-    @SuppressWarnings("unchecked")
     public static Material addMaterial(String name, int id, short data) {
         Material material = DynamicEnumType.addEnum(Material.class, name, new Class[]{Integer.TYPE}, new Object[]{id});
-        try {
-            Field field = Material.class.getDeclaredField("BY_NAME");
-            field.setAccessible(true);
-            Object object = field.get(null);
-            Map<String, Material> BY_NAME = (Map<String, Material>) object;
-            BY_NAME.put(name, material);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
-        try {
-            Field field = Material.class.getDeclaredField("byId");
-            field.setAccessible(true);
-            Object object = field.get(0);
-            Material[] byId = (Material[]) object;
-            byId[id] = material;
-            field.set(object, byId);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
-        try {
-            Field field = Material.class.getDeclaredField("durability");
-            field.setAccessible(true);
-            Object object = field.get((short) 0);
-            Material[] durability = (Material[]) object;
-            durability[data] = material;
-            field.set(object, durability);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
+        Utils.<Map<String, Material>>getFieldValue(Material.class, "BY_NAME", null).put(name, material);
+        Material[] byId = getFieldValue(Material.class, "byId", null);
+        byId[id] = material;
+        setFieldValue(Material.class, "byId", null, byId);
+        Material[] durability = getFieldValue(Material.class, "durability", null);
+        durability[data] = material;
+        setFieldValue(Material.class, "durability", null, byId);
         return material;
     }
 
@@ -179,14 +103,7 @@ public class Utils {
      * @return
      */
     public static float getBlockStrength(net.minecraft.server.v1_8_R3.Block b) {
-        try {
-            Field field = b.getClass().getField("strength");
-            field.setAccessible(true);
-            return field.getFloat(b);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
+        return getFieldValue(b.getClass(), "strength", b);
     }
 
     /**
@@ -196,14 +113,7 @@ public class Utils {
      * @return
      */
     public static float getBlockDurability(net.minecraft.server.v1_8_R3.Block b) {
-        try {
-            Field field = b.getClass().getField("durability");
-            field.setAccessible(true);
-            return field.getFloat(b);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-            Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
+        return getFieldValue(b.getClass(), "durability", b);
     }
 
     /**
@@ -274,6 +184,40 @@ public class Utils {
         byte[] result = new byte[buf.readableBytes()];
         buf.readBytes(result);
         return result;
+    }
+
+    /**
+     * Gets field reflectively
+     * 
+     * @param clazz
+     * @param fieldName
+     * @param obj
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getFieldValue(Class<?> clazz, String fieldName, Object obj) {
+        try {
+            return (T) setAccessible(clazz.getDeclaredField(fieldName)).get(obj);
+        } catch (Throwable t) {
+            SneakyThrow.sneaky(t);
+        }
+        return null;
+    }
+
+    /**
+     * Sets field reflectively
+     * 
+     * @param clazz
+     * @param fieldName
+     * @param obj
+     * @param value
+     */
+    public static void setFieldValue(Class<?> clazz, String fieldName, Object obj, Object value) {
+        try {
+            setAccessible(clazz.getDeclaredField(fieldName)).set(obj, value);
+        } catch (Throwable t) {
+            SneakyThrow.sneaky(t);
+        }
     }
 
 }

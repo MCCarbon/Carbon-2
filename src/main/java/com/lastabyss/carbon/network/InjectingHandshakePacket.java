@@ -1,18 +1,17 @@
 package com.lastabyss.carbon.network;
 
-import io.netty.util.AttributeKey;
-
 import java.lang.reflect.Field;
 
 import org.spigotmc.SneakyThrow;
 
+import com.lastabyss.carbon.network.pipeline.StatusResponseTransformer;
+
+import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PacketHandshakingInListener;
 import net.minecraft.server.v1_8_R3.PacketHandshakingInSetProtocol;
 
 public class InjectingHandshakePacket extends PacketHandshakingInSetProtocol {
-
-    public static final AttributeKey<Boolean> IS_SNAPSHOT = AttributeKey.valueOf("IS_SNAPSHOT");
 
     private boolean injected = false;
 
@@ -20,11 +19,14 @@ public class InjectingHandshakePacket extends PacketHandshakingInSetProtocol {
     public void a(PacketHandshakingInListener listener) {
         try {
             NetworkManager manager = findNetworkManager(listener);
-            if (b() == 51) {
-                manager.channel.attr(IS_SNAPSHOT).set(Boolean.TRUE);
+            if (b() == NetworkInjector.PROTOCOL_VERSION_ID) {
+                manager.channel.attr(NetworkInjector.IS_SNAPSHOT).set(Boolean.TRUE);
+                if (a() == EnumProtocol.STATUS) {
+                    manager.channel.pipeline().addAfter("prepender", "carbon-status-transformer", new StatusResponseTransformer());
+                }
                 injected = true;
             } else {
-                manager.channel.attr(IS_SNAPSHOT).set(Boolean.FALSE);
+                manager.channel.attr(NetworkInjector.IS_SNAPSHOT).set(Boolean.FALSE);
             }
         } catch (Throwable t) {
             SneakyThrow.sneaky(t);
@@ -35,7 +37,7 @@ public class InjectingHandshakePacket extends PacketHandshakingInSetProtocol {
     @Override
     public int b() {
         int version = super.b();
-        if (version == 51 && injected) {
+        if (version == NetworkInjector.PROTOCOL_VERSION_ID && injected) {
             return 47;
         }
         return version;

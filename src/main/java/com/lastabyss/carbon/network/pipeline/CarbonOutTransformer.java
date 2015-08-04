@@ -15,7 +15,6 @@ import com.lastabyss.carbon.utils.watchedentity.WatchedPlayer;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
@@ -36,68 +35,71 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf messagebuf, ByteBuf out) throws Exception {
-        ByteBuf buffer = Unpooled.buffer();
-        PacketDataSerializer packetdata = new PacketDataSerializer(buffer);
+        PacketDataSerializer outdata = new PacketDataSerializer(out);
         PacketDataSerializer message = new PacketDataSerializer(messagebuf);
         int packetId = PacketDataSerializerHelper.readVarInt(message);
-        PacketDataSerializerHelper.writeVarInt(packetdata, packetId);
         switch (packetId) {
             case 0x04: { //EntitEquip - fix slot id (left hand now has id == 1, and other parts 2-5, main hand id remain untouched)
-                PacketDataSerializerHelper.writeVarInt(packetdata, PacketDataSerializerHelper.readVarInt(message));
+                PacketDataSerializerHelper.writeVarInt(outdata, packetId);
+                PacketDataSerializerHelper.writeVarInt(outdata, PacketDataSerializerHelper.readVarInt(message));
                 int slot = message.readShort();
                 if (slot > 0) {
                     slot++;
                 }
-                PacketDataSerializerHelper.writeVarInt(packetdata, slot);
-                packetdata.writeBytes(message);
+                PacketDataSerializerHelper.writeVarInt(outdata, slot);
+                outdata.writeBytes(message);
                 break;
             }
             case 0x0C: { //PlayerSpawn - add random uuid and transform entity metadata
+                PacketDataSerializerHelper.writeVarInt(outdata, packetId);
                 int entityId = PacketDataSerializerHelper.readVarInt(message);
                 entities.put(entityId, new WatchedPlayer(entityId));
-                PacketDataSerializerHelper.writeVarInt(packetdata, entityId);
-                PacketDataSerializerHelper.writeUUID(packetdata, PacketDataSerializerHelper.readUUID(message));
-                packetdata.writeInt(message.readInt());
-                packetdata.writeInt(message.readInt());
-                packetdata.writeInt(message.readInt());
-                packetdata.writeByte(message.readByte());
-                packetdata.writeByte(message.readByte());
+                PacketDataSerializerHelper.writeVarInt(outdata, entityId);
+                PacketDataSerializerHelper.writeUUID(outdata, PacketDataSerializerHelper.readUUID(message));
+                outdata.writeInt(message.readInt());
+                outdata.writeInt(message.readInt());
+                outdata.writeInt(message.readInt());
+                outdata.writeByte(message.readByte());
+                outdata.writeByte(message.readByte());
                 message.readShort();
-                packetdata.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(message)));
+                outdata.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(message)));
                 break;
             }
             case 0x0E: { //SpawnObject - add random uuid
-                PacketDataSerializerHelper.writeVarInt(packetdata, PacketDataSerializerHelper.readVarInt(message));
-                PacketDataSerializerHelper.writeUUID(packetdata, UUID.randomUUID());
-                packetdata.writeByte(message.readByte());
-                packetdata.writeInt(message.readInt());
-                packetdata.writeInt(message.readInt());
-                packetdata.writeInt(message.readInt());
-                packetdata.writeByte(message.readByte());
-                packetdata.writeByte(message.readByte());
+                PacketDataSerializerHelper.writeVarInt(outdata, packetId);
+                PacketDataSerializerHelper.writeVarInt(outdata, PacketDataSerializerHelper.readVarInt(message));
+                PacketDataSerializerHelper.writeUUID(outdata, UUID.randomUUID());
+                outdata.writeByte(message.readByte());
+                outdata.writeInt(message.readInt());
+                outdata.writeInt(message.readInt());
+                outdata.writeInt(message.readInt());
+                outdata.writeByte(message.readByte());
+                outdata.writeByte(message.readByte());
                 int data = message.readInt();
-                packetdata.writeInt(data);
+                outdata.writeInt(data);
                 if (data != 0) {
-                    packetdata.writeShort(message.readShort());
-                    packetdata.writeShort(message.readShort());
-                    packetdata.writeShort(message.readShort());
+                    outdata.writeShort(message.readShort());
+                    outdata.writeShort(message.readShort());
+                    outdata.writeShort(message.readShort());
                 } else {
-                    packetdata.writeShort(0);
-                    packetdata.writeShort(0);
-                    packetdata.writeShort(0);
+                    outdata.writeShort(0);
+                    outdata.writeShort(0);
+                    outdata.writeShort(0);
                 }
                 break;
             }
             case 0x0F: { //SpawnMob - add random uuid
-                PacketDataSerializerHelper.writeVarInt(packetdata, PacketDataSerializerHelper.readVarInt(message));
-                PacketDataSerializerHelper.writeUUID(packetdata, UUID.randomUUID());
-                packetdata.writeBytes(message);
+                PacketDataSerializerHelper.writeVarInt(outdata, packetId);
+                PacketDataSerializerHelper.writeVarInt(outdata, PacketDataSerializerHelper.readVarInt(message));
+                PacketDataSerializerHelper.writeUUID(outdata, UUID.randomUUID());
+                outdata.writeBytes(message);
                 break;
             }
             case 0x1C: { //EntityMetadata - transform entity metadata
+                PacketDataSerializerHelper.writeVarInt(outdata, packetId);
                 int entityId = PacketDataSerializerHelper.readVarInt(message);
-                PacketDataSerializerHelper.writeVarInt(packetdata, entityId);
-                packetdata.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(message)));
+                PacketDataSerializerHelper.writeVarInt(outdata, entityId);
+                outdata.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(message)));
                 break;
             }
             case 0x07: { //Respawn - reset watched entity map, and send original packet
@@ -117,16 +119,17 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                 return;
             }
             case 0x30: { //WindowItems - add offhand slot to the end
-                packetdata.writeByte(message.readByte());
+                PacketDataSerializerHelper.writeVarInt(outdata, packetId);
+                outdata.writeByte(message.readByte());
                 int count = message.readShort();
-                packetdata.writeShort(count + 1);
+                outdata.writeShort(count + 1);
                 ArrayList<ItemStack> items = new ArrayList<ItemStack>(count * 2);
                 for (int i = 0; i < count; i++) {
                     items.add(PacketDataSerializerHelper.readItemStack(message));
                 }
                 items.add(connection.getOffHandItem());
                 for (ItemStack itemstack : items) {
-                    PacketDataSerializerHelper.writeItemStack(packetdata, itemstack);
+                    PacketDataSerializerHelper.writeItemStack(outdata, itemstack);
                 }
                 break;
             }
@@ -139,8 +142,6 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                 return;
             }
         }
-        //add transformed packet
-        out.writeBytes(buffer);
     }
 
 }

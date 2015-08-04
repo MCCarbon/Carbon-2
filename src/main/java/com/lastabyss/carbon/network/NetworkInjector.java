@@ -1,5 +1,7 @@
 package com.lastabyss.carbon.network;
 
+import io.netty.util.AttributeKey;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -30,7 +32,9 @@ import com.lastabyss.carbon.utils.Utils;
 
 public class NetworkInjector implements Listener {
 
+    public static final int PROTOCOL_VERSION_ID = 51;
     public static final Enum<EnumPlayerDigType> SWAP_HELD_ITEMS = DynamicEnumType.addEnum(EnumPlayerDigType.class, "SWAP_HELD_ITEMS", new Class<?>[0], new Object[0]);
+    public static final AttributeKey<Boolean> IS_SNAPSHOT = AttributeKey.valueOf("IS_SNAPSHOT");
 
     public static void inject() {
         registerPacket(EnumProtocol.HANDSHAKING, InjectingHandshakePacket.class, 0, false);
@@ -55,7 +59,7 @@ public class NetworkInjector implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         EntityPlayer nmsplayer = ((CraftPlayer) event.getPlayer()).getHandle();
         NetworkManager networkManager = nmsplayer.playerConnection.networkManager;
-        if (networkManager.channel.attr(InjectingHandshakePacket.IS_SNAPSHOT).get()) {
+        if (networkManager.channel.attr(NetworkInjector.IS_SNAPSHOT).get()) {
             CarbonOutTransformer outransformer = new CarbonOutTransformer(new CarbonPlayerConnection(MinecraftServer.getServer(), networkManager, nmsplayer));
             outransformer.setPlayerId(event.getPlayer().getEntityId());
             networkManager.channel.pipeline()
