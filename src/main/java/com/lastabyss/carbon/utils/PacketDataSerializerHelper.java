@@ -3,6 +3,7 @@ package com.lastabyss.carbon.utils;
 import java.io.IOException;
 import java.util.UUID;
 
+import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
@@ -31,6 +32,14 @@ public class PacketDataSerializerHelper {
     public static void writeItemStack(PacketDataSerializer serializer, ItemStack itemstack) {
         serializer.a(itemstack);
     }
+    
+	public static BlockPosition readBlockPosition(PacketDataSerializer serializer) {
+		return serializer.c();
+	}
+
+	public static void writeBlockPosition(PacketDataSerializer serializer, BlockPosition blockposition) {
+		serializer.a(blockposition);
+	}
 
     public static byte[] readArray(PacketDataSerializer serializer) {
         return serializer.a();
