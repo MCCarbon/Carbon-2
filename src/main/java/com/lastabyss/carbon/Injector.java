@@ -1,5 +1,38 @@
 package com.lastabyss.carbon;
 
+import gnu.trove.map.TObjectIntMap;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+
+import net.minecraft.server.v1_8_R3.Block;
+import net.minecraft.server.v1_8_R3.Blocks;
+import net.minecraft.server.v1_8_R3.DataWatcher;
+import net.minecraft.server.v1_8_R3.Enchantment;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityTypes;
+import net.minecraft.server.v1_8_R3.IBlockData;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.Item;
+import net.minecraft.server.v1_8_R3.ItemBlock;
+import net.minecraft.server.v1_8_R3.ItemFood;
+import net.minecraft.server.v1_8_R3.ItemSeeds;
+import net.minecraft.server.v1_8_R3.ItemSoup;
+import net.minecraft.server.v1_8_R3.Items;
+import net.minecraft.server.v1_8_R3.Material;
+import net.minecraft.server.v1_8_R3.MinecraftKey;
+import net.minecraft.server.v1_8_R3.PotionBrewer;
+import net.minecraft.server.v1_8_R3.TileEntity;
+
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+
 import com.lastabyss.carbon.blocks.BlockBeetroots;
 import com.lastabyss.carbon.blocks.BlockChorusFlower;
 import com.lastabyss.carbon.blocks.BlockChorusPlant;
@@ -24,35 +57,6 @@ import com.lastabyss.carbon.items.ItemTippedArrow;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.FixedChatSerializer;
 import com.lastabyss.carbon.utils.Utils;
-
-import gnu.trove.map.TObjectIntMap;
-import net.minecraft.server.v1_8_R3.Block;
-import net.minecraft.server.v1_8_R3.Blocks;
-import net.minecraft.server.v1_8_R3.DataWatcher;
-import net.minecraft.server.v1_8_R3.Enchantment;
-import net.minecraft.server.v1_8_R3.Entity;
-import net.minecraft.server.v1_8_R3.EntityTypes;
-import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.Item;
-import net.minecraft.server.v1_8_R3.ItemBlock;
-import net.minecraft.server.v1_8_R3.ItemFood;
-import net.minecraft.server.v1_8_R3.ItemSeeds;
-import net.minecraft.server.v1_8_R3.ItemSoup;
-import net.minecraft.server.v1_8_R3.Items;
-import net.minecraft.server.v1_8_R3.Material;
-import net.minecraft.server.v1_8_R3.MinecraftKey;
-import net.minecraft.server.v1_8_R3.PotionBrewer;
-import net.minecraft.server.v1_8_R3.TileEntity;
-
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.Recipe;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 
 /**
  * The injector class is the driver behind Carbon.
@@ -116,7 +120,7 @@ public class Injector {
         registerBlock(203, "purpur_stairs", purpurStairs, new ItemBlock(purpurStairs));
         registerBlock(204, "purpur_double_slab", purpurDoubleSlab);
         registerBlock(205, "purpur_slab", purpurSlab, new ItemStep(purpurSlab, purpurSlab, purpurDoubleSlab).b("purpurSlab"));
-        registerBlock(206, "end_bricks", endBricks, new ItemBlock(purpurPillar));
+        registerBlock(206, "end_bricks", endBricks, new ItemBlock(endBricks));
         registerBlock(207, "beetroots", beetroots, new ItemBlock(beetroots));
         registerBlock(208, "grass_path", grassPath, new ItemBlock(grassPath));
         registerBlock(209, "end_gateway", endGateway, new ItemBlock(endGateway));
@@ -145,11 +149,25 @@ public class Injector {
         fixItemsRefs();
     }
 
-    public void registerRecipes() {
-        Bukkit.resetRecipes();
-        //remove that recipe for now, we don't have all needed items yet
-        //addRecipe(new ShapedRecipe(new ItemStack(436)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', org.bukkit.Material.valueOf("BEETROOT")).setIngredient('b', org.bukkit.Material.BOWL));
-    }
+     
+     public void registerRecipes() {
+         Bukkit.resetRecipes();
+       //addRecipe(new ShapedRecipe(new ItemStack(436)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', org.bukkit.Material.valueOf("BEETROOT")).setIngredient('b', org.bukkit.Material.BOWL));
+        addRecipe(new ShapedRecipe(new ItemStack(BEETROOT_SOUP)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', BEETROOT).setIngredient('b', org.bukkit.Material.BOWL));
+        addRecipe(new ShapedRecipe(new ItemStack(END_BRICKS)).shape(new String[] {"ee", "ee"}).setIngredient('e', org.bukkit.Material.ENDER_STONE));
+        
+        //Purpur block recipes
+        addRecipe(new FurnaceRecipe(new ItemStack(CHORUS_FRUIT_POPPED), CHORUS_FRUIT));
+        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_BLOCK, 4)).shape(new String[] {"pp", "pp"}).setIngredient('p', CHORUS_FRUIT_POPPED));
+        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_STAIRS, 4)).shape(new String[] {"p  ", "pp ", "ppp"}).setIngredient('p', PURPUR_BLOCK));
+        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_STAIRS, 4)).shape(new String[] {"  p", " pp", "ppp"}).setIngredient('p', PURPUR_BLOCK));
+        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_SLAB, 6)).shape(new String[] {"ppp"}).setIngredient('p', PURPUR_BLOCK));
+        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_PILLAR)).shape(new String[] {"s", "s"}).setIngredient('s', PURPUR_SLAB));
+        
+        //Arrows
+        addRecipe(new ShapedRecipe(new ItemStack(SPECTRAL_ARROW, 2)).shape(new String[] {" d ", "dad", " d "}).setIngredient('d', org.bukkit.Material.GLOWSTONE_DUST).setIngredient('a', org.bukkit.Material.ARROW));
+     }
+     
 
     private void addRecipe(Recipe recipe) {
         Bukkit.getServer().addRecipe(recipe);
