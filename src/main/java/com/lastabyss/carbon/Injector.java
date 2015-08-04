@@ -22,7 +22,9 @@ import com.lastabyss.carbon.items.ItemSplashPotion;
 import com.lastabyss.carbon.items.ItemStep;
 import com.lastabyss.carbon.items.ItemTippedArrow;
 import com.lastabyss.carbon.network.NetworkInjector;
+import com.lastabyss.carbon.utils.FixedChatSerializer;
 import com.lastabyss.carbon.utils.Utils;
+
 import gnu.trove.map.TObjectIntMap;
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Blocks;
@@ -31,6 +33,7 @@ import net.minecraft.server.v1_8_R3.Enchantment;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 import net.minecraft.server.v1_8_R3.IBlockData;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemBlock;
 import net.minecraft.server.v1_8_R3.ItemFood;
@@ -41,6 +44,7 @@ import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
 import net.minecraft.server.v1_8_R3.PotionBrewer;
 import net.minecraft.server.v1_8_R3.TileEntity;
+
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Recipe;
 
@@ -61,6 +65,9 @@ public class Injector {
     }
 
     public void registerAll() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InvocationTargetException, NoSuchMethodException {
+        //Inject new json serializer
+        Utils.setFinalField(IChatBaseComponent.ChatSerializer.class.getDeclaredField("a"), null, FixedChatSerializer.gson);
+
         //Inject network
         NetworkInjector.inject();
 
