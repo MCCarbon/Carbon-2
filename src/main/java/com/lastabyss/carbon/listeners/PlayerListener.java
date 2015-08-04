@@ -4,44 +4,50 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.lastabyss.carbon.Carbon;
+import com.lastabyss.carbon.Injector;
 
 public class PlayerListener implements Listener {
-	
-	private Carbon plugin;
-	
-	public PlayerListener(Carbon plugin) {
-		this.plugin = plugin;
-	}
-	
-	@EventHandler
-	public void onPlayerRightClickGrass(PlayerInteractEvent event) {
-		if(event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
-		}
-		if(event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.GRASS) {
-			return;
-		}
-		if(event.getPlayer().getItemInHand() == null) {
-			return;
-		}
-		Material material = event.getPlayer().getItemInHand().getType();
-		if(material != Material.WOOD_SPADE && material != Material.IRON_SPADE && material != Material.GOLD_SPADE && material != Material.DIAMOND_SPADE) {
-			return;
-		}
-		short durability = (short) (event.getPlayer().getItemInHand().getDurability()+1);
-		if(event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-			if(durability == event.getPlayer().getItemInHand().getType().getMaxDurability()) {
-				event.getPlayer().getInventory().setItem(event.getPlayer().getInventory().getHeldItemSlot(), null);
-			} else {
-				event.getPlayer().getInventory().getItemInHand().setDurability(durability);
-			}
-		}
-		event.getClickedBlock().setType(Material.valueOf("GRASS_PATH"));
-		event.getPlayer().getWorld().playSound(event.getClickedBlock().getLocation(), Sound.DIG_GRAVEL, 1, 1);
-	}
+
+    public PlayerListener(Carbon plugin) {
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerRightClickGrass(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+        if (event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.GRASS) {
+            return;
+        }
+        if (event.getItem() == null) {
+            return;
+        }
+        Material material = event.getItem().getType();
+        switch (material) {
+            case WOOD_SPADE:
+            case STONE_SPADE:
+            case IRON_SPADE:
+            case GOLD_SPADE:
+            case DIAMOND_SPADE: {
+                break;
+            }
+            default: {
+                return;
+            }
+        }
+        short durability = (short) (event.getItem().getDurability() + 1);
+        if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            //TODO: check if setting more that max durability do break item
+            event.getItem().setDurability(durability);
+        }
+        event.getClickedBlock().setType(Injector.GRASS_PATH);
+        event.getPlayer().getWorld().playSound(event.getClickedBlock().getLocation(), Sound.DIG_GRAVEL, 1, 1);
+    }
+
 }

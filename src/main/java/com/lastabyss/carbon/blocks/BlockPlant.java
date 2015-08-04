@@ -12,9 +12,11 @@ import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MaterialMapColor;
 import net.minecraft.server.v1_8_R3.World;
 
+
 // CraftBukkit start
 import org.bukkit.event.block.BlockPhysicsEvent;
 // CraftBukkit end
+
 
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
 
@@ -61,6 +63,7 @@ public class BlockPlant extends WrappedBlock {
         if (!f(world, blockposition, iblockdata)) {
             // CraftBukkit Start
             org.bukkit.block.Block block = world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ());
+            @SuppressWarnings("deprecation")
             BlockPhysicsEvent event = new BlockPhysicsEvent(block, block.getTypeId());
             world.getServer().getPluginManager().callEvent(event);
 

@@ -20,7 +20,6 @@ import net.minecraft.server.v1_8_R3.EnumDirection.EnumDirectionLimit;
 import net.minecraft.server.v1_8_R3.Explosion;
 import net.minecraft.server.v1_8_R3.IBlockAccess;
 import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.IBlockState;
 import net.minecraft.server.v1_8_R3.INamable;
 import net.minecraft.server.v1_8_R3.MaterialMapColor;
 import net.minecraft.server.v1_8_R3.MovingObjectPosition;
@@ -515,15 +514,12 @@ public class BlockStairs extends WrappedBlock {
             }
         }
 
-        int k = aint.length;
-
         for (int i1 : aint) {
             amovingobjectposition[i1] = null;
         }
 
         MovingObjectPosition movingobjectposition = null;
         double d0 = 0.0D;
-        int j1 = amovingobjectposition.length;
 
         for (MovingObjectPosition movingobjectposition1 : amovingobjectposition) {
             if (movingobjectposition1 != null) {
