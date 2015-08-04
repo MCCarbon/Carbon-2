@@ -1,6 +1,5 @@
 package com.lastabyss.carbon.utils;
 
-import com.lastabyss.carbon.Carbon;
 import com.lastabyss.carbon.DynamicEnumType;
 
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -37,22 +36,10 @@ import java.util.logging.Logger;
  */
 public class Utils {
 
-    private static Carbon plugin = null;
     public final static SecureRandom random = new SecureRandom();
 
     private Utils() {
         throw new UnsupportedOperationException("No, bad!");
-    }
-
-    /**
-     * Can only be instantiated once.
-     *
-     * @param instance
-     */
-    public static void instantiate(Carbon instance) {
-        if (plugin == null) {
-            plugin = instance;
-        }
     }
 
     /**
@@ -95,9 +82,6 @@ public class Utils {
             Object object = field.get(null);
             Map<String, EntityType> NAME_MAP = (Map<String, EntityType>) object;
             NAME_MAP.put(name, entityType);
-            if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-                Carbon.log.log(Level.INFO, "[Carbon] Entity {0} with ID {1} was injected into CraftBukkit.", new Object[]{name, id});
-            }
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace(System.out);
         }
@@ -129,9 +113,6 @@ public class Utils {
             Object object = field.get(null);
             Map<String, Material> BY_NAME = (Map<String, Material>) object;
             BY_NAME.put(name, material);
-            if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-                Carbon.log.log(Level.INFO, "[Carbon] Material {0} with ID {1} was injected into CraftBukkit.", new Object[]{name, id});
-            }
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace(System.out);
         }
@@ -165,9 +146,6 @@ public class Utils {
             Object object = field.get(null);
             Map<String, Material> BY_NAME = (Map<String, Material>) object;
             BY_NAME.put(name, material);
-            if (plugin.getConfig().getBoolean("debug.verbose", false)) {
-                Carbon.log.log(Level.INFO, "[Carbon] Material {0} with ID {1} with data {2} was injected into CraftBukkit.", new Object[]{name, id, data});
-            }
         } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace(System.out);
         }

@@ -1,11 +1,8 @@
 package com.lastabyss.carbon;
 
-import com.lastabyss.carbon.instrumentation.Instrumentator;
 import com.lastabyss.carbon.listeners.PlayerListener;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Metrics;
-import com.lastabyss.carbon.utils.Utils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -23,9 +20,6 @@ public class Carbon extends JavaPlugin {
     private FileConfiguration spigotConfig = YamlConfiguration.loadConfiguration(new File(getServer().getWorldContainer(), "spigot.yml"));
 
     public static final Logger log = Bukkit.getLogger();
-
-    private static Injector injector;
-    private static Instrumentator instrumentator;
 
     @Override
     public void onLoad() {
@@ -50,10 +44,8 @@ public class Carbon extends JavaPlugin {
 
         // Inject 1.8 features. Stop server if something fails
         try {
-            Utils.instantiate(this);
-            //instrumentator = new Instrumentator(this, new File(getDataFolder(), "libraries/natives/").getPath());
-            //instrumentator.instrumentate();
-            injector = new Injector(this);
+            //new Instrumentator(this, new File(getDataFolder(), "libraries/natives/").getPath()).instrumentate();
+            Injector injector = new Injector(this);
             injector.registerAll();
             injector.registerRecipes();
         } catch (Throwable e) {
