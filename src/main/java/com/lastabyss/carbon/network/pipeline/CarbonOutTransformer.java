@@ -8,10 +8,11 @@ import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
 import com.lastabyss.carbon.network.CarbonPlayerConnection;
 import com.lastabyss.carbon.network.DataWatcherTransformer;
+import com.lastabyss.carbon.network.watchedentity.WatchedEntity;
+import com.lastabyss.carbon.network.watchedentity.WatchedLiving;
+import com.lastabyss.carbon.network.watchedentity.WatchedPlayer;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 import com.lastabyss.carbon.utils.Utils;
-import com.lastabyss.carbon.utils.watchedentity.WatchedEntity;
-import com.lastabyss.carbon.utils.watchedentity.WatchedPlayer;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import io.netty.buffer.ByteBuf;
@@ -90,9 +91,22 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
             }
             case 0x0F: { //SpawnMob - add random uuid
                 PacketDataSerializerHelper.writeVarInt(outdata, packetId);
-                PacketDataSerializerHelper.writeVarInt(outdata, PacketDataSerializerHelper.readVarInt(message));
+                int entityId = PacketDataSerializerHelper.readVarInt(message);
+                PacketDataSerializerHelper.writeVarInt(outdata, entityId);
                 PacketDataSerializerHelper.writeUUID(outdata, UUID.randomUUID());
-                outdata.writeBytes(message);
+                int type = message.readByte();
+                entities.put(entityId, new WatchedLiving(entityId, type));
+                outdata.writeByte(type);
+                outdata.writeInt(message.readInt());
+                outdata.writeInt(message.readInt());
+                outdata.writeInt(message.readInt());
+                outdata.writeByte(message.readByte());
+                outdata.writeByte(message.readByte());
+                outdata.writeByte(message.readByte());
+                outdata.writeShort(message.readShort());
+                outdata.writeShort(message.readShort());
+                outdata.writeShort(message.readShort());
+                outdata.writeBytes(DataWatcherTransformer.transform(entities.get(entityId), Utils.toArray(message)));
                 break;
             }
             case 0x1C: { //EntityMetadata - transform entity metadata
