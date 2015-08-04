@@ -61,7 +61,7 @@ public class Carbon extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new NetworkInjector(), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        //getServer().getPluginManager().registerEvents(new PlayerListener(this), this); - temporaly disable, until we find a way to actually break the item when durability end, should probably just reimplement shovels
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
