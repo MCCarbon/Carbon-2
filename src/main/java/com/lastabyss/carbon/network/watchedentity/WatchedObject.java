@@ -2,8 +2,8 @@ package com.lastabyss.carbon.network.watchedentity;
 
 public class WatchedObject extends WatchedEntity {
 
-	int type;
-	
+    int type;
+
     public WatchedObject(int id, int type) {
         super(id);
         this.type = type;
@@ -31,16 +31,16 @@ public class WatchedObject extends WatchedEntity {
 
     @Override
     public SpecificType getType() {
-        switch(type) {
-	        case 71: {
-	        	return SpecificType.ITEM_FRAME;
-	        }
-	        case 2: {
-	        	return SpecificType.ITEM;
-	        }
-	        default: {
-	        	return SpecificType.NONE;
-	        }
+        switch (type) {
+            case 71: {
+                return SpecificType.ITEM_FRAME;
+            }
+            case 2: {
+                return SpecificType.ITEM;
+            }
+            default: {
+                return SpecificType.NONE;
+            }
         }
     }
 

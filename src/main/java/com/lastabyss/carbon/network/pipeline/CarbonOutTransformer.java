@@ -13,7 +13,6 @@ import com.lastabyss.carbon.network.watchedentity.WatchedEntity;
 import com.lastabyss.carbon.network.watchedentity.WatchedLiving;
 import com.lastabyss.carbon.network.watchedentity.WatchedObject;
 import com.lastabyss.carbon.network.watchedentity.WatchedPlayer;
-import com.lastabyss.carbon.network.watchedentity.WatchedEntity.SpecificType;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 import com.lastabyss.carbon.utils.Utils;
 
