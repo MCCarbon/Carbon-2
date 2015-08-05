@@ -2,7 +2,6 @@ package com.lastabyss.carbon.network;
 
 import io.netty.util.AttributeKey;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
 import net.minecraft.server.v1_8_R3.EntityPlayer;
@@ -20,7 +19,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.lastabyss.carbon.DynamicEnumType;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInAnimation;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInSettings;
@@ -28,11 +26,12 @@ import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseEntity;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
 import com.lastabyss.carbon.network.pipeline.CarbonInTransformer;
 import com.lastabyss.carbon.network.pipeline.CarbonOutTransformer;
+import com.lastabyss.carbon.utils.DynamicEnumType;
 import com.lastabyss.carbon.utils.Utils;
 
 public class NetworkInjector implements Listener {
 
-    public static final int PROTOCOL_VERSION_ID = 51;
+    public static final int PROTOCOL_VERSION_ID = 52;
     public static final Enum<EnumPlayerDigType> SWAP_HELD_ITEMS = DynamicEnumType.addEnum(EnumPlayerDigType.class, "SWAP_HELD_ITEMS", new Class<?>[0], new Object[0]);
     public static final AttributeKey<Boolean> IS_SNAPSHOT = AttributeKey.valueOf("IS_SNAPSHOT");
 
@@ -45,14 +44,9 @@ public class NetworkInjector implements Listener {
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInSettings.class, 0x15, false);
     }
 
-    @SuppressWarnings("unchecked")
     public static void registerPacket(EnumProtocol protocol, Class<? extends Packet<? extends PacketListener>> packetClass, int packetID, boolean isClientbound) {
-        try {
-            ((Map<Class<? extends Packet<? extends PacketListener>>, EnumProtocol>) Utils.<Field>setAccessible(EnumProtocol.class.getDeclaredField("h")).get(null)).put(packetClass, protocol);
-            ((Map<EnumProtocolDirection, Map<Integer, Class<? extends Packet<? extends PacketListener>>>>) Utils.<Field>setAccessible(EnumProtocol.class.getDeclaredField("j")).get(protocol)).get(isClientbound ? EnumProtocolDirection.CLIENTBOUND : EnumProtocolDirection.SERVERBOUND).put(packetID, packetClass);
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace(System.out);
-        }
+        Utils.<Map<Class<? extends Packet<? extends PacketListener>>, EnumProtocol>>getFieldValue(EnumProtocol.class, "h", null).put(packetClass, protocol);
+        Utils.<Map<EnumProtocolDirection, Map<Integer, Class<? extends Packet<? extends PacketListener>>>>>getFieldValue(EnumProtocol.class, "j", protocol).get(isClientbound ? EnumProtocolDirection.CLIENTBOUND : EnumProtocolDirection.SERVERBOUND).put(packetID, packetClass);
     }
 
     @EventHandler(priority = EventPriority.LOW)

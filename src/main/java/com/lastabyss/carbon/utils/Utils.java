@@ -1,7 +1,5 @@
 package com.lastabyss.carbon.utils;
 
-import com.lastabyss.carbon.DynamicEnumType;
-
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
