@@ -20,7 +20,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.lastabyss.carbon.DynamicEnumType;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInAnimation;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInSettings;
@@ -28,6 +27,7 @@ import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseEntity;
 import com.lastabyss.carbon.network.pipeline.CarbonInTransformer;
 import com.lastabyss.carbon.network.pipeline.CarbonOutTransformer;
+import com.lastabyss.carbon.utils.DynamicEnumType;
 import com.lastabyss.carbon.utils.Utils;
 
 public class NetworkInjector implements Listener {

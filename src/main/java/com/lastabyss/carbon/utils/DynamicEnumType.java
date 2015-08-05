@@ -1,4 +1,4 @@
-package com.lastabyss.carbon;
+package com.lastabyss.carbon.utils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
