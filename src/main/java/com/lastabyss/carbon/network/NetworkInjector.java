@@ -4,6 +4,7 @@ import io.netty.util.AttributeKey;
 
 import java.util.Map;
 
+import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
@@ -17,6 +18,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInAnimation;
@@ -24,6 +26,8 @@ import com.lastabyss.carbon.network.packets.CarbonPacketPlayInBlockPlace;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInSettings;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseEntity;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayInUseItem;
+import com.lastabyss.carbon.network.packets.class_le;
+import com.lastabyss.carbon.network.packets.class_oh;
 import com.lastabyss.carbon.network.pipeline.CarbonInTransformer;
 import com.lastabyss.carbon.network.pipeline.CarbonOutTransformer;
 import com.lastabyss.carbon.utils.DynamicEnumType;
@@ -37,6 +41,7 @@ public class NetworkInjector implements Listener {
 
     public static void inject() {
         registerPacket(EnumProtocol.HANDSHAKING, InjectingHandshakePacket.class, 0, false);
+        
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUseItem.class, CarbonPacketPlayInUseItem.ID, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInUseEntity.class, 0x02, false);
         registerPacket(EnumProtocol.PLAY, CarbonPacketPlayInBlockPlace.class, 0x08, false);
@@ -60,6 +65,20 @@ public class NetworkInjector implements Listener {
             .addAfter("compress", "carbon-out-transformer", outransformer)
             .addAfter("decompress", "carbon-in-transformer", new CarbonInTransformer());
         }
+    }
+    
+    @EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent event) {
+    	if(event.getMessage().contains("barapi")) {
+    		String[] args = event.getMessage().replace("barapi ", "").split(" ");
+    		String message = "";
+    		for(int i = 0; i < args.length; i++) {
+    			message = message + " " + args[i];
+    		}
+    		class_le clazz = new class_le(new ChatComponentText("testing"), class_oh.class_a_in_class_oh.f, class_oh.class_b_in_class_oh.a, true, false);
+    		clazz.a(((CraftPlayer)event.getPlayer()).getHandle());
+    		event.setCancelled(true);
+    	}
     }
 
 }

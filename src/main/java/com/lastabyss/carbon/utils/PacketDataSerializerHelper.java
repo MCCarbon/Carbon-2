@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
@@ -32,6 +33,22 @@ public class PacketDataSerializerHelper {
     public static void writeItemStack(PacketDataSerializer serializer, ItemStack itemstack) {
         serializer.a(itemstack);
     }
+    
+	public static <T extends Enum<T>> T readEnum(PacketDataSerializer serializer, Class<T> clazz) {
+		return serializer.a(clazz);
+	}
+	
+	public static void writeEnum(PacketDataSerializer serializer, Enum<?> enumClass) {
+		serializer.a(enumClass);
+	}
+	
+	public static IChatBaseComponent readChat(PacketDataSerializer serializer) throws IOException {
+		return serializer.d();
+	}
+
+	public static void writeChat(PacketDataSerializer serializer, IChatBaseComponent ichatbasecomponent) throws IOException {
+		serializer.a(ichatbasecomponent);
+	}
     
 	public static BlockPosition readBlockPosition(PacketDataSerializer serializer) {
 		return serializer.c();
