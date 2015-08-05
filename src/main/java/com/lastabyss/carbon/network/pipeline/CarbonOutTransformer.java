@@ -8,6 +8,7 @@ import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
 import com.lastabyss.carbon.network.CarbonPlayerConnection;
 import com.lastabyss.carbon.network.DataWatcherTransformer;
+import com.lastabyss.carbon.network.packets.CarbonPacketPlayOutBossBar;
 import com.lastabyss.carbon.network.watchedentity.WatchedEntity;
 import com.lastabyss.carbon.network.watchedentity.WatchedLiving;
 import com.lastabyss.carbon.network.watchedentity.WatchedPlayer;
@@ -149,6 +150,11 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
             }
             case 0x49: { //UpdateEntityNBT - was removed in 1.9, just skip
                 return;
+            }
+            case CarbonPacketPlayOutBossBar.FAKE_ID: { //BossBar - Write real packet id
+                PacketDataSerializerHelper.writeVarInt(outdata, CarbonPacketPlayOutBossBar.REAL_ID);
+                out.writeBytes(messagebuf);
+                break;
             }
             default: { //Any other - just send original packet
                 messagebuf.resetReaderIndex();

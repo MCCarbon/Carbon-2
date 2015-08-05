@@ -21,8 +21,8 @@ public class CarbonInTransformer extends MessageToMessageDecoder<ByteBuf> {
         }
         PacketDataSerializer serializer = new PacketDataSerializer(message);
         int packetId = PacketDataSerializerHelper.readVarInt(serializer);
-        if (packetId == 0x08) {
-            packetId = CarbonPacketPlayInUseItem.ID + 1;
+        if (packetId == CarbonPacketPlayInUseItem.REAL_ID) {
+            packetId = CarbonPacketPlayInUseItem.FAKE_ID + 1;
         }
         if (packetId > 0x08) {
             packetId--;

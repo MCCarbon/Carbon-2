@@ -15,6 +15,9 @@ import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 
 public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut> {
 
+    public static final int REAL_ID = 0x49;
+    public static final int FAKE_ID = 99;
+
     private UUID uniqueId;
     private EnumBossBarAction action;
     private IChatBaseComponent message;
