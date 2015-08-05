@@ -20,10 +20,10 @@ public class DataWatcherTransformer {
         //copy entity
         moveDWData(objects, newobjects, 0, 0); //flags
         moveDWData(objects, newobjects, 1, 1); //air
-        moveDWData(objects, newobjects, 2, 2); //nametag
-        moveDWData(objects, newobjects, 3, 3); //nametagvisible
         //copy living entity
         if (entity.isLiving()) {
+            moveDWData(objects, newobjects, 2, 2); //nametag
+            moveDWData(objects, newobjects, 3, 3); //nametagvisible
             moveDWData(objects, newobjects, 6, 6); //health
             moveDWData(objects, newobjects, 7, 7); //potion color
             moveDWData(objects, newobjects, 8, 8); //potion ambient
@@ -58,6 +58,13 @@ public class DataWatcherTransformer {
                 moveDWData(objects, newobjects, 21, 15); //owner
                 moveDWData(objects, newobjects, 22, 16); //armor
                 break;
+            } case ITEM_FRAME: {
+            	moveDWData(objects, newobjects, 8, 5); //item
+            	moveDWData(objects, newobjects, 9, 6); //rotation
+            	break;
+            } case ITEM: {
+            	moveDWData(objects, newobjects, 10, 5); //item
+            	break;
             }
             case BAT: {
                 moveDWData(objects, newobjects, 16, 11);

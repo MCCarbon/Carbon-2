@@ -11,7 +11,9 @@ import com.lastabyss.carbon.network.DataWatcherTransformer;
 import com.lastabyss.carbon.network.packets.CarbonPacketPlayOutBossBar;
 import com.lastabyss.carbon.network.watchedentity.WatchedEntity;
 import com.lastabyss.carbon.network.watchedentity.WatchedLiving;
+import com.lastabyss.carbon.network.watchedentity.WatchedObject;
 import com.lastabyss.carbon.network.watchedentity.WatchedPlayer;
+import com.lastabyss.carbon.network.watchedentity.WatchedEntity.SpecificType;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 import com.lastabyss.carbon.utils.Utils;
 
@@ -69,9 +71,12 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
             }
             case 0x0E: { //SpawnObject - add random uuid
                 PacketDataSerializerHelper.writeVarInt(outdata, packetId);
-                PacketDataSerializerHelper.writeVarInt(outdata, PacketDataSerializerHelper.readVarInt(message));
+                int entityId = PacketDataSerializerHelper.readVarInt(message);
+                int type = message.readByte();
+                entities.put(entityId, new WatchedObject(entityId, type));
+                PacketDataSerializerHelper.writeVarInt(outdata, entityId);
                 PacketDataSerializerHelper.writeUUID(outdata, UUID.randomUUID());
-                outdata.writeByte(message.readByte());
+                outdata.writeByte(type);
                 outdata.writeInt(message.readInt());
                 outdata.writeInt(message.readInt());
                 outdata.writeInt(message.readInt());
@@ -88,6 +93,7 @@ public class CarbonOutTransformer extends MessageToByteEncoder<ByteBuf> {
                     outdata.writeShort(0);
                     outdata.writeShort(0);
                 }
+                
                 break;
             }
             case 0x0F: { //SpawnMob - add random uuid
