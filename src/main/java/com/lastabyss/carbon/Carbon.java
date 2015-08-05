@@ -1,6 +1,5 @@
 package com.lastabyss.carbon;
 
-import com.lastabyss.carbon.listeners.PlayerListener;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Metrics;
 import java.io.File;
