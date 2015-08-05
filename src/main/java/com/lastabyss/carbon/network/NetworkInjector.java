@@ -32,7 +32,7 @@ import com.lastabyss.carbon.utils.Utils;
 
 public class NetworkInjector implements Listener {
 
-    public static final int PROTOCOL_VERSION_ID = 51;
+    public static final int PROTOCOL_VERSION_ID = 52;
     public static final Enum<EnumPlayerDigType> SWAP_HELD_ITEMS = DynamicEnumType.addEnum(EnumPlayerDigType.class, "SWAP_HELD_ITEMS", new Class<?>[0], new Object[0]);
     public static final AttributeKey<Boolean> IS_SNAPSHOT = AttributeKey.valueOf("IS_SNAPSHOT");
 
