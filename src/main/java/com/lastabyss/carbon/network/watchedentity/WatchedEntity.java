@@ -23,7 +23,7 @@ public abstract class WatchedEntity {
     public abstract SpecificType getType();
 
     public static enum SpecificType {
-        NONE, VILLAGER, HORSE, ITEM, ITEM_FRAME;
+        NONE, VILLAGER, HORSE, BAT, ITEM, ITEM_FRAME;
     }
 
 }

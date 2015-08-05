@@ -6,7 +6,6 @@ import org.spigotmc.SneakyThrow;
 
 import com.lastabyss.carbon.network.pipeline.StatusResponseTransformer;
 
-import net.minecraft.server.v1_8_R3.ChatComponentText;
 import net.minecraft.server.v1_8_R3.EnumProtocol;
 import net.minecraft.server.v1_8_R3.NetworkManager;
 import net.minecraft.server.v1_8_R3.PacketHandshakingInListener;
@@ -28,8 +27,6 @@ public class InjectingHandshakePacket extends PacketHandshakingInSetProtocol {
                 injected = true;
             } else {
                 manager.channel.attr(NetworkInjector.IS_SNAPSHOT).set(Boolean.FALSE);
-                manager.close(new ChatComponentText("Please update to 1.9"));
-                
             }
         } catch (Throwable t) {
             SneakyThrow.sneaky(t);

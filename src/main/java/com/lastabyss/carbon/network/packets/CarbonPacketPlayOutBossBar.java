@@ -6,173 +6,138 @@ import java.util.UUID;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
-import net.minecraft.server.v1_8_R3.PacketListener;
 import net.minecraft.server.v1_8_R3.PacketListenerPlayOut;
 
+import com.lastabyss.carbon.types.Bossbar;
+import com.lastabyss.carbon.types.Bossbar.EnumBossbarColor;
+import com.lastabyss.carbon.types.Bossbar.EnumBossbarDivider;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 
 public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut> {
-	
-	   private UUID uniqueId;
-	   private BossBarType bossBarType;
-	   private IChatBaseComponent message;
-	   private float health;
-	   private class_oh.class_a_in_class_oh e;
-	   private class_oh.class_b_in_class_oh f;
-	   private boolean g;
-	   private boolean h;
 
-	   public CarbonPacketPlayOutBossBar() {
-	   }
+    public static final int REAL_ID = 0x49;
+    public static final int FAKE_ID = 99;
 
-	   public CarbonPacketPlayOutBossBar(BossBarType var1, class_oh var2) {
-	      this.bossBarType = var1;
-	      this.uniqueId = var2.d();
-	      this.message = var2.e();
-	      this.health = var2.f();
-	      this.e = var2.g();
-	      this.f = var2.h();
-	      this.g = var2.i();
-	      this.h = var2.j();
-	   }
+    private UUID uniqueId;
+    private EnumBossBarAction action;
+    private IChatBaseComponent message;
+    private float health;
+    private EnumBossbarColor color;
+    private EnumBossbarDivider divider;
+    private boolean darkenSky;
+    private boolean isDragon;
 
-	   public void a(PacketDataSerializer serializer) throws IOException {
-	      this.uniqueId = PacketDataSerializerHelper.readUUID(serializer);
-	      this.bossBarType = (BossBarType)PacketDataSerializerHelper.readEnum(serializer, BossBarType.class);
-	      switch(CarbonPacketPlayOutBossBar.SyntheticClass_1.a[this.bossBarType.ordinal()]) {
-	      case 1:
-	         this.message = PacketDataSerializerHelper.readChat(serializer);
-	         this.health = serializer.readFloat();
-	         this.e = (class_oh.class_a_in_class_oh)PacketDataSerializerHelper.readEnum(serializer, class_oh.class_a_in_class_oh.class);
-	         this.f = (class_oh.class_b_in_class_oh)PacketDataSerializerHelper.readEnum(serializer, class_oh.class_b_in_class_oh.class);
-	         this.a(serializer.readUnsignedByte());
-	      case 2:
-	      default:
-	         break;
-	      case 3:
-	         this.health = serializer.readFloat();
-	         break;
-	      case 4:
-	         this.message = PacketDataSerializerHelper.readChat(serializer);
-	         break;
-	      case 5:
-	         this.e = (class_oh.class_a_in_class_oh)PacketDataSerializerHelper.readEnum(serializer, class_oh.class_a_in_class_oh.class);
-	         this.f = (class_oh.class_b_in_class_oh)PacketDataSerializerHelper.readEnum(serializer, class_oh.class_b_in_class_oh.class);
-	         break;
-	      case 6:
-	         this.a(serializer.readUnsignedByte());
-	      }
+    public CarbonPacketPlayOutBossBar() {
+    }
 
-	   }
+    public CarbonPacketPlayOutBossBar(EnumBossBarAction action, Bossbar boossbar) {
+        this.action = action;
+        this.uniqueId = boossbar.getUniqueId();
+        this.message = boossbar.getMessage();
+        this.health = boossbar.getHealth();
+        this.color = boossbar.getColor();
+        this.divider = boossbar.getDivider();
+        this.darkenSky = boossbar.shouldDarkenSky();
+        this.isDragon = boossbar.isDragon();
+    }
 
-	   private void a(int var1) {
-	      this.g = (var1 & 1) > 0;
-	      this.h = (var1 & 2) > 0;
-	   }
+    @Override
+    public void a(PacketDataSerializer serializer) throws IOException {
+        this.uniqueId = PacketDataSerializerHelper.readUUID(serializer);
+        this.action = PacketDataSerializerHelper.readEnum(serializer, EnumBossBarAction.class);
+        switch (action) {
+            case ADD: {
+                this.message = PacketDataSerializerHelper.readChat(serializer);
+                this.health = serializer.readFloat();
+                this.color = (Bossbar.EnumBossbarColor) PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarColor.class);
+                this.divider = (Bossbar.EnumBossbarDivider) PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarDivider.class);
+                this.decodeFlags(serializer.readUnsignedByte());
+            }
+            case REMOVE: {
+                break;
+            }
+            case UPDATE_HEALTH: {
+                this.health = serializer.readFloat();
+                break;
+            }
+            case UPDATE_TITLE: {
+                this.message = PacketDataSerializerHelper.readChat(serializer);
+                break;
+            }
+            case UPDATE_STYLE: {
+                this.color = PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarColor.class);
+                this.divider = PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarDivider.class);
+                break;
+            }
+            case UPDATE_FLAGS: {
+                this.decodeFlags(serializer.readUnsignedByte());
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
 
-	   public void b(PacketDataSerializer var1) throws IOException {
-		   PacketDataSerializerHelper.writeUUID(var1, this.uniqueId);
-		   PacketDataSerializerHelper.writeEnum(var1, this.bossBarType);
-	      switch(CarbonPacketPlayOutBossBar.SyntheticClass_1.a[this.bossBarType.ordinal()]) {
-	      case 1:
-	    	  PacketDataSerializerHelper.writeChat(var1, this.message);
-	         var1.writeFloat(this.health);
-	         PacketDataSerializerHelper.writeEnum(var1, this.e);
-	         PacketDataSerializerHelper.writeEnum(var1, this.f);
-	         var1.writeByte(this.i());
-	      case 2:
-	      default:
-	         break;
-	      case 3:
-	         var1.writeFloat(this.health);
-	         break;
-	      case 4:
-	    	  PacketDataSerializerHelper.writeChat(var1, this.message);
-	         break;
-	      case 5:
-	    	  PacketDataSerializerHelper.writeEnum(var1, this.e);
-	    	  PacketDataSerializerHelper.writeEnum(var1, this.f);
-	         break;
-	      case 6:
-	         var1.writeByte(this.i());
-	      }
+    private void decodeFlags(int bitset) {
+        this.darkenSky = (bitset & 1) > 0;
+        this.isDragon = (bitset & 2) > 0;
+    }
 
-	   }
+    @Override
+    public void b(PacketDataSerializer serializer) throws IOException {
+        PacketDataSerializerHelper.writeUUID(serializer, this.uniqueId);
+        PacketDataSerializerHelper.writeEnum(serializer, this.action);
+        switch (action) {
+            case ADD:
+                PacketDataSerializerHelper.writeChat(serializer, this.message);
+                serializer.writeFloat(this.health);
+                PacketDataSerializerHelper.writeEnum(serializer, this.color);
+                PacketDataSerializerHelper.writeEnum(serializer, this.divider);
+                serializer.writeByte(this.encodeFlags());
+            case REMOVE: {
+                break;
+            }
+            case UPDATE_HEALTH: {
+                serializer.writeFloat(this.health);
+                break;
+            }
+            case UPDATE_TITLE: {
+                PacketDataSerializerHelper.writeChat(serializer, this.message);
+                break;
+            }
+            case UPDATE_STYLE: {
+                PacketDataSerializerHelper.writeEnum(serializer, this.color);
+                PacketDataSerializerHelper.writeEnum(serializer, this.divider);
+                break;
+            }
+            case UPDATE_FLAGS: {
+                serializer.writeByte(this.encodeFlags());
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
 
-	   private int i() {
-	      int var1 = 0;
-	      if(this.g) {
-	         var1 |= 1;
-	      }
+    private int encodeFlags() {
+        int bitset = 0;
+        if (this.darkenSky) {
+            bitset |= 1;
+        }
+        if (this.isDragon) {
+            bitset |= 2;
+        }
+        return bitset;
+    }
 
-	      if(this.h) {
-	         var1 |= 2;
-	      }
+    @Override
+    public void a(PacketListenerPlayOut listener) {
+    }
 
-	      return var1;
-	   }
+    public enum EnumBossBarAction {
+        ADD, REMOVE, UPDATE_HEALTH, UPDATE_TITLE, UPDATE_STYLE, UPDATE_FLAGS;
+    }
 
-	   public void a(PacketListenerPlayOut var1) {
-	     
-	   }
-
-	   // $FF: synthetic method
-	   // $FF: bridge method
-	   public void handle(PacketListener var1) {
-	      this.a((PacketListenerPlayOut) var1);
-	   }
-
-	   // $FF: synthetic class
-	   static class SyntheticClass_1 {
-	      // $FF: synthetic field
-	      static final int[] a = new int[BossBarType.values().length];
-
-	      static {
-	         try {
-	            a[BossBarType.a.ordinal()] = 1;
-	         } catch (NoSuchFieldError var6) {
-	            ;
-	         }
-
-	         try {
-	            a[BossBarType.b.ordinal()] = 2;
-	         } catch (NoSuchFieldError var5) {
-	            ;
-	         }
-
-	         try {
-	            a[BossBarType.c.ordinal()] = 3;
-	         } catch (NoSuchFieldError var4) {
-	            ;
-	         }
-
-	         try {
-	            a[BossBarType.d.ordinal()] = 4;
-	         } catch (NoSuchFieldError var3) {
-	            ;
-	         }
-
-	         try {
-	            a[BossBarType.e.ordinal()] = 5;
-	         } catch (NoSuchFieldError var2) {
-	            ;
-	         }
-
-	         try {
-	            a[BossBarType.f.ordinal()] = 6;
-	         } catch (NoSuchFieldError var1) {
-	            ;
-	         }
-
-	      }
-	   }
-
-	   public enum BossBarType {
-	      a,
-	      b,
-	      c,
-	      d,
-	      e,
-	      f;
-	   }
-	}
+}

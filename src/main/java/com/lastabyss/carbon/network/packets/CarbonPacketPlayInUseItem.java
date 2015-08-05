@@ -10,7 +10,8 @@ import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 
 public class CarbonPacketPlayInUseItem implements Packet<CarbonPlayerConnection> {
 
-    public static final int ID = 99;
+    public static final int REAL_ID = 8;
+    public static final int FAKE_ID = 99;
 
     private EnumUsedHand hand;
 
