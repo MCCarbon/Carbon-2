@@ -59,6 +59,10 @@ public class DataWatcherTransformer {
                 moveDWData(objects, newobjects, 22, 16); //armor
                 break;
             }
+            case BAT: {
+                moveDWData(objects, newobjects, 16, 11);
+                break;
+            }
             default: {
                 break;
             }
