@@ -2,13 +2,15 @@ package com.lastabyss.carbon.network.watchedentity;
 
 public class WatchedLiving extends WatchedEntity {
 
-    private boolean isLiving;
+    private boolean isLiving; //Yes, we do have a flag for living because some people tend to spawn objects using spawn mob packet (hologramm plugins most of the time)
     private boolean isAgeable;
+    private boolean isTameable;
     private SpecificType stype;
 
     public WatchedLiving(int id, int type) {
         super(id);
         stype = SpecificType.NONE;
+        //TODO: cleanup this shit somehow
         switch (type) {
             case 50:
             case 51:
@@ -44,7 +46,12 @@ public class WatchedLiving extends WatchedEntity {
                 isLiving = true;
                 break;
             }
-            case 95:
+            case 95: {
+                isTameable = true;
+                isAgeable = true;
+                isLiving = true;
+                break;
+            }
             case 96: {
                 isAgeable = true;
                 isLiving = true;
@@ -55,6 +62,7 @@ public class WatchedLiving extends WatchedEntity {
                 break;
             }
             case 98: {
+                isTameable = true;
                 isAgeable = true;
                 isLiving = true;
                 break;
@@ -91,6 +99,11 @@ public class WatchedLiving extends WatchedEntity {
     @Override
     public boolean isAgeable() {
         return isAgeable;
+    }
+
+    @Override
+    public boolean isTameable() {
+        return isTameable;
     }
 
     @Override

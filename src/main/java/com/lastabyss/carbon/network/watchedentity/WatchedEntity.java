@@ -16,6 +16,8 @@ public abstract class WatchedEntity {
 
     public abstract boolean isAgeable();
 
+    public abstract boolean isTameable();
+
     public abstract boolean isPlayer();
 
     public abstract SpecificType getType();

@@ -22,6 +22,11 @@ public class WatchedObject extends WatchedEntity {
     }
 
     @Override
+    public boolean isTameable() {
+        return false;
+    }
+
+    @Override
     public SpecificType getType() {
         //TODO
         return SpecificType.NONE;

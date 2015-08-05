@@ -32,7 +32,12 @@ public class DataWatcherTransformer {
         }
         //copy ageable
         if (entity.isAgeable()) {
-            moveDWData(objects, newobjects, 12, 11);
+            moveDWData(objects, newobjects, 12, 11); //age
+        }
+        //copy tameable
+        if (entity.isTameable()) {
+            moveDWData(objects, newobjects, 16, 12); //tame flags
+            moveDWData(objects, newobjects, 17, 13); //owner
         }
         //copy player
         if (entity.isPlayer()) {

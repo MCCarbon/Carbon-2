@@ -13,12 +13,17 @@ public class WatchedPlayer extends WatchedEntity {
 
     @Override
     public boolean isAgeable() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isPlayer() {
         return true;
+    }
+
+    @Override
+    public boolean isTameable() {
+        return false;
     }
 
     @Override
