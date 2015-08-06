@@ -1,7 +1,9 @@
 package com.lastabyss.carbon;
 
+import com.lastabyss.carbon.api.BossBarAPI;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Metrics;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -33,14 +35,6 @@ public class Carbon extends JavaPlugin {
             return;
         }
 
-        /*saveResource("libraries/natives/32/linux/libattach.so", true);
-        saveResource("libraries/natives/32/solaris/libattach.so", true);
-        saveResource("libraries/natives/32/windows/attach.dll", true);
-        saveResource("libraries/natives/64/linux/libattach.so", true);
-        saveResource("libraries/natives/64/mac/libattach.dylib", true);
-        saveResource("libraries/natives/64/solaris/libattach.so", true);
-        saveResource("libraries/natives/64/windows/attach.dll", true);*/
-
         // Inject 1.8 features. Stop server if something fails
         try {
             //new Instrumentator(this, new File(getDataFolder(), "libraries/natives/").getPath()).instrumentate();
@@ -61,6 +55,7 @@ public class Carbon extends JavaPlugin {
     public void onEnable() {
         getServer().getPluginManager().registerEvents(new NetworkInjector(), this);
         //getServer().getPluginManager().registerEvents(new PlayerListener(this), this); - temporaly disable, until we find a way to actually break the item when durability end, should probably just reimplement shovels
+        new BossBarAPI(this);
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();

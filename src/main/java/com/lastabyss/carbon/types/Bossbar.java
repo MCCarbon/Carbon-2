@@ -6,13 +6,13 @@ import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 
 public class Bossbar {
 
-    private final UUID uniqueId;
-    protected IChatBaseComponent message;
-    protected float health;
-    protected Bossbar.EnumBossbarColor color;
-    protected Bossbar.EnumBossbarDivider divider;
-    protected boolean darkenSky;
-    protected boolean isDragon;
+    private UUID uniqueId;
+    private IChatBaseComponent message;
+    private float health;
+    private Bossbar.EnumBossbarColor color;
+    private Bossbar.EnumBossbarDivider divider;
+    private boolean darkenSky;
+    private boolean isDragon;
 
     public Bossbar(UUID uuid, IChatBaseComponent message, EnumBossbarColor color, EnumBossbarDivider divider, boolean darkenSky, boolean isDragon) {
         this.uniqueId = uuid;
@@ -43,9 +43,17 @@ public class Bossbar {
     public EnumBossbarColor getColor() {
         return this.color;
     }
+    
+    public void setColor(EnumBossbarColor color) {
+    	this.color = color;
+    }
 
     public EnumBossbarDivider getDivider() {
         return this.divider;
+    }
+    
+    public void setDivider(EnumBossbarDivider divider) {
+    	this.divider = divider;
     }
 
     public boolean shouldDarkenSky() {
@@ -54,6 +62,13 @@ public class Bossbar {
 
     public boolean isDragon() {
         return this.isDragon;
+    }
+    
+    public void destroy() {
+    	this.color = null;
+    	this.divider = null;
+    	this.message = null;
+    	this.uniqueId = null;
     }
 
     public static enum EnumBossbarDivider {

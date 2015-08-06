@@ -30,15 +30,15 @@ public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut>
     public CarbonPacketPlayOutBossBar() {
     }
 
-    public CarbonPacketPlayOutBossBar(EnumBossBarAction action, Bossbar boossbar) {
+    public CarbonPacketPlayOutBossBar(EnumBossBarAction action, Bossbar bossbar) {
         this.action = action;
-        this.uniqueId = boossbar.getUniqueId();
-        this.message = boossbar.getMessage();
-        this.health = boossbar.getHealth();
-        this.color = boossbar.getColor();
-        this.divider = boossbar.getDivider();
-        this.darkenSky = boossbar.shouldDarkenSky();
-        this.isDragon = boossbar.isDragon();
+        this.uniqueId = bossbar.getUniqueId();
+        this.message = bossbar.getMessage();
+        this.health = bossbar.getHealth();
+        this.color = bossbar.getColor();
+        this.divider = bossbar.getDivider();
+        this.darkenSky = bossbar.shouldDarkenSky();
+        this.isDragon = bossbar.isDragon();
     }
 
     @Override
