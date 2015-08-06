@@ -106,11 +106,13 @@ public class BossBarAPI implements Listener {
 		for(Bossbar bar : getBossBars(player)) {
 			removeBar(player, bar);
 		}
+		bars.remove(player);
 	}
 	
 	public static void removeBar(Player player, Bossbar bar) {
 		Utils.sendPacket(player, new CarbonPacketPlayOutBossBar(EnumBossBarAction.REMOVE, bar));
 		bar.destroy();
+		bars.get(player).remove(bar);
 	}
 	
 	public static boolean hasBar(Player player) {
