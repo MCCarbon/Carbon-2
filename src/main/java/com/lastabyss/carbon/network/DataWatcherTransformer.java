@@ -69,7 +69,7 @@ public class DataWatcherTransformer {
                 break;
             }
             case BAT: {
-                moveDWData(objects, newobjects, 16, 11);
+                moveDWData(objects, newobjects, 16, 11); //hanging
                 break;
             }
             default: {

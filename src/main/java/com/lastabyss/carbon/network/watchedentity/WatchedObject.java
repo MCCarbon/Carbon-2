@@ -1,12 +1,21 @@
 package com.lastabyss.carbon.network.watchedentity;
 
+import java.util.Arrays;
+
 public class WatchedObject extends WatchedEntity {
 
-    int type;
+    private static final SpecificType[] specificTypes = new SpecificType[256];
+    static {
+        Arrays.fill(specificTypes, SpecificType.NONE);
+        specificTypes[2] = SpecificType.ITEM;
+        specificTypes[71] = SpecificType.ITEM_FRAME;
+    }
+
+    private SpecificType stype;
 
     public WatchedObject(int id, int type) {
         super(id);
-        this.type = type;
+        stype = specificTypes[type];
     }
 
     @Override
@@ -31,17 +40,7 @@ public class WatchedObject extends WatchedEntity {
 
     @Override
     public SpecificType getType() {
-        switch (type) {
-            case 71: {
-                return SpecificType.ITEM_FRAME;
-            }
-            case 2: {
-                return SpecificType.ITEM;
-            }
-            default: {
-                return SpecificType.NONE;
-            }
-        }
+        return stype;
     }
 
 }
