@@ -1,4 +1,4 @@
-package com.lastabyss.carbon.types;
+package com.lastabyss.carbon.api;
 
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class Bossbar {
 		return this.message;
 	}
 	
-	public void setMessage(String message) {
+	protected void setMessage(String message) {
 		this.message = new ChatComponentText(message);
 		packet.resetValues(this);
 		packet.setAction(EnumBossBarAction.UPDATE_HEALTH);
@@ -50,7 +50,7 @@ public class Bossbar {
 		return this.health;
 	}
 
-	public void setHealth(float health) {
+	protected void setHealth(float health) {
 		this.health = health;
 		packet.resetValues(this);
 		packet.setAction(EnumBossBarAction.UPDATE_HEALTH);
@@ -60,7 +60,7 @@ public class Bossbar {
 		return this.color;
 	}
 
-	public void setColor(EnumBossbarColor color) {
+	protected void setColor(EnumBossbarColor color) {
 		this.color = color;
 		packet.setAction(EnumBossBarAction.UPDATE_STYLE);
 	}
@@ -69,7 +69,7 @@ public class Bossbar {
 		return this.divider;
 	}
 
-	public void setDivider(EnumBossbarDivider divider) {
+	protected void setDivider(EnumBossbarDivider divider) {
 		this.divider = divider;
 		packet.setAction(EnumBossBarAction.UPDATE_STYLE);
 	}
@@ -82,22 +82,13 @@ public class Bossbar {
 		return this.isDragon;
 	}
 	
-	public void sendPacket(Player player) {
+	protected void sendPacket(Player player) {
 		Utils.sendPacket(player, packet);
 	}
 	
-	public void removeBar(Player player) {
+	protected void removeBar(Player player) {
 		packet.setAction(EnumBossBarAction.REMOVE);
 		sendPacket(player);
-	}
-
-	public void destroy() {
-		this.packet.destory();
-		this.packet = null;
-		this.color = null;
-		this.divider = null;
-		this.message = null;
-		this.uniqueId = null;
 	}
 
 	public static enum EnumBossbarDivider {

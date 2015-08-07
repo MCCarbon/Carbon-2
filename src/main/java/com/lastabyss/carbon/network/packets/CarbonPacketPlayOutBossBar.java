@@ -8,9 +8,9 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 import net.minecraft.server.v1_8_R3.PacketListenerPlayOut;
 
-import com.lastabyss.carbon.types.Bossbar;
-import com.lastabyss.carbon.types.Bossbar.EnumBossbarColor;
-import com.lastabyss.carbon.types.Bossbar.EnumBossbarDivider;
+import com.lastabyss.carbon.api.Bossbar;
+import com.lastabyss.carbon.api.Bossbar.EnumBossbarColor;
+import com.lastabyss.carbon.api.Bossbar.EnumBossbarDivider;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 
 public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut> {
@@ -148,14 +148,6 @@ public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut>
 
 	@Override
 	public void a(PacketListenerPlayOut listener) {
-	}
-	
-	public void destory() {
-		this.action = null;
-		this.color = null;
-		this.divider = null;
-		this.message = null;
-		this.uniqueId = null;
 	}
 
 	public enum EnumBossBarAction {
