@@ -218,7 +218,7 @@ public class BlockChorusFlower extends WrappedBlock {
 
         for (int var7 = 0; var7 < var6; ++var7) {
             BlockPosition var8 = var1.up(var7 + 1);
-            if (!a(var0, var8, null)) {
+            if (!a(var0, var8, (EnumDirection) null)) {
                 return;
             }
 
