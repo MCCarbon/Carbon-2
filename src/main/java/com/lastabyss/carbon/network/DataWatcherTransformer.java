@@ -6,6 +6,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import java.io.IOException;
 
 import com.lastabyss.carbon.network.watchedentity.WatchedEntity;
+import com.lastabyss.carbon.network.watchedentity.SpecificType.RemappingEntry;
 import com.lastabyss.carbon.utils.DataWatcherSerializer;
 import com.lastabyss.carbon.utils.DataWatcherSerializer.DataWatcherObject;
 
@@ -46,37 +47,9 @@ public class DataWatcherTransformer {
             moveDWData(objects, newobjects, 10, 12); // skinflags
         }
         // copy specific types
-        switch (entity.getType()) {
-            case VILLAGER: {
-                moveDWData(objects, newobjects, 16, 12); // profession
-                break;
-            }
-            case HORSE: {
-                moveDWData(objects, newobjects, 16, 12); // info flags
-                moveDWData(objects, newobjects, 19, 13); // type
-                moveDWData(objects, newobjects, 20, 14); // color/variant
-                moveDWData(objects, newobjects, 21, 15); // owner
-                moveDWData(objects, newobjects, 22, 16); // armor
-                break;
-            }
-            case ITEM_FRAME: {
-                moveDWData(objects, newobjects, 8, 5); // item
-                moveDWData(objects, newobjects, 9, 6); // rotation
-                break;
-            }
-            case ITEM: {
-                moveDWData(objects, newobjects, 10, 5); // item
-                break;
-            }
-            case BAT: {
-                moveDWData(objects, newobjects, 16, 11); //hanging
-                break;
-            }
-            default: {
-                break;
-            }
+        for (RemappingEntry entry : entity.getType().getRemaps()) {
+            moveDWData(objects, newobjects, entry.getFrom(), entry.getTo());
         }
-        // TODO: more types
         return DataWatcherSerializer.encodeData(newobjects);
     }
 

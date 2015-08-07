@@ -1,15 +1,6 @@
 package com.lastabyss.carbon.network.watchedentity;
 
-import java.util.Arrays;
-
 public class WatchedLiving extends WatchedEntity {
-
-    private static final SpecificType[] specificTypes = new SpecificType[256];
-    static {
-        Arrays.fill(specificTypes, SpecificType.NONE);
-        specificTypes[100] = SpecificType.HORSE;
-        specificTypes[120] = SpecificType.VILLAGER;
-    }
 
     private boolean isAgeable;
     private boolean isTameable;
@@ -17,7 +8,7 @@ public class WatchedLiving extends WatchedEntity {
 
     public WatchedLiving(int id, int type) {
         super(id);
-        stype = specificTypes[type];
+        stype = SpecificType.getMobByTypeId(type);
         switch (type) {
             case 90:
             case 91:
