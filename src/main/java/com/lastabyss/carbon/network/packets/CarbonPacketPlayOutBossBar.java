@@ -9,8 +9,8 @@ import net.minecraft.server.v1_8_R3.PacketDataSerializer;
 import net.minecraft.server.v1_8_R3.PacketListenerPlayOut;
 
 import com.lastabyss.carbon.types.Bossbar;
-import com.lastabyss.carbon.types.Bossbar.EnumBossbarColor;
-import com.lastabyss.carbon.types.Bossbar.EnumBossbarDivider;
+import com.lastabyss.carbon.types.Bossbar.BossBarColor;
+import com.lastabyss.carbon.types.Bossbar.BossBarDivider;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
 
 public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut> {
@@ -22,37 +22,37 @@ public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut>
 	private EnumBossBarAction action;
 	private IChatBaseComponent message;
 	private float health;
-	private EnumBossbarColor color;
-	private EnumBossbarDivider divider;
+	private BossBarColor color;
+	private BossBarDivider divider;
 	private boolean darkenSky;
 	private boolean isDragon;
 
 	public CarbonPacketPlayOutBossBar() {
 	}
 
-	public CarbonPacketPlayOutBossBar(EnumBossBarAction action, Bossbar bossbar) {
+	public CarbonPacketPlayOutBossBar(EnumBossBarAction action, Bossbar bossBar) {
 		this.action = action;
-		this.uniqueId = bossbar.getUniqueId();
-		this.message = bossbar.getMessage();
-		this.health = bossbar.getHealth();
-		this.color = bossbar.getColor();
-		this.divider = bossbar.getDivider();
-		this.darkenSky = bossbar.shouldDarkenSky();
-		this.isDragon = bossbar.isDragon();
+		this.uniqueId = bossBar.getUniqueId();
+		this.message = bossBar.getMessage();
+		this.health = bossBar.getHealth();
+		this.color = bossBar.getColor();
+		this.divider = bossBar.getDivider();
+		this.darkenSky = bossBar.shouldDarkenSky();
+		this.isDragon = bossBar.isDragon();
 	}
 
 	public void setAction(EnumBossBarAction action) {
 
 	}
 
-	public void resetValues(Bossbar bossbar) {
-		this.uniqueId = bossbar.getUniqueId();
-		this.message = bossbar.getMessage();
-		this.health = bossbar.getHealth();
-		this.color = bossbar.getColor();
-		this.divider = bossbar.getDivider();
-		this.darkenSky = bossbar.shouldDarkenSky();
-		this.isDragon = bossbar.isDragon();
+	public void resetValues(Bossbar bossBar) {
+		this.uniqueId = bossBar.getUniqueId();
+		this.message = bossBar.getMessage();
+		this.health = bossBar.getHealth();
+		this.color = bossBar.getColor();
+		this.divider = bossBar.getDivider();
+		this.darkenSky = bossBar.shouldDarkenSky();
+		this.isDragon = bossBar.isDragon();
 	}
 
 	@Override
@@ -63,8 +63,8 @@ public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut>
 			case ADD: {
 				this.message = PacketDataSerializerHelper.readChat(serializer);
 				this.health = serializer.readFloat();
-				this.color = (Bossbar.EnumBossbarColor) PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarColor.class);
-				this.divider = (Bossbar.EnumBossbarDivider) PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarDivider.class);
+				this.color = (BossBarColor) PacketDataSerializerHelper.readEnum(serializer, BossBarColor.class);
+				this.divider = (BossBarDivider) PacketDataSerializerHelper.readEnum(serializer, BossBarDivider.class);
 				this.decodeFlags(serializer.readUnsignedByte());
 			}
 			case REMOVE: {
@@ -79,8 +79,8 @@ public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut>
 				break;
 			}
 			case UPDATE_STYLE: {
-				this.color = PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarColor.class);
-				this.divider = PacketDataSerializerHelper.readEnum(serializer, Bossbar.EnumBossbarDivider.class);
+				this.color = PacketDataSerializerHelper.readEnum(serializer, BossBarColor.class);
+				this.divider = PacketDataSerializerHelper.readEnum(serializer, BossBarDivider.class);
 				break;
 			}
 			case UPDATE_FLAGS: {
@@ -150,7 +150,7 @@ public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut>
 	public void a(PacketListenerPlayOut listener) {
 	}
 	
-	public void destory() {
+	public void destroy() {
 		this.action = null;
 		this.color = null;
 		this.divider = null;

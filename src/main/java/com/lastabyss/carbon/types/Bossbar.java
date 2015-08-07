@@ -16,13 +16,13 @@ public class Bossbar {
 	private UUID uniqueId;
 	private IChatBaseComponent message;
 	private float health;
-	private Bossbar.EnumBossbarColor color;
-	private Bossbar.EnumBossbarDivider divider;
+	private BossBarColor color;
+	private BossBarDivider divider;
 	private boolean darkenSky;
 	private boolean isDragon;
 	private CarbonPacketPlayOutBossBar packet;
 
-	public Bossbar(UUID uuid, IChatBaseComponent message, EnumBossbarColor color, EnumBossbarDivider divider, CarbonPacketPlayOutBossBar packet, boolean darkenSky, boolean isDragon) {
+	public Bossbar(UUID uuid, IChatBaseComponent message, BossBarColor color, BossBarDivider divider, CarbonPacketPlayOutBossBar packet, boolean darkenSky, boolean isDragon) {
 		this.uniqueId = uuid;
 		this.message = message;
 		this.color = color;
@@ -56,20 +56,20 @@ public class Bossbar {
 		packet.setAction(EnumBossBarAction.UPDATE_HEALTH);
 	}
 
-	public EnumBossbarColor getColor() {
+	public BossBarColor getColor() {
 		return this.color;
 	}
 
-	public void setColor(EnumBossbarColor color) {
+	public void setColor(BossBarColor color) {
 		this.color = color;
 		packet.setAction(EnumBossBarAction.UPDATE_STYLE);
 	}
 
-	public EnumBossbarDivider getDivider() {
+	public BossBarDivider getDivider() {
 		return this.divider;
 	}
 
-	public void setDivider(EnumBossbarDivider divider) {
+	public void setDivider(BossBarDivider divider) {
 		this.divider = divider;
 		packet.setAction(EnumBossBarAction.UPDATE_STYLE);
 	}
@@ -92,7 +92,7 @@ public class Bossbar {
 	}
 
 	public void destroy() {
-		this.packet.destory();
+		this.packet.destroy();
 		this.packet = null;
 		this.color = null;
 		this.divider = null;
@@ -100,11 +100,11 @@ public class Bossbar {
 		this.uniqueId = null;
 	}
 
-	public static enum EnumBossbarDivider {
+	public enum BossBarDivider {
 		PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20;
 	}
 
-	public static enum EnumBossbarColor {
+	public enum BossBarColor {
 		PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE;
 	}
 

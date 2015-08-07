@@ -19,7 +19,16 @@ task wrapper(type: Wrapper) {
 
 repositories {
     mavenCentral()
-    
+    maven {
+        name 'Sonatype'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+
+    maven {
+        name 'Spigot Snapshots'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+
     maven {
         name 'Spigot'
         url 'https://hub.spigotmc.org/nexus/content/groups/public/'
@@ -88,4 +97,5 @@ ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigot.jar', 
 
 dependencies {
     compile files('libs/spigot.jar')
+    compile "org.spigotmc:spigot-api:$project.ext.spigotVersion"
 }
