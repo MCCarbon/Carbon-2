@@ -16,18 +16,26 @@ public enum SpecificType {
     HORSE(EType.MOB, EntityType.HORSE, SpecificType.AGEABLE, RemappingEntry.of(16, 12, "<>", 19, 13, "<>", 20, 14, "<>", 21, 15, "<>", 22, 16)), //info flags, type, color/variant, owner, armor
     BAT(EType.MOB, EntityType.BAT, SpecificType.LIVING, new RemappingEntry(16, 11)), //hanging
     OCELOT(EType.MOB, EntityType.OCELOT, SpecificType.TAMEABLE, new RemappingEntry(18, 14)), //type
-    WOLF(EType.MOB, EntityType.WOLF, SpecificType.TAMEABLE, RemappingEntry.of(18, 14, "<>", 19, 15, "<>", 18, 14)), //health, begging, collar color
+    WOLF(EType.MOB, EntityType.WOLF, SpecificType.TAMEABLE, RemappingEntry.ofShift(18, 20, 14)), //health, begging, collar color
     PIG(EType.MOB, EntityType.PIG, SpecificType.AGEABLE, new RemappingEntry(16, 12)), //has saddle
     RABBIT(EType.MOB, EntityType.RABBIT, SpecificType.AGEABLE, new RemappingEntry(18, 12)), //type
     SHEEP(EType.MOB, EntityType.SHEEP, SpecificType.AGEABLE, new RemappingEntry(16, 12)), //info flags (color + sheared)
     VILLAGER(EType.MOB, EntityType.VILLAGER, SpecificType.AGEABLE, new RemappingEntry(16, 12)), //profession
-    ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.LIVING, RemappingEntry.of(16, 11, "<>", 17, 12, "<>", 18, 13)), //carried block id, carried data id, screaming
-    ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.LIVING, RemappingEntry.of(12, 11, "<>", 13, 12, "<>", 14, 13)), //is baby, is villager, is converting
+    ENDERMAN(EType.MOB, EntityType.ENDERMAN, SpecificType.LIVING, RemappingEntry.ofShift(16, 18, 11)), //carried block id, carried data id, screaming
+    ZOMBIE(EType.MOB, EntityType.ZOMBIE, SpecificType.LIVING, RemappingEntry.ofShift(12, 14, 11)), //is baby, is villager, is converting
     ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, SpecificType.ZOMBIE),
     BLAZE(EType.MOB, EntityType.BLAZE, SpecificType.LIVING, new RemappingEntry(16, 11)), //on fire
     SPIDER(EType.MOB, EntityType.SPIDER, SpecificType.LIVING, new RemappingEntry(16, 11)), //is climbing
     CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, SpecificType.SPIDER),
-    CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.LIVING, RemappingEntry.of(16, 11, "<>", 17, 12, "<>", 18, 13)), //state, is powered, ignited
+    CREEPER(EType.MOB, EntityType.CREEPER, SpecificType.LIVING, RemappingEntry.ofShift(16, 18, 11)), //state, is powered, ignited
+    GHAST(EType.MOB, EntityType.GHAST, SpecificType.LIVING, new RemappingEntry(16, 11)), //is attacking
+    SLIME(EType.MOB, EntityType.SLIME, SpecificType.LIVING, new RemappingEntry(16, 11)), //size
+    MAGMA_CUBE(EType.MOB, EntityType.MAGMA_CUBE, SpecificType.SLIME),
+    SKELETON(EType.MOB, EntityType.SKELETON, SpecificType.LIVING, new RemappingEntry(13, 11)), //type
+    WITCH(EType.MOB, EntityType.WITCH, SpecificType.LIVING, new RemappingEntry(21, 11)), //agressive
+    IRON_GOLEM(EType.MOB, EntityType.IRON_GOLEM, SpecificType.LIVING, new RemappingEntry(16, 11)), //player created
+    WITHER(EType.MOB, EntityType.WITHER, SpecificType.LIVING, RemappingEntry.ofShift(17, 20, 11)), //target 1-3, invulnerable time
+    GUARDIAN(EType.MOB, EntityType.GUARDIAN, SpecificType.LIVING, new RemappingEntry(16, 11), new RemappingEntry(17, 12)), //info flags(elder, spikes), target id
     ITEM(EType.OBJECT, 2, new RemappingEntry(10, 5)), //item
     ITEM_FRAME(EType.OBJECT, 71, new RemappingEntry(8, 5), new RemappingEntry(9, 6)); //item, rotation
 
@@ -106,10 +114,18 @@ public enum SpecificType {
             return to;
         }
 
-        private static RemappingEntry[] of(Object... pairsWithSeparator) {
+        protected static RemappingEntry[] of(Object... pairsWithSeparator) {
             ArrayList<RemappingEntry> entries = new ArrayList<RemappingEntry>();
             for (int i = 0; i < pairsWithSeparator.length; i += 3) {
                 entries.add(new RemappingEntry((int) pairsWithSeparator[i], (int) pairsWithSeparator[i + 1]));
+            }
+            return entries.toArray(new RemappingEntry[entries.size()]);
+        }
+
+        protected static RemappingEntry[] ofShift(int fromBegin, int fromEnd, int to) {
+            ArrayList<RemappingEntry> entries = new ArrayList<RemappingEntry>();
+            for (int i = fromBegin; i <= fromEnd; i++) {
+                entries.add(new RemappingEntry(i, to++));
             }
             return entries.toArray(new RemappingEntry[entries.size()]);
         }
