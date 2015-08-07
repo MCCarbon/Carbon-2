@@ -9,7 +9,7 @@ import org.bukkit.entity.EntityType;
 public enum SpecificType {
 
     // TODO: more types
-    NONE(EType.NONE, null),
+    NONE(EType.NONE, -1),
     VILLAGER(EType.MOB, EntityType.VILLAGER, new RemappingEntry(16, 12)), //profession
     HORSE(EType.MOB, EntityType.HORSE, RemappingEntry.of(16, 12, "<>", 19, 13, "<>", 20, 14, "<>", 21, 15, "<>", 22, 16)), //info flags, type, color/variant, owner, armor
     BAT(EType.MOB, EntityType.BAT, new RemappingEntry(16, 11)), //hanging
@@ -17,8 +17,16 @@ public enum SpecificType {
     WOLF(EType.MOB, EntityType.WOLF, RemappingEntry.of(18, 14, "<>", 19, 15, "<>", 18, 14)), //health, begging, collar color
     PIG(EType.MOB, EntityType.PIG, new RemappingEntry(16, 12)), //has saddle
     RABBIT(EType.MOB, EntityType.RABBIT, new RemappingEntry(18, 12)), //type
-    ITEM(EType.OBJECT, EntityType.DROPPED_ITEM, new RemappingEntry(10, 5)), //item
-    ITEM_FRAME(EType.OBJECT, EntityType.ITEM_FRAME, new RemappingEntry(8, 5), new RemappingEntry(9, 6)); //item, rotation
+    SHEEP(EType.MOB, EntityType.SHEEP, new RemappingEntry(16, 12)), //info flags (color + sheared)
+    ENDERMAN(EType.MOB, EntityType.ENDERMAN, RemappingEntry.of(16, 11, "<>", 17, 12, "<>", 18, 13)), //carried block id, carried data id, screaming
+    ZOMBIE(EType.MOB, EntityType.ZOMBIE, RemappingEntry.of(12, 11, "<>", 13, 12, "<>", 14, 13)), //is baby, is villager, is converting
+    ZOMBIE_PIGMAN(EType.MOB, EntityType.PIG_ZOMBIE, RemappingEntry.of(12, 11, "<>", 13, 12, "<>", 14, 13)), //is baby, is villager, is converting
+    BLAZE(EType.MOB, EntityType.BLAZE, new RemappingEntry(16, 11)), //on fire
+    SPIDER(EType.MOB, EntityType.SPIDER, new RemappingEntry(16, 11)), //is climbing
+    CAVE_SPIDER(EType.MOB, EntityType.CAVE_SPIDER, new RemappingEntry(16, 11)), //is climbing
+    CREEPER(EType.MOB, EntityType.CREEPER, RemappingEntry.of(16, 11, "<>", 17, 12, "<>", 18, 13)), //state, is powered, ignited
+    ITEM(EType.OBJECT, 2, new RemappingEntry(10, 5)), //item
+    ITEM_FRAME(EType.OBJECT, 71, new RemappingEntry(8, 5), new RemappingEntry(9, 6)); //item, rotation
 
     private static final SpecificType[] OBJECT_BY_TYPE_ID = new SpecificType[256];
     private static final SpecificType[] MOB_BY_TYPE_ID = new SpecificType[256];
@@ -54,11 +62,17 @@ public enum SpecificType {
     private EType etype;
     private int typeId;
     private RemappingEntry[] entries;
+
     SpecificType(EType etype, EntityType type, RemappingEntry... entries) {
+        this(etype, type.getTypeId(), entries);
+    }
+
+    SpecificType(EType etype, int typeId, RemappingEntry... entries) {
         this.etype = etype;
-        this.typeId = type != null ? type.getTypeId() : -1;
+        this.typeId = typeId;
         this.entries = entries;
     }
+
 
     public RemappingEntry[] getRemaps() {
         return entries;
