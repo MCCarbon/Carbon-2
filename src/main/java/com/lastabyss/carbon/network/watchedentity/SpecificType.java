@@ -3,17 +3,22 @@ package com.lastabyss.carbon.network.watchedentity;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.bukkit.entity.EntityType;
+
+@SuppressWarnings("deprecation")
 public enum SpecificType {
 
     // TODO: more types
-    NONE(EntityType.NONE, 0),
-    VILLAGER(EntityType.MOB, 120, new RemappingEntry(16, 12)), //profession
-    HORSE(EntityType.MOB, 100, RemappingEntry.of(16, 12, "<>", 19, 13, "<>", 20, 14, "<>", 21, 15, "<>", 22, 16)), //info flags, type, color/variant, owner, armor
-    BAT(EntityType.MOB, 65, new RemappingEntry(16, 11)), //hanging
-    OCELOT(EntityType.MOB, 98, new RemappingEntry(18, 14)), //type
-    WOLF(EntityType.MOB, 95, RemappingEntry.of(18, 14, "<>", 19, 15, "<>", 18, 14)), //health, begging, collar color
-    ITEM(EntityType.OBJECT, 2, new RemappingEntry(10, 5)), //item
-    ITEM_FRAME(EntityType.OBJECT, 71, new RemappingEntry(8, 5), new RemappingEntry(9, 6)); //item, rotation
+    NONE(EType.NONE, null),
+    VILLAGER(EType.MOB, EntityType.VILLAGER, new RemappingEntry(16, 12)), //profession
+    HORSE(EType.MOB, EntityType.HORSE, RemappingEntry.of(16, 12, "<>", 19, 13, "<>", 20, 14, "<>", 21, 15, "<>", 22, 16)), //info flags, type, color/variant, owner, armor
+    BAT(EType.MOB, EntityType.BAT, new RemappingEntry(16, 11)), //hanging
+    OCELOT(EType.MOB, EntityType.OCELOT, new RemappingEntry(18, 14)), //type
+    WOLF(EType.MOB, EntityType.WOLF, RemappingEntry.of(18, 14, "<>", 19, 15, "<>", 18, 14)), //health, begging, collar color
+    PIG(EType.MOB, EntityType.PIG, new RemappingEntry(16, 12)), //has saddle
+    RABBIT(EType.MOB, EntityType.RABBIT, new RemappingEntry(18, 12)), //type
+    ITEM(EType.OBJECT, EntityType.DROPPED_ITEM, new RemappingEntry(10, 5)), //item
+    ITEM_FRAME(EType.OBJECT, EntityType.ITEM_FRAME, new RemappingEntry(8, 5), new RemappingEntry(9, 6)); //item, rotation
 
     private static final SpecificType[] OBJECT_BY_TYPE_ID = new SpecificType[256];
     private static final SpecificType[] MOB_BY_TYPE_ID = new SpecificType[256];
@@ -46,12 +51,12 @@ public enum SpecificType {
         return MOB_BY_TYPE_ID[mobTypeId];
     }
 
-    private EntityType etype;
+    private EType etype;
     private int typeId;
     private RemappingEntry[] entries;
-    SpecificType(EntityType etype, int typeId, RemappingEntry... entries) {
+    SpecificType(EType etype, EntityType type, RemappingEntry... entries) {
         this.etype = etype;
-        this.typeId = typeId;
+        this.typeId = type != null ? type.getTypeId() : -1;
         this.entries = entries;
     }
 
@@ -85,7 +90,7 @@ public enum SpecificType {
 
     }
 
-    private static enum EntityType {
+    private static enum EType {
         NONE, OBJECT, MOB;
     }
 
