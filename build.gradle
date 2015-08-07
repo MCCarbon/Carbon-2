@@ -88,6 +88,4 @@ ant.get src: 'https://dl.dropboxusercontent.com/u/71299154/Carbon2/spigot.jar', 
 
 dependencies {
     compile files('libs/spigot.jar')
-    compile "org.bukkit:bukkit:$project.ext.spigotVersion"
-    compile 'com.comphenix.protocol:ProtocolLib:3.6.5-SNAPSHOT'
 }
