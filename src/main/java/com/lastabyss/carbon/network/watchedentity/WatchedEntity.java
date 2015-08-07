@@ -12,14 +12,6 @@ public abstract class WatchedEntity {
         return id;
     }
 
-    public abstract boolean isLiving();
-
-    public abstract boolean isAgeable();
-
-    public abstract boolean isTameable();
-
-    public abstract boolean isPlayer();
-
     public abstract SpecificType getType();
 
 }
