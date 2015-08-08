@@ -75,6 +75,7 @@ public class Injector {
     public static final org.bukkit.Material GRASS_PATH = Utils.addMaterial("GRASS_PATH", 208);
     public static final org.bukkit.Material END_GATEWAY = Utils.addMaterial("END_GATEWAY", 209);
     public static final org.bukkit.Material STRUCTURE_BLOCK = Utils.addMaterial("STRUCTURE_BLOCK", 255);
+
     public static final org.bukkit.Material CHORUS_FRUIT = Utils.addMaterial("CHORUS_FRUIT", 432);
     public static final org.bukkit.Material CHORUS_FRUIT_POPPED = Utils.addMaterial("CHORUS_FRUIT_POPPED", 433);
     public static final org.bukkit.Material BEETROOT = Utils.addMaterial("BEETROOT", 434);
