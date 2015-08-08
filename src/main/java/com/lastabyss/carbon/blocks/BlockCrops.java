@@ -70,7 +70,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = iblockdata.get(getIntegerState()).intValue() + MathHelper.nextInt(world.random, 2, 5);
+        int i = iblockdata.get(getIntegerState()) + MathHelper.nextInt(world.random, 2, 5);
 
         if (i > getIntegerStateMax()) {
             i = getIntegerStateMax();
@@ -93,7 +93,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
                 if (iblockdata.getBlock() == Blocks.FARMLAND) {
                     f1 = 1.0F;
-                    if (iblockdata.get(BlockSoil.MOISTURE).intValue() > 0) {
+                    if (iblockdata.get(BlockSoil.MOISTURE) > 0) {
                         f1 = 3.0F;
                     }
                 }
@@ -143,7 +143,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, 0);
         if (!world.isClientSide) {
-            int j = iblockdata.get(getIntegerState()).intValue();
+            int j = iblockdata.get(getIntegerState());
 
             if (j >= getIntegerStateMax()) {
                 int k = 3 + i;
@@ -190,6 +190,6 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { AGE });
+        return new BlockStateList(this, AGE);
     }
 }

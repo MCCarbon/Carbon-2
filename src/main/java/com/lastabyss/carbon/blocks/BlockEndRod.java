@@ -19,7 +19,7 @@ import net.minecraft.server.v1_8_R3.MovingObjectPosition;
 import net.minecraft.server.v1_8_R3.Vec3D;
 import net.minecraft.server.v1_8_R3.World;
 
-public class BlockEndRod extends UnknownBlockAHI {
+public class BlockEndRod extends BlockDirectional {
 
     public BlockEndRod() {
         super(Material.ORIENTABLE);
@@ -41,7 +41,7 @@ public class BlockEndRod extends UnknownBlockAHI {
         EnumDirection var4 = var3.get(FACING);
         float var5 = 0.4375F;
         float var6 = 0.5625F;
-        return (var4 != EnumDirection.EAST) && (var4 != EnumDirection.WEST) ? ((var4 != EnumDirection.SOUTH) && (var4 != EnumDirection.NORTH) ? new AxisAlignedBB(var2.getX() + var5, var2.getY() + 0, var2.getZ() + var5, var2.getX() + var6, var2.getY() + 1, var2.getZ() + var6) : new AxisAlignedBB(var2.getX() + var5, var2.getY() + var5, var2.getZ() + 0, var2.getX() + var6, var2.getY() + var6, var2.getZ() + 1)) : new AxisAlignedBB(var2.getX() + 0, var2.getY() + var5, var2.getZ() + var5, var2.getX() + 1, var2.getY() + var6, var2.getZ() + var6);
+        return (var4 != EnumDirection.EAST) && (var4 != EnumDirection.WEST) ? ((var4 != EnumDirection.SOUTH) && (var4 != EnumDirection.NORTH) ? new AxisAlignedBB(var2.getX() + var5, var2.getY(), var2.getZ() + var5, var2.getX() + var6, var2.getY() + 1, var2.getZ() + var6) : new AxisAlignedBB(var2.getX() + var5, var2.getY() + var5, var2.getZ(), var2.getX() + var6, var2.getY() + var6, var2.getZ() + 1)) : new AxisAlignedBB(var2.getX(), var2.getY() + var5, var2.getZ() + var5, var2.getX() + 1, var2.getY() + var6, var2.getZ() + var6);
     }
 
     @Override
@@ -58,13 +58,16 @@ public class BlockEndRod extends UnknownBlockAHI {
     public boolean canPlace(World world, BlockPosition position) {
         Iterator<EnumDirection> iterator = BlockStateUtil.getValues(FACING).iterator();
 
-        EnumDirection direction;
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-            direction = (EnumDirection) iterator.next();
-        } while (!this.a(world, position, direction));
+        if (!iterator.hasNext()) return false;
+        // The following code is pretty pointless for now, so I commented it out until it's needed later
+        // when we implement the end rod code
+//        EnumDirection direction;
+//        do {
+//            if (!iterator.hasNext()) {
+//                return false;
+//            }
+//            direction = iterator.next();
+//        } while (!this.a(world, position, direction)); //Why is this always false?
 
         return true;
     }
@@ -126,7 +129,7 @@ public class BlockEndRod extends UnknownBlockAHI {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { FACING });
+        return new BlockStateList(this, FACING);
     }
 
     @Override

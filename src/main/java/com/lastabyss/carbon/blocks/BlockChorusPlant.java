@@ -42,7 +42,7 @@ public class BlockChorusPlant extends WrappedBlock {
         Block var7 = access.getType(position.east()).getBlock();
         Block var8 = access.getType(position.south()).getBlock();
         Block var9 = access.getType(position.west()).getBlock();
-        return blockdata.set(DOWN, Boolean.valueOf((var4 == this) || (var4 == AddedBlockList.CHORUS_FLOWER) || (var4 == Blocks.END_STONE))).set(UP, Boolean.valueOf((var5 == this) || (var5 == AddedBlockList.CHORUS_FLOWER))).set(NORTH, Boolean.valueOf((var6 == this) || (var6 == AddedBlockList.CHORUS_FLOWER))).set(EAST, Boolean.valueOf((var7 == this) || (var7 == AddedBlockList.CHORUS_FLOWER))).set(SOUTH, Boolean.valueOf((var8 == this) || (var8 == AddedBlockList.CHORUS_FLOWER))).set(WEST, Boolean.valueOf((var9 == this) || (var9 == AddedBlockList.CHORUS_FLOWER)));
+        return blockdata.set(DOWN, (var4 == this) || (var4 == AddedBlockList.CHORUS_FLOWER) || (var4 == Blocks.END_STONE)).set(UP, (var5 == this) || (var5 == AddedBlockList.CHORUS_FLOWER)).set(NORTH, var6 == this || (var6 == AddedBlockList.CHORUS_FLOWER)).set(EAST, (var7 == this) || (var7 == AddedBlockList.CHORUS_FLOWER)).set(SOUTH, (var8 == this) || (var8 == AddedBlockList.CHORUS_FLOWER)).set(WEST, (var9 == this) || (var9 == AddedBlockList.CHORUS_FLOWER));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class BlockChorusPlant extends WrappedBlock {
 
     @Override
     public boolean canPlace(World world, BlockPosition position) {
-        return super.canPlace(world, position) ? isValid(world, position) : false;
+        return super.canPlace(world, position) && isValid(world, position);
     }
 
     @Override
@@ -108,11 +108,8 @@ public class BlockChorusPlant extends WrappedBlock {
             do {
                 if (!directionIt.hasNext()) {
                     Block var10 = world.getType(position.down()).getBlock();
-                    if ((var10 != this) && (var10 != Blocks.END_STONE)) {
-                        return false;
-                    }
+                    return !((var10 != this) && (var10 != Blocks.END_STONE));
 
-                    return true;
                 }
 
                 EnumDirection direction = directionIt.next();
@@ -132,7 +129,7 @@ public class BlockChorusPlant extends WrappedBlock {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { NORTH, EAST, SOUTH, WEST, UP, DOWN });
+        return new BlockStateList(this, NORTH, EAST, SOUTH, WEST, UP, DOWN);
     }
 
 }

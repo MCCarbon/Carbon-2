@@ -108,7 +108,7 @@ public enum SpecificType {
     public static class RemappingEntry {
 
         protected static RemappingEntry[] of(Object... pairsWithSeparator) {
-            ArrayList<RemappingEntry> entries = new ArrayList<RemappingEntry>();
+            ArrayList<RemappingEntry> entries = new ArrayList<>();
             for (int i = 0; i < pairsWithSeparator.length; i += 3) {
                 entries.add(new RemappingEntry((int) pairsWithSeparator[i], (int) pairsWithSeparator[i + 1]));
             }
@@ -116,7 +116,7 @@ public enum SpecificType {
         }
 
         protected static RemappingEntry[] ofShift(int fromBegin, int fromEnd, int to) {
-            ArrayList<RemappingEntry> entries = new ArrayList<RemappingEntry>();
+            ArrayList<RemappingEntry> entries = new ArrayList<>();
             for (int i = fromBegin; i <= fromEnd; i++) {
                 entries.add(new RemappingEntry(i, to++));
             }
@@ -158,12 +158,12 @@ public enum SpecificType {
 
     }
 
-    private static enum EType {
-        NONE, OBJECT, MOB;
+    private enum EType {
+        NONE, OBJECT, MOB
     }
 
     private static RemappingEntry[] combine(RemappingEntry[]... entriesArray) {
-        ArrayList<RemappingEntry> aentries = new ArrayList<RemappingEntry>();
+        ArrayList<RemappingEntry> aentries = new ArrayList<>();
         for (RemappingEntry[] entries : entriesArray) {
             aentries.addAll(Arrays.asList(entries));
         }

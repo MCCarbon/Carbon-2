@@ -193,7 +193,7 @@ public class CarbonPlayerConnection extends PlayerConnection {
             final double d3 = (player.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.CREATIVE) ? 5.0 : 4.5;
             final Vec3D vec3d2 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
             final MovingObjectPosition movingobjectposition = player.world.rayTrace(vec3d, vec3d2, false);
-            boolean cancelled = false;
+            boolean cancelled;
             if ((movingobjectposition == null) || (movingobjectposition.type != MovingObjectPosition.EnumMovingObjectType.BLOCK)) {
                 final PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(player, Action.RIGHT_CLICK_AIR, itemstack);
                 cancelled = (event.useItemInHand() == PlayerInteractEvent.Result.DENY);
@@ -208,7 +208,7 @@ public class CarbonPlayerConnection extends PlayerConnection {
                 useItem(itemstack, carbonpacket.getHand());
             }
         } else if ((blockposition.getY() >= (minecraftServer.getMaxBuildHeight() - 1)) && ((enumdirection == EnumDirection.UP) || (blockposition.getY() >= minecraftServer.getMaxBuildHeight()))) {
-            final ChatMessage chatmessage = new ChatMessage("build.tooHigh", new Object[] { minecraftServer.getMaxBuildHeight() });
+            final ChatMessage chatmessage = new ChatMessage("build.tooHigh", minecraftServer.getMaxBuildHeight());
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             player.playerConnection.sendPacket(new PacketPlayOutChat(chatmessage));
             flag = true;
@@ -258,7 +258,7 @@ public class CarbonPlayerConnection extends PlayerConnection {
         final double d3 = (player.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.CREATIVE) ? 5.0 : 4.5;
         final Vec3D vec3d2 = posVec.add(f7 * d3, f6 * d3, f8 * d3);
         final MovingObjectPosition movingobjectposition = player.world.rayTrace(posVec, vec3d2, false);
-        boolean cancelled = false;
+        boolean cancelled;
         if ((movingobjectposition == null) || (movingobjectposition.type != MovingObjectPosition.EnumMovingObjectType.BLOCK)) {
             final PlayerInteractEvent event = CraftEventFactory.callPlayerInteractEvent(player, Action.RIGHT_CLICK_AIR, itemstack);
             cancelled = (event.useItemInHand() == PlayerInteractEvent.Result.DENY);
@@ -282,7 +282,7 @@ public class CarbonPlayerConnection extends PlayerConnection {
         final int count = itemstack.count;
         final int data = itemstack.getData();
         final ItemStack afterUse = itemstack.a(player.world, player);
-        if (afterUse == itemstack && (afterUse == null || (afterUse.count == count && afterUse.l() <= 0 && afterUse.getData() == data))) {
+        if (afterUse == itemstack && ((afterUse.count == count && afterUse.l() <= 0 && afterUse.getData() == data))) {
             return false;
         }
         if (hand == EnumUsedHand.MAIN_HAND) {
@@ -306,7 +306,6 @@ public class CarbonPlayerConnection extends PlayerConnection {
         ItemStack mainhandItem = player.inventory.getItemInHand();
         if ((mainhandItem != null) && (mainhandItem.count == 0)) {
             player.inventory.items[player.inventory.itemInHandIndex] = null;
-            mainhandItem = null;
         }
         if ((offhandItem != null) && (offhandItem.count == 0)) {
             offhandItem = null;

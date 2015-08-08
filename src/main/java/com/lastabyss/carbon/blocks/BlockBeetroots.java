@@ -55,7 +55,7 @@ public class BlockBeetroots extends BlockCrops {
     // }
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { AGE });
+        return new BlockStateList(this, AGE);
     }
 
 }

@@ -107,7 +107,7 @@ public class FixedChatSerializer implements JsonDeserializer<IChatBaseComponent>
                 }
             }
 
-            resultComp.setChatModifier((ChatModifier) ctx.deserialize(element, ChatModifier.class));
+            resultComp.setChatModifier(ctx.deserialize(element, ChatModifier.class));
             return resultComp;
         }
     }

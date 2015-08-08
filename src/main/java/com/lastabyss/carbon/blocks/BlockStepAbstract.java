@@ -107,13 +107,13 @@ public abstract class BlockStepAbstract extends WrappedBlock {
 
     public abstract Object a(ItemStack itemstack);
 
-    public static enum EnumSlabHalf implements INamable {
+    public enum EnumSlabHalf implements INamable {
 
         TOP("top"), BOTTOM("bottom");
 
         private final String c;
 
-        private EnumSlabHalf(String s) {
+        EnumSlabHalf(String s) {
             c = s;
         }
 

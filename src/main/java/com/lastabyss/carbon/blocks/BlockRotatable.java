@@ -61,7 +61,7 @@ public class BlockRotatable extends WrappedBlock {
 
     @Override
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { AXIS });
+        return new BlockStateList(this, AXIS);
     }
 
     @Override

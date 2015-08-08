@@ -92,11 +92,11 @@ public class BossBar {
 	}
 
 	public enum BossBarDivider {
-		PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20;
+		PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
 	}
 
 	public enum BossBarColor {
-		PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE;
+		PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
 	}
 
 }
