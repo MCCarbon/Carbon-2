@@ -8,6 +8,7 @@ import com.lastabyss.carbon.Injector;
 import com.lastabyss.carbon.utils.DataWatcherSerializer;
 import com.lastabyss.carbon.utils.DataWatcherSerializer.DataWatcherObject;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
+import com.lastabyss.carbon.utils.ReflectionUtils;
 import com.lastabyss.carbon.utils.Utils;
 
 import net.minecraft.server.v1_8_R3.EnumProtocol;
@@ -119,12 +120,12 @@ public class OldClientPacketDataRemapper extends MessageToMessageEncoder<Packet<
                     break;
                 }
                 case 0x21: { //Chunk data
-                    ChunkMap chunk = Utils.getFieldValue(PacketPlayOutMapChunk.class, "c", packet);
+                    ChunkMap chunk = ReflectionUtils.getFieldValue(PacketPlayOutMapChunk.class, "c", packet);
                     remapChunk(chunk);
                     break;
                 }
                 case 0x26: { //Bulk chunk data
-                    ChunkMap[] chunks = Utils.getFieldValue(PacketPlayOutMapChunkBulk.class, "c", packet);
+                    ChunkMap[] chunks = ReflectionUtils.getFieldValue(PacketPlayOutMapChunkBulk.class, "c", packet);
                     for (ChunkMap chunk : chunks) {
                         remapChunk(chunk);
                     }

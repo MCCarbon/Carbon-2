@@ -6,7 +6,6 @@ import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.BlockStateInteger;
 import net.minecraft.server.v1_8_R3.BlockStateList;
 import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.IBlockState;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.World;

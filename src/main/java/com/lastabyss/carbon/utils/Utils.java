@@ -15,13 +15,9 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.spigotmc.SneakyThrow;
 
 import io.netty.buffer.ByteBuf;
 
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +35,7 @@ public class Utils {
      * @param cmd
      */
     public static void registerBukkitCommand(String fallbackPrefix, Command cmd) {
-        CommandMap cmap = getFieldValue(CraftServer.class, "commandMap", Bukkit.getServer());
+        CommandMap cmap = ReflectionUtils.getFieldValue(CraftServer.class, "commandMap", Bukkit.getServer());
         cmap.register(fallbackPrefix, cmd);
     }
 
@@ -53,8 +49,8 @@ public class Utils {
      */
     public static EntityType addEntity(String name, int id, Class<? extends Entity> entityClass) {
         EntityType entityType = DynamicEnumType.addEnum(EntityType.class, name, new Class[]{String.class, entityClass.getClass(), Integer.TYPE}, new Object[]{name, entityClass.getClass(), id});
-        Utils.<Map<String, EntityType>>getFieldValue(EntityType.class, "NAME_MAP", null).put(name, entityType);
-        Utils.<Map<Short, EntityType>>getFieldValue(EntityType.class, "ID_MAP", null).put((short) id, entityType);
+        ReflectionUtils.<Map<String, EntityType>>getFieldValue(EntityType.class, "NAME_MAP", null).put(name, entityType);
+        ReflectionUtils.<Map<Short, EntityType>>getFieldValue(EntityType.class, "ID_MAP", null).put((short) id, entityType);
         return entityType;
     }
 
@@ -67,10 +63,10 @@ public class Utils {
      */
     public static Material addMaterial(String name, int id) {
         Material material = DynamicEnumType.addEnum(Material.class, name, new Class[]{Integer.TYPE}, new Object[]{id});
-        Utils.<Map<String, Material>>getFieldValue(Material.class, "BY_NAME", null).put(name, material);
-        Material[] byId = getFieldValue(Material.class, "byId", null);
+        ReflectionUtils.<Map<String, Material>>getFieldValue(Material.class, "BY_NAME", null).put(name, material);
+        Material[] byId = ReflectionUtils.getFieldValue(Material.class, "byId", null);
         byId[id] = material;
-        setFieldValue(Material.class, "byId", null, byId);
+        ReflectionUtils.setFieldValue(Material.class, "byId", null, byId);
         return material;
     }
 
@@ -84,13 +80,13 @@ public class Utils {
      */
     public static Material addMaterial(String name, int id, short data) {
         Material material = DynamicEnumType.addEnum(Material.class, name, new Class[]{Integer.TYPE}, new Object[]{id});
-        Utils.<Map<String, Material>>getFieldValue(Material.class, "BY_NAME", null).put(name, material);
-        Material[] byId = getFieldValue(Material.class, "byId", null);
+        ReflectionUtils.<Map<String, Material>>getFieldValue(Material.class, "BY_NAME", null).put(name, material);
+        Material[] byId = ReflectionUtils.getFieldValue(Material.class, "byId", null);
         byId[id] = material;
-        setFieldValue(Material.class, "byId", null, byId);
-        Material[] durability = getFieldValue(Material.class, "durability", null);
+        ReflectionUtils.setFieldValue(Material.class, "byId", null, byId);
+        Material[] durability = ReflectionUtils.getFieldValue(Material.class, "durability", null);
         durability[data] = material;
-        setFieldValue(Material.class, "durability", null, byId);
+        ReflectionUtils.setFieldValue(Material.class, "durability", null, byId);
         return material;
     }
 
@@ -101,7 +97,7 @@ public class Utils {
      * @return
      */
     public static float getBlockStrength(net.minecraft.server.v1_8_R3.Block b) {
-        return getFieldValue(b.getClass(), "strength", b);
+        return ReflectionUtils.getFieldValue(b.getClass(), "strength", b);
     }
 
     /**
@@ -111,7 +107,7 @@ public class Utils {
      * @return
      */
     public static float getBlockDurability(net.minecraft.server.v1_8_R3.Block b) {
-        return getFieldValue(b.getClass(), "durability", b);
+        return ReflectionUtils.getFieldValue(b.getClass(), "durability", b);
     }
 
     /**
@@ -143,36 +139,6 @@ public class Utils {
     }
 
     /**
-     * Sets accessibleobject accessible state an returns this object
-     *
-     * @param <T>
-     * @param object
-     * @return
-     */
-    public static <T extends AccessibleObject> T setAccessible(T object) {
-        object.setAccessible(true);
-        return object;
-    }
-
-    /**
-     * Sets final field to the provided value
-     *
-     * @param field - the field which should be modified
-     * @param obj - the object whose field should be modified
-     * @param newValue - the new value for the field of obj being modified
-     * @throws NoSuchFieldException
-     * @throws SecurityException
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
-    public static void setFinalField(Field field, Object obj, Object newValue) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        setAccessible(Field.class.getDeclaredField("modifiers")).setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        setAccessible(Field.class.getDeclaredField("root")).set(field, null);
-        setAccessible(Field.class.getDeclaredField("overrideFieldAccessor")).set(field, null);
-        setAccessible(field).set(obj, newValue);
-    }
-
-    /**
      * Returns ByteBuf contents as byte array
      * 
      * @param buf
@@ -182,40 +148,6 @@ public class Utils {
         byte[] result = new byte[buf.readableBytes()];
         buf.readBytes(result);
         return result;
-    }
-
-    /**
-     * Gets field reflectively
-     * 
-     * @param clazz
-     * @param fieldName
-     * @param obj
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T getFieldValue(Class<?> clazz, String fieldName, Object obj) {
-        try {
-            return (T) setAccessible(clazz.getDeclaredField(fieldName)).get(obj);
-        } catch (Throwable t) {
-            SneakyThrow.sneaky(t);
-        }
-        return null;
-    }
-
-    /**
-     * Sets field reflectively
-     * 
-     * @param clazz
-     * @param fieldName
-     * @param obj
-     * @param value
-     */
-    public static void setFieldValue(Class<?> clazz, String fieldName, Object obj, Object value) {
-        try {
-            setAccessible(clazz.getDeclaredField(fieldName)).set(obj, value);
-        } catch (Throwable t) {
-            SneakyThrow.sneaky(t);
-        }
     }
 
 }

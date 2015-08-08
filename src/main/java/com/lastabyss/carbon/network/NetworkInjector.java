@@ -28,7 +28,7 @@ import com.lastabyss.carbon.network.packets.CarbonPacketPlayOutBossBar;
 import com.lastabyss.carbon.network.pipeline.CarbonInTransformer;
 import com.lastabyss.carbon.network.pipeline.CarbonOutTransformer;
 import com.lastabyss.carbon.utils.DynamicEnumType;
-import com.lastabyss.carbon.utils.Utils;
+import com.lastabyss.carbon.utils.ReflectionUtils;
 
 public class NetworkInjector implements Listener {
 
@@ -47,8 +47,8 @@ public class NetworkInjector implements Listener {
     }
 
     public static void registerPacket(EnumProtocol protocol, Class<? extends Packet<? extends PacketListener>> packetClass, int packetID, boolean isClientbound) {
-        Utils.<Map<Class<? extends Packet<? extends PacketListener>>, EnumProtocol>>getFieldValue(EnumProtocol.class, "h", null).put(packetClass, protocol);
-        Utils.<Map<EnumProtocolDirection, Map<Integer, Class<? extends Packet<? extends PacketListener>>>>>getFieldValue(EnumProtocol.class, "j", protocol).get(isClientbound ? EnumProtocolDirection.CLIENTBOUND : EnumProtocolDirection.SERVERBOUND).put(packetID, packetClass);
+        ReflectionUtils.<Map<Class<? extends Packet<? extends PacketListener>>, EnumProtocol>>getFieldValue(EnumProtocol.class, "h", null).put(packetClass, protocol);
+        ReflectionUtils.<Map<EnumProtocolDirection, Map<Integer, Class<? extends Packet<? extends PacketListener>>>>>getFieldValue(EnumProtocol.class, "j", protocol).get(isClientbound ? EnumProtocolDirection.CLIENTBOUND : EnumProtocolDirection.SERVERBOUND).put(packetID, packetClass);
     }
 
     @EventHandler(priority = EventPriority.LOW)

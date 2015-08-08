@@ -296,9 +296,6 @@ public class CarbonPlayerConnection extends PlayerConnection {
                 afterUse.setData(data);
             }
         }
-        if (!player.bS()) {
-            player.updateInventory(player.defaultContainer);
-        }
         return true;
     }
 

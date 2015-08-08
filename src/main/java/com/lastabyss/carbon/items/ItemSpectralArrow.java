@@ -14,8 +14,8 @@ public class ItemSpectralArrow extends ItemArrow {
     }
 
     @Override
-    public EntityArrow a(World var1, ItemStack var2, EntityLiving var3) {
-        return new EntitySpectralArrow(var1, var3.locX, var3.locY, var3.locZ);
+    public EntityArrow createArrowEntity(World world, ItemStack itemstack, EntityLiving entity) {
+        return new EntitySpectralArrow(world, entity.locX, entity.locY, entity.locZ);
     }
 
 }

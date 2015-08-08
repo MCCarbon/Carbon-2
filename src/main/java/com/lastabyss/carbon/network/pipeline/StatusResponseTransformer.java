@@ -8,7 +8,7 @@ import net.minecraft.server.v1_8_R3.ServerPing.ServerData;
 import com.google.gson.Gson;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;
-import com.lastabyss.carbon.utils.Utils;
+import com.lastabyss.carbon.utils.ReflectionUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,7 +16,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 public class StatusResponseTransformer extends MessageToByteEncoder<ByteBuf> {
 
-    private static final Gson pingGson = Utils.getFieldValue(PacketStatusOutServerInfo.class, "a", null);
+    private static final Gson pingGson = ReflectionUtils.getFieldValue(PacketStatusOutServerInfo.class, "a", null);
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf messagebuf, ByteBuf out) throws Exception {

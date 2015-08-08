@@ -11,7 +11,6 @@ import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.CreativeModeTab;
 import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.IBlockFragilePlantElement;
-import net.minecraft.server.v1_8_R3.IBlockState;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import net.minecraft.server.v1_8_R3.Items;

@@ -9,4 +9,6 @@ public class ItemTippedArrow extends ItemArrow {
         c("tipped_arrow");
     }
 
+    //TODO: effects on hit
+
 }

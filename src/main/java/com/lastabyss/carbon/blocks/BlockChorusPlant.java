@@ -15,7 +15,6 @@ import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.EnumDirection;
 import net.minecraft.server.v1_8_R3.IBlockAccess;
 import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.IBlockState;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.World;

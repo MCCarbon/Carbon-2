@@ -13,7 +13,6 @@ import net.minecraft.server.v1_8_R3.BlockStateList;
 import net.minecraft.server.v1_8_R3.EntityLiving;
 import net.minecraft.server.v1_8_R3.EnumDirection;
 import net.minecraft.server.v1_8_R3.IBlockData;
-import net.minecraft.server.v1_8_R3.IBlockState;
 import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MovingObjectPosition;
 import net.minecraft.server.v1_8_R3.Vec3D;
@@ -73,6 +72,7 @@ public class BlockEndRod extends BlockDirectional {
     }
 
     // WTF??????
+    @SuppressWarnings("unused")
     private boolean a(World var1, BlockPosition var2, EnumDirection var3) {
         return true;
     }
