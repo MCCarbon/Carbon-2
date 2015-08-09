@@ -3,12 +3,12 @@ package com.lastabyss.carbon.items;
 /**
  * @author Navid
  */
-public class ItemTippedArrow extends ItemArrow {
+public class ItemTippedArrow extends ItemNewArrow {
 
     public ItemTippedArrow() {
         c("tipped_arrow");
     }
 
-    //TODO: effects on hit
+    //TODO: create entity arrow that applies effects o hit
 
 }

@@ -45,8 +45,8 @@ import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
-import com.lastabyss.carbon.items.ItemArrow;
-import com.lastabyss.carbon.items.ItemBow;
+import com.lastabyss.carbon.items.ItemNewArrow;
+import com.lastabyss.carbon.items.ItemNewBow;
 import com.lastabyss.carbon.items.ItemChorusFruit;
 import com.lastabyss.carbon.items.ItemSpectralArrow;
 import com.lastabyss.carbon.items.ItemSplashPotion;
@@ -133,8 +133,8 @@ public class Injector {
         registerBlock(255, "structure_block", structureBlock, new ItemBlock(structureBlock));
 
         //Add new items
-        registerItem(261, "bow", new ItemBow().c("bow"));
-        registerItem(262, "arrow", new ItemArrow().c("arrow"));
+        registerItem(261, "bow", new ItemNewBow().c("bow"));
+        registerItem(262, "arrow", new ItemNewArrow().c("arrow"));
         registerItem(432, "chorus_fruit", new ItemChorusFruit().h().c("chorusFruit"));
         registerItem(433, "chorus_fruit_popped", (new Item()).c("chorusFruitPopped"));
         registerItem(434, "beetroot", (new ItemFood(1, 0.6F, false)).c("beetroot"));
