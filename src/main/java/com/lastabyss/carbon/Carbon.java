@@ -22,6 +22,8 @@ public class Carbon extends JavaPlugin {
 
     public static final Logger log = Bukkit.getLogger();
 
+    private final Injector injector = new Injector(this);
+
     @Override
     public void onLoad() {
         // call to server shutdown if worlds are already loaded, prevents various errors when loading plugin on the fly
@@ -37,8 +39,6 @@ public class Carbon extends JavaPlugin {
 
         // Inject 1.8 features. Stop server if something fails
         try {
-            //new Instrumentator(this, new File(getDataFolder(), "libraries/natives/").getPath()).instrumentate();
-            Injector injector = new Injector(this);
             injector.registerAll();
             injector.registerRecipes();
         } catch (Throwable e) {
@@ -53,8 +53,8 @@ public class Carbon extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        injector.registerEntityHandler();
         getServer().getPluginManager().registerEvents(new NetworkInjector(), this);
-        //getServer().getPluginManager().registerEvents(new PlayerListener(this), this); - temporaly disable, until we find a way to actually break the item when durability end, should probably just reimplement shovels
         getServer().getPluginManager().registerEvents(new BossBarAPI(), this);
         try {
             Metrics metrics = new Metrics(this);

@@ -10,6 +10,7 @@ import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.Enchantment;
 import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityLiving;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 import net.minecraft.server.v1_8_R3.IBlockData;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
@@ -23,12 +24,15 @@ import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
 import net.minecraft.server.v1_8_R3.PotionBrewer;
 import net.minecraft.server.v1_8_R3.TileEntity;
+import net.minecraft.server.v1_8_R3.WorldServer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.potion.PotionEffectType;
 
 import com.lastabyss.carbon.blocks.BlockBeetroots;
 import com.lastabyss.carbon.blocks.BlockChorusFlower;
@@ -45,6 +49,7 @@ import com.lastabyss.carbon.blocks.TileEntityEndGateway;
 import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.effects.NewMobEffectType;
 import com.lastabyss.carbon.items.ItemNewArrow;
 import com.lastabyss.carbon.items.ItemNewBow;
 import com.lastabyss.carbon.items.ItemChorusFruit;
@@ -53,6 +58,7 @@ import com.lastabyss.carbon.items.ItemSplashPotion;
 import com.lastabyss.carbon.items.ItemStep;
 import com.lastabyss.carbon.items.ItemTippedArrow;
 import com.lastabyss.carbon.network.NetworkInjector;
+import com.lastabyss.carbon.staticaccess.EffectList;
 import com.lastabyss.carbon.utils.FixedChatSerializer;
 import com.lastabyss.carbon.utils.ReflectionUtils;
 import com.lastabyss.carbon.utils.Utils;
@@ -87,7 +93,9 @@ public class Injector {
     public static final org.bukkit.Material SPECTRAL_ARROW = Utils.addMaterial("SPECTRAL_ARROW", 439);
     public static final org.bukkit.Material TIPPED_ARROW = Utils.addMaterial("TIPPED_ARROW", 440);
 
+    private Carbon plugin;
     public Injector(Carbon plugin) {
+        this.plugin = plugin;
     }
 
     private static boolean injectionFinished;
@@ -150,6 +158,10 @@ public class Injector {
         registerTileEntity(TileEntityStructure.class, "Structure");
 
         //Add new effects
+        prepareMobEffectRegistration(2);
+        new NewMobEffectType(24, new MinecraftKey("glowing"), false, 9740385).c("effect.glowing");
+        new NewMobEffectType(25, new MinecraftKey("levitation"), true, 13565951).c("potion.levitation");
+        PotionEffectType.stopAcceptingRegistrations();
 
         registerRecipes();
 
@@ -181,6 +193,34 @@ public class Injector {
 
     private void addRecipe(Recipe recipe) {
         Bukkit.getServer().addRecipe(recipe);
+    }
+
+    public void registerEntityHandler() {
+        //register task that updates glowing effect on entities
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+            private final int GLOWING_BIT = 6;
+            @Override
+            public void run() {
+                for (org.bukkit.World world : Bukkit.getWorlds()) {
+                    WorldServer nmsworld = ((CraftWorld) world).getHandle();
+                    for (Entity entity : nmsworld.entityList) {
+                        if (entity instanceof EntityLiving) {
+                            EntityLiving living = (EntityLiving) entity;
+                            boolean hasGlowingEffect = living.hasEffect(EffectList.GLOWING);
+                            final byte b0 = entity.getDataWatcher().getByte(0);
+                            boolean hasGlowingFlag = (b0 & 1 << GLOWING_BIT) != 0;
+                            if (hasGlowingEffect != hasGlowingFlag) {
+                                if (hasGlowingEffect) {
+                                    entity.getDataWatcher().watch(0, (byte)(b0 | 1 << GLOWING_BIT));
+                                } else {
+                                    entity.getDataWatcher().watch(0, (byte)(b0 & ~(1 << GLOWING_BIT)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }, 0, 1);
     }
 
     public static void registerBlock(int id, String name, Block block) {
@@ -223,6 +263,14 @@ public class Injector {
     public static void registerEntity(Class<? extends Entity> entityClass, String name, int id, int monsterEgg, int monsterEggData) {
         registerEntity(entityClass, name, id);
         EntityTypes.eggInfo.put(id, new EntityTypes.MonsterEggInfo(id, monsterEgg, monsterEggData));
+    }
+
+    public static void prepareMobEffectRegistration(int additionalSlots) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        ReflectionUtils.setFieldValue(PotionEffectType.class, "acceptingNew", null, true);
+        PotionEffectType[] oldById = ReflectionUtils.getFieldValue(PotionEffectType.class, "byId", null);
+        PotionEffectType[] newById = new PotionEffectType[oldById.length + 2];
+        System.arraycopy(oldById, 0, newById, 0, oldById.length);
+        ReflectionUtils.setStaticFinalField(PotionEffectType.class, "byId", newById);
     }
 
     public static void registerPotionEffect(int effectId, String durations, String amplifier) {

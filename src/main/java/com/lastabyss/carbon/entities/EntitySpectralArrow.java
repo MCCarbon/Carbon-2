@@ -1,9 +1,11 @@
 package com.lastabyss.carbon.entities;
 
+import com.lastabyss.carbon.staticaccess.EffectList;
 import com.lastabyss.carbon.staticaccess.ItemList;
 
 import net.minecraft.server.v1_8_R3.EntityLiving;
 import net.minecraft.server.v1_8_R3.ItemStack;
+import net.minecraft.server.v1_8_R3.MobEffect;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.World;
 
@@ -40,9 +42,8 @@ public class EntitySpectralArrow extends EntityNewArrow {
     @Override
     public void onEntityHit(EntityLiving living) {
         super.onEntityHit(living);
-        //TODO: glowing effect
-        /*MobEffect var2 = new MobEffect(MobEffectList.WATER_BREATHING.getId(), duration, 0);
-        living.addEffect(var2);*/
+        MobEffect glowing = new MobEffect(EffectList.GLOWING.getId(), duration, 0);
+        living.addEffect(glowing);
     }
 
     protected ItemStack getItemStack() {

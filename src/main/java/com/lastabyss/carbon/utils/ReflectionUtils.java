@@ -11,6 +11,21 @@ public class ReflectionUtils {
     /**
      * Sets final field to the provided value
      *
+     * @param clazz
+     * @param fieldName
+     * @param newValue
+     * @throws NoSuchFieldException
+     * @throws SecurityException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     */
+    public static void setStaticFinalField(Class<?> clazz, String fieldName, Object newValue) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        setFinalField(clazz.getDeclaredField(fieldName), null, newValue);
+    }
+
+    /**
+     * Sets final field to the provided value
+     *
      * @param field - the field which should be modified
      * @param obj - the object whose field should be modified
      * @param newValue - the new value for the field of obj being modified
