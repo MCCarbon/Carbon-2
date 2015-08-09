@@ -90,6 +90,12 @@ public class Injector {
     public Injector(Carbon plugin) {
     }
 
+    private static boolean injectionFinished;
+
+    public static boolean isFinished() {
+        return injectionFinished;
+    }
+
     public void registerAll() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, InvocationTargetException, NoSuchMethodException {
         //Inject new json serializer
         ReflectionUtils.setFinalField(IChatBaseComponent.ChatSerializer.class.getDeclaredField("a"), null, FixedChatSerializer.gson);
@@ -143,11 +149,15 @@ public class Injector {
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");
         registerTileEntity(TileEntityStructure.class, "Structure");
 
+        //Add new effects
+
         registerRecipes();
 
         //Fix block references and items, replacing the ones in Minecraft with our new ones
         fixBlocksRefs();
         fixItemsRefs();
+
+        injectionFinished = true;
     }
 
      

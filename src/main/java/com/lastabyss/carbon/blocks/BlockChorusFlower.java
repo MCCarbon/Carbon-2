@@ -3,9 +3,9 @@ package com.lastabyss.carbon.blocks;
 import java.util.Iterator;
 import java.util.Random;
 
-import com.lastabyss.carbon.blocks.util.AddedBlockList;
 import com.lastabyss.carbon.blocks.util.EnumDirectionLimitUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.staticaccess.BlockList;
 
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -50,7 +50,7 @@ public class BlockChorusFlower extends WrappedBlock {
                 int var9;
                 if (var8 == Blocks.END_STONE) {
                     var6 = true;
-                } else if (var8 != AddedBlockList.CHORUS_PLANT) {
+                } else if (var8 != BlockList.CHORUS_PLANT) {
                     if (var8 == Blocks.AIR) {
                         var6 = true;
                     }
@@ -60,7 +60,7 @@ public class BlockChorusFlower extends WrappedBlock {
                     int var10;
                     for (var10 = 0; var10 < 4; ++var10) {
                         Block var11 = world.getType(position.down(var9 + 1)).getBlock();
-                        if (var11 != AddedBlockList.CHORUS_PLANT) {
+                        if (var11 != BlockList.CHORUS_PLANT) {
                             if (var11 == Blocks.END_STONE) {
                                 var7 = true;
                             }
@@ -81,7 +81,7 @@ public class BlockChorusFlower extends WrappedBlock {
                 }
 
                 if (var6 && a(world, position.up(), (EnumDirection) null) && world.isEmpty(position.up(2))) {
-                    world.setTypeAndData(position, AddedBlockList.CHORUS_PLANT.getBlockData(), 2);
+                    world.setTypeAndData(position, BlockList.CHORUS_PLANT.getBlockData(), 2);
                     world.setTypeAndData(position.up(), getBlockData().set(AGE, agev), 2);
                 } else if (agev < 4) {
                     var9 = random.nextInt(4);
@@ -100,7 +100,7 @@ public class BlockChorusFlower extends WrappedBlock {
                     }
 
                     if (var15) {
-                        world.setTypeAndData(position, AddedBlockList.CHORUS_PLANT.getBlockData(), 2);
+                        world.setTypeAndData(position, BlockList.CHORUS_PLANT.getBlockData(), 2);
                     } else {
                         world.setTypeAndData(position, blockdata.set(AGE, 5), 2);
                     }
@@ -151,13 +151,13 @@ public class BlockChorusFlower extends WrappedBlock {
 
     public boolean isValid(World world, BlockPosition position) {
         Block var3 = world.getType(position.down()).getBlock();
-        if ((var3 != AddedBlockList.CHORUS_PLANT) && (var3 != Blocks.END_STONE)) {
+        if ((var3 != BlockList.CHORUS_PLANT) && (var3 != Blocks.END_STONE)) {
             if (var3 == Blocks.AIR) {
                 int var4 = 0;
 
                 for (EnumDirection var6 : EnumDirectionLimit.HORIZONTAL) {
                     Block var7 = world.getType(position.shift(var6)).getBlock();
-                    if (var7 == AddedBlockList.CHORUS_PLANT) {
+                    if (var7 == BlockList.CHORUS_PLANT) {
                         ++var4;
                     } else if (var7 != Blocks.AIR) {
                         return false;
@@ -205,7 +205,7 @@ public class BlockChorusFlower extends WrappedBlock {
     }
 
     public static void a(World world, BlockPosition position, Random rnd, int var3) {
-        world.setTypeAndData(position, AddedBlockList.CHORUS_PLANT.getBlockData(), 2);
+        world.setTypeAndData(position, BlockList.CHORUS_PLANT.getBlockData(), 2);
         a(world, position, rnd, position, var3, 0);
     }
 
@@ -221,7 +221,7 @@ public class BlockChorusFlower extends WrappedBlock {
                 return;
             }
 
-            var0.setTypeAndData(var8, AddedBlockList.CHORUS_PLANT.getBlockData(), 2);
+            var0.setTypeAndData(var8, BlockList.CHORUS_PLANT.getBlockData(), 2);
         }
 
         boolean var12 = false;
@@ -236,14 +236,14 @@ public class BlockChorusFlower extends WrappedBlock {
                 BlockPosition var11 = var1.up(var6).shift(var10);
                 if ((Math.abs(var11.getX() - var3.getX()) < var4) && (Math.abs(var11.getZ() - var3.getZ()) < var4) && var0.isEmpty(var11) && var0.isEmpty(var11.down()) && a(var0, var11, var10.opposite())) {
                     var12 = true;
-                    var0.setTypeAndData(var11, AddedBlockList.CHORUS_PLANT.getBlockData(), 2);
+                    var0.setTypeAndData(var11, BlockList.CHORUS_PLANT.getBlockData(), 2);
                     a(var0, var11, var2, var3, var4, var5 + 1);
                 }
             }
         }
 
         if (!var12) {
-            var0.setTypeAndData(var1.up(var6), AddedBlockList.CHORUS_FLOWER.getBlockData().set(AGE, 5), 2);
+            var0.setTypeAndData(var1.up(var6), BlockList.CHORUS_FLOWER.getBlockData().set(AGE, 5), 2);
         }
     }
 

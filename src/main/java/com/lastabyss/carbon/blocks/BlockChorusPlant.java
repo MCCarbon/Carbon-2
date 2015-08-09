@@ -3,8 +3,8 @@ package com.lastabyss.carbon.blocks;
 import java.util.Iterator;
 import java.util.Random;
 
-import com.lastabyss.carbon.blocks.util.AddedBlockList;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.staticaccess.BlockList;
 
 import net.minecraft.server.v1_8_R3.AxisAlignedBB;
 import net.minecraft.server.v1_8_R3.Block;
@@ -41,7 +41,7 @@ public class BlockChorusPlant extends WrappedBlock {
         Block var7 = access.getType(position.east()).getBlock();
         Block var8 = access.getType(position.south()).getBlock();
         Block var9 = access.getType(position.west()).getBlock();
-        return blockdata.set(DOWN, (var4 == this) || (var4 == AddedBlockList.CHORUS_FLOWER) || (var4 == Blocks.END_STONE)).set(UP, (var5 == this) || (var5 == AddedBlockList.CHORUS_FLOWER)).set(NORTH, var6 == this || (var6 == AddedBlockList.CHORUS_FLOWER)).set(EAST, (var7 == this) || (var7 == AddedBlockList.CHORUS_FLOWER)).set(SOUTH, (var8 == this) || (var8 == AddedBlockList.CHORUS_FLOWER)).set(WEST, (var9 == this) || (var9 == AddedBlockList.CHORUS_FLOWER));
+        return blockdata.set(DOWN, (var4 == this) || (var4 == BlockList.CHORUS_FLOWER) || (var4 == Blocks.END_STONE)).set(UP, (var5 == this) || (var5 == BlockList.CHORUS_FLOWER)).set(NORTH, var6 == this || (var6 == BlockList.CHORUS_FLOWER)).set(EAST, (var7 == this) || (var7 == BlockList.CHORUS_FLOWER)).set(SOUTH, (var8 == this) || (var8 == BlockList.CHORUS_FLOWER)).set(WEST, (var9 == this) || (var9 == BlockList.CHORUS_FLOWER));
     }
 
     @Override

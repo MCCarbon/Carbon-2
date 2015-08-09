@@ -2,9 +2,9 @@ package com.lastabyss.carbon.blocks;
 
 import java.util.Iterator;
 
-import com.lastabyss.carbon.blocks.util.AddedBlockList;
 import com.lastabyss.carbon.blocks.util.BlockStateUtil;
 import com.lastabyss.carbon.blocks.util.EnumDirectionUtil;
+import com.lastabyss.carbon.staticaccess.BlockList;
 
 import net.minecraft.server.v1_8_R3.AxisAlignedBB;
 import net.minecraft.server.v1_8_R3.Block;
@@ -80,7 +80,7 @@ public class BlockEndRod extends BlockDirectional {
     @Override
     public IBlockData getPlacedState(World world, BlockPosition position, EnumDirection face, float var4, float var5, float var6, int var7, EntityLiving var8) {
         IBlockData blockdata = world.getType(position.shift(face.opposite()));
-        if (blockdata.getBlock() == AddedBlockList.END_ROD) {
+        if (blockdata.getBlock() == BlockList.END_ROD) {
             EnumDirection facing = blockdata.get(FACING);
             if (facing == face) {
                 return getBlockData().set(FACING, face.opposite());
