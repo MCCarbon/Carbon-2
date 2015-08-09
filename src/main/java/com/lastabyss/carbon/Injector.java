@@ -135,10 +135,10 @@ public class Injector {
         //Add new items
         registerItem(261, "bow", new ItemBow().c("bow"));
         registerItem(262, "arrow", new ItemArrow().c("arrow"));
-        registerItem(432, "chorus_fruit", new ItemChorusFruit());
+        registerItem(432, "chorus_fruit", new ItemChorusFruit().h().c("chorusFruit"));
         registerItem(433, "chorus_fruit_popped", (new Item()).c("chorusFruitPopped"));
         registerItem(434, "beetroot", (new ItemFood(1, 0.6F, false)).c("beetroot"));
-        registerItem(435, "beetroot_seeds", new ItemSeeds(beetroots, Blocks.FARMLAND));
+        registerItem(435, "beetroot_seeds", new ItemSeeds(beetroots, Blocks.FARMLAND).c("beetroot_seeds"));
         registerItem(436, "beetroot_soup", new ItemSoup(6).c("beetroot_soup"));
         //Skip 437 because there is nothing there apparently... spooky
         registerItem(438, "splash_potion", new ItemSplashPotion().c("splash_potion"));

@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityTeleportEvent;
 public class ItemChorusFruit extends ItemFood {
 
     public ItemChorusFruit() {
-        super(4, 2.4F, true);
+        super(4, 0.3F, false);
     }
 
     @Override
