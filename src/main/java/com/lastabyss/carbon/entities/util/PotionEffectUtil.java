@@ -14,7 +14,7 @@ public class PotionEffectUtil {
 
     public static List<MobEffect> getEffects(ItemStack itemstack) {
         ArrayList<MobEffect> effects = Lists.newArrayList();
-        //effects.addAll(i(itemstack).b()); //TODO: create potion registry
+        effects.addAll(PotionRegistry.getMobEffectsByPotionName(getPotionName(itemstack)));
         if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("CustomPotionEffects", 9)) {
             NBTTagList potioneffectstag = itemstack.getTag().getList("CustomPotionEffects", 10);
             for (int i = 0; i < potioneffectstag.size(); ++i) {
@@ -25,8 +25,11 @@ public class PotionEffectUtil {
                 }
             }
         }
-
         return effects;
+    }
+
+    public static final String getPotionName(ItemStack stack) {
+        return !stack.hasTag() ? null : stack.getTag().getString("Potion");
     }
 
 }

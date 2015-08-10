@@ -13,7 +13,6 @@ import net.minecraft.server.v1_8_R3.World;
 import com.google.common.collect.Sets;
 import com.lastabyss.carbon.entities.util.PotionEffectUtil;
 
-//TODO: create potion registry so that arrow will actually work (creative client will spawn arrow using "Potion" tag, and that doesn't work right now)
 public class EntityTippedArrow extends EntityNewArrow {
 
     private final Set<MobEffect> effects = Sets.newHashSet();
@@ -39,12 +38,9 @@ public class EntityTippedArrow extends EntityNewArrow {
 
     private void setItem(ItemStack itemstack) {
         List<MobEffect> effectlist = PotionEffectUtil.getEffects(itemstack);
-        if (!effectlist.isEmpty()) {
-            for (MobEffect effect : effectlist) {
-                this.effects.add(new MobEffect(effect));
-            }
+        for (MobEffect effect : effectlist) {
+            this.effects.add(new MobEffect(effect));
         }
-
         this.item = itemstack.cloneItemStack();
         this.item.count = 1;
     }
