@@ -1,6 +1,7 @@
 package com.lastabyss.carbon;
 
 import com.lastabyss.carbon.api.BossBarAPI;
+import com.lastabyss.carbon.listener.WorldGeneratorInjector;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.utils.Metrics;
 
@@ -56,6 +57,7 @@ public class Carbon extends JavaPlugin {
         injector.registerEntityHandler();
         getServer().getPluginManager().registerEvents(new NetworkInjector(), this);
         getServer().getPluginManager().registerEvents(new BossBarAPI(), this);
+        getServer().getPluginManager().registerEvents(new WorldGeneratorInjector(), this);
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();

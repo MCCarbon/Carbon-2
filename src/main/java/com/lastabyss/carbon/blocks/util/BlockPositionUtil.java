@@ -21,4 +21,12 @@ public class BlockPositionUtil {
         return position.d(x, y, z);
     }
 
+    public static BlockPosition add(BlockPosition pos, BlockPosition other) {
+        return pos.a(other);
+    }
+
+    public static BlockPosition substract(BlockPosition pos, BlockPosition other) {
+        return pos.b(other);
+    }
+
 }

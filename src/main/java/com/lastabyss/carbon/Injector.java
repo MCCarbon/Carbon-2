@@ -24,6 +24,7 @@ import net.minecraft.server.v1_8_R3.Material;
 import net.minecraft.server.v1_8_R3.MinecraftKey;
 import net.minecraft.server.v1_8_R3.PotionBrewer;
 import net.minecraft.server.v1_8_R3.TileEntity;
+import net.minecraft.server.v1_8_R3.WorldGenFactory;
 import net.minecraft.server.v1_8_R3.WorldServer;
 
 import org.bukkit.Bukkit;
@@ -50,6 +51,8 @@ import com.lastabyss.carbon.blocks.TileEntityStructure;
 import com.lastabyss.carbon.blocks.util.SoundUtil;
 import com.lastabyss.carbon.blocks.util.WrappedBlock;
 import com.lastabyss.carbon.effects.NewMobEffectType;
+import com.lastabyss.carbon.generators.end.WorldGenEndCity.WorldGenEndCityStart;
+import com.lastabyss.carbon.generators.end.WorldGenEndCityPieces.CityPiece;
 import com.lastabyss.carbon.items.ItemNewArrow;
 import com.lastabyss.carbon.items.ItemNewBow;
 import com.lastabyss.carbon.items.ItemChorusFruit;
@@ -163,7 +166,12 @@ public class Injector {
         new NewMobEffectType(25, new MinecraftKey("levitation"), true, 13565951).c("potion.levitation");
         PotionEffectType.stopAcceptingRegistrations();
 
+        //Add new recipes
         registerRecipes();
+
+        //Add worldgen factory entry
+        registerWorldGenFactoryAddition(false, CityPiece.class, "ECP");
+        registerWorldGenFactoryAddition(true, WorldGenEndCityStart.class, "EndCity");
 
         //Fix block references and items, replacing the ones in Minecraft with our new ones
         fixBlocksRefs();
@@ -284,6 +292,10 @@ public class Injector {
         enchants.add(enhcantment);
         ReflectionUtils.setFinalField(Enchantment.class.getField("b"), null, enchants.toArray(new Enchantment[enchants.size()]));
         ReflectionUtils.setAccessible(org.bukkit.enchantments.Enchantment.class.getDeclaredField("acceptingNew")).set(null, false);
+    }
+
+    public static void registerWorldGenFactoryAddition(boolean isStructureStart, Class<?> clazz, String string) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+        ReflectionUtils.setAccessible(WorldGenFactory.class.getDeclaredMethod(isStructureStart ? "b" : "a", Class.class, String.class)).invoke(null, clazz, string);
     }
 
     private static void fixBlocksRefs() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
