@@ -10,11 +10,11 @@ import net.minecraft.server.v1_8_R3.TileEntity;
  */
 public class WrappedTileEntity extends TileEntity {
 
-    public void write(NBTTagCompound tag) {
+    public void read(NBTTagCompound tag) {
         a(tag);
     }
 
-    public void read(NBTTagCompound tag) {
+    public void write(NBTTagCompound tag) {
         b(tag);
     }
 
@@ -23,11 +23,20 @@ public class WrappedTileEntity extends TileEntity {
     }
 
     public Block getBlock() {
-        return e;
+        return w();
     }
 
-    public void tick() {
-        update();
+    public int getMetadata() {
+        return u();
+    }
+
+    @Override
+    public boolean c(final int i, final int j) {
+        return handleClientInput(i, j);
+    }
+
+    public boolean handleClientInput(int id, int val) {
+        return super.c(id, val);
     }
 
 }
