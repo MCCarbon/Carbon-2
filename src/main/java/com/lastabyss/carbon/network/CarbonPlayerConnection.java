@@ -296,13 +296,10 @@ public class CarbonPlayerConnection extends PlayerConnection {
                 afterUse.setData(data);
             }
         }
-        if (!player.bS()) {
-            player.updateInventory(player.defaultContainer);
-        }
         return true;
     }
 
-    private void validateHandItems() {
+    public void validateHandItems() {
         ItemStack mainhandItem = player.inventory.getItemInHand();
         if ((mainhandItem != null) && (mainhandItem.count == 0)) {
             player.inventory.items[player.inventory.itemInHandIndex] = null;
@@ -314,6 +311,11 @@ public class CarbonPlayerConnection extends PlayerConnection {
 
     public ItemStack getOffHandItem() {
         return offhandItem;
+    }
+
+    public void setOffHandItem(ItemStack item) {
+        offhandItem = item;
+        sendPacket(new PacketPlayOutSetSlot(player.activeContainer.windowId, player.activeContainer.c.size(), offhandItem));
     }
 
 }
