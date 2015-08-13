@@ -50,11 +50,11 @@ public abstract class class_asp extends StructurePiece {
 	public boolean a(World var1, Random var2, StructureBoundingBox var3) {
 		this.b.a(var3);
 		this.a.b(var1, this.c, this.b);
-		Map var4 = this.a.a(this.c, this.b);
-		Iterator var5 = var4.keySet().iterator();
+		Map<BlockPosition, String> var4 = this.a.a(this.c, this.b);
+		Iterator<BlockPosition> var5 = var4.keySet().iterator();
 
 		while (var5.hasNext()) {
-			BlockPosition var6 = (BlockPosition) var5.next();
+			BlockPosition var6 = var5.next();
 			String var7 = (String) var4.get(var6);
 			this.a(var7, var6, var1, var2, var3);
 		}

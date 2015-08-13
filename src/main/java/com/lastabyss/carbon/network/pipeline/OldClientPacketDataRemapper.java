@@ -5,7 +5,6 @@ import java.util.List;
 import com.lastabyss.carbon.staticaccess.MaterialList;
 import org.bukkit.Material;
 
-import com.lastabyss.carbon.Injector;
 import com.lastabyss.carbon.utils.DataWatcherSerializer;
 import com.lastabyss.carbon.utils.DataWatcherSerializer.DataWatcherObject;
 import com.lastabyss.carbon.utils.PacketDataSerializerHelper;

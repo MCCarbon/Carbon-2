@@ -1,14 +1,11 @@
 package com.lastabyss.carbon.entities;
 
 import net.minecraft.server.v1_8_R3.EntityGolem;
-import net.minecraft.server.v1_8_R3.EntitySnowman;
 import net.minecraft.server.v1_8_R3.IMonster;
 import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 
 public class EntityShulker extends EntityGolem implements IMonster {
-
-
 
     public EntityShulker(World world) {
         super(world);
@@ -22,6 +19,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
         return bukkitEntity;
     }
+
 }
 /**
 public class EntityShulker extends EntityGolem implements IMonster {

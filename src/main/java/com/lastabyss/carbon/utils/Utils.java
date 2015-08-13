@@ -1,6 +1,5 @@
 package com.lastabyss.carbon.utils;
 
-import com.lastabyss.carbon.api.BossBarAPI;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.Packet;

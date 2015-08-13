@@ -1,13 +1,11 @@
 package com.lastabyss.carbon.staticaccess;
 
-import com.lastabyss.carbon.Injector;
 import com.lastabyss.carbon.utils.Utils;
 
 /**
  * @author Navid
  */
 public class MaterialList {
-
 
     public static final org.bukkit.Material END_ROD_BLOCK = Utils.addMaterial("END_ROD_BLOCK", 198);
     public static final org.bukkit.Material CHORUS_PLANT_BLOCK = Utils.addMaterial("CHORUS_PLANT_BLOCK", 199);
@@ -31,5 +29,8 @@ public class MaterialList {
     public static final org.bukkit.Material SPLASH_POTION = Utils.addMaterial("SPLASH_POTION", 438);
     public static final org.bukkit.Material SPECTRAL_ARROW = Utils.addMaterial("SPECTRAL_ARROW", 439);
     public static final org.bukkit.Material TIPPED_ARROW = Utils.addMaterial("TIPPED_ARROW", 440);
+
+    public static void init() {
+    }
 
 }

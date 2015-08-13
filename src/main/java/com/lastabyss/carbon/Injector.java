@@ -32,8 +32,10 @@ import com.lastabyss.carbon.items.ItemTippedArrow;
 import com.lastabyss.carbon.network.NetworkInjector;
 import com.lastabyss.carbon.staticaccess.EffectList;
 import com.lastabyss.carbon.staticaccess.MaterialList;
+import com.lastabyss.carbon.staticaccess.ParticleList;
 import com.lastabyss.carbon.utils.FixedChatSerializer;
 import com.lastabyss.carbon.utils.ReflectionUtils;
+
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.Enchantment;
@@ -54,6 +56,7 @@ import net.minecraft.server.v1_8_R3.PotionBrewer;
 import net.minecraft.server.v1_8_R3.TileEntity;
 import net.minecraft.server.v1_8_R3.WorldGenFactory;
 import net.minecraft.server.v1_8_R3.WorldServer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -157,6 +160,10 @@ public class Injector {
         //Add worldgen factory entry
         registerWorldGenFactoryAddition(false, CityPiece.class, "ECP");
         registerWorldGenFactoryAddition(true, WorldGenEndCityStart.class, "EndCity");
+
+        //Make sure that enums are injected at start
+        MaterialList.init();
+        ParticleList.init();
 
         //Fix block references and items, replacing the ones in Minecraft with our new ones
         fixBlocksRefs();

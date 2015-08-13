@@ -28,7 +28,7 @@ public final class class_xj {
             }
 
             Entity var20 = null;
-            List var21 = var16.getEntities(var0, var0.getBoundingBox().a(var10, var12, var14).grow(1.0D, 1.0D, 1.0D));
+            List<Entity> var21 = var16.getEntities(var0, var0.getBoundingBox().a(var10, var12, var14).grow(1.0D, 1.0D, 1.0D));
             double var22 = 0.0D;
 
             for(int var24 = 0; var24 < var21.size(); ++var24) {

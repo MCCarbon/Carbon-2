@@ -140,7 +140,7 @@ public class EntityShulkerBullet extends Entity {
         double var9 = (double) var2.getZ() + 0.5D;
         if (var2.d(this.locX, this.locY, this.locZ) >= 4.0D) {
             BlockPosition var11 = new BlockPosition(this);
-            ArrayList var12 = Lists.newArrayList();
+            ArrayList<EnumDirection> var12 = Lists.newArrayList();
             if (var1 != EnumDirection.EnumAxis.X) {
                 if (var11.getX() < var2.getX() && this.world.isEmpty(var11.east())) {
                     var12.add(EnumDirection.EAST);
@@ -202,8 +202,8 @@ public class EntityShulkerBullet extends Entity {
     public void t_() {
         super.t_();
         if (!this.world.isClientSide) {
-            List var1;
-            Iterator var2;
+            List<EntityLiving> var1;
+            Iterator<EntityLiving> var2;
             EntityLiving var3;
             if (this.b == null && this.as != null) {
                 var1 = this.world.a(EntityLiving.class, new AxisAlignedBB(this.at.a(-2, -2, -2), this.at.a(2, 2, 2)));
