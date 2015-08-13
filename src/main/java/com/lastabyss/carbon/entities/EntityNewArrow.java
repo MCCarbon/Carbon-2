@@ -301,7 +301,7 @@ public class EntityNewArrow extends EntityArrow {
                             }
                             if (this.shooter instanceof EntityLiving) {
                                 EnchantmentManager.a(entityliving, this.shooter);
-                                EnchantmentManager.b((EntityLiving) this.shooter, (Entity) entityliving);
+                                EnchantmentManager.b((EntityLiving) this.shooter, entityliving);
                             }
                             onEntityHit(entityliving);
                             if ((this.shooter != null) && (movingobjectposition.entity != this.shooter) && (movingobjectposition.entity instanceof EntityHuman) && (this.shooter instanceof EntityPlayer)) {
@@ -346,7 +346,7 @@ public class EntityNewArrow extends EntityArrow {
             }
             if (this.isCritical()) {
                 for (int j = 0; j < 4; ++j) {
-                    this.world.addParticle(EnumParticle.CRIT, this.locX + ((this.motX * j) / 4.0), this.locY + ((this.motY * j) / 4.0), this.locZ + ((this.motZ * j) / 4.0), -this.motX, -this.motY + 0.2, -this.motZ, new int[0]);
+                    this.world.addParticle(EnumParticle.CRIT, this.locX + ((this.motX * j) / 4.0), this.locY + ((this.motY * j) / 4.0), this.locZ + ((this.motZ * j) / 4.0), -this.motX, -this.motY + 0.2, -this.motZ);
                 }
             }
             this.locX += this.motX;
@@ -374,7 +374,7 @@ public class EntityNewArrow extends EntityArrow {
             if (this.V()) {
                 for (int l = 0; l < 4; ++l) {
                     final float f4 = 0.25f;
-                    this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - (this.motX * f4), this.locY - (this.motY * f4), this.locZ - (this.motZ * f4), this.motX, this.motY, this.motZ, new int[0]);
+                    this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - (this.motX * f4), this.locY - (this.motY * f4), this.locZ - (this.motZ * f4), this.motX, this.motY, this.motZ);
                 }
                 f5 = 0.6f;
             }
@@ -488,9 +488,9 @@ public class EntityNewArrow extends EntityArrow {
     public void setCritical(final boolean flag) {
         final byte b0 = this.datawatcher.getByte(16);
         if (flag) {
-            this.datawatcher.watch(16, (Object) (byte) (b0 | 0x1));
+            this.datawatcher.watch(16, (byte) (b0 | 0x1));
         } else {
-            this.datawatcher.watch(16, (Object) (byte) (b0 & 0xFFFFFFFE));
+            this.datawatcher.watch(16, (byte) (b0 & 0xFFFFFFFE));
         }
     }
 

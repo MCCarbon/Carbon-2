@@ -21,12 +21,13 @@ public class Carbon extends JavaPlugin {
     private PluginDescriptionFile pluginDescriptionFile = this.getDescription();
     private FileConfiguration spigotConfig = YamlConfiguration.loadConfiguration(new File(getServer().getWorldContainer(), "spigot.yml"));
 
-    public static final Logger log = Bukkit.getLogger();
+    public static Logger log;
 
     private final Injector injector = new Injector(this);
 
     @Override
     public void onLoad() {
+        log = this.getLogger(); //Automatically appends [Carbon] to prefix
         // call to server shutdown if worlds are already loaded, prevents various errors when loading plugin on the fly
         if (!Bukkit.getWorlds().isEmpty()) {
             log.log(Level.SEVERE, "World loaded before{0} {1}! (Was {2} loaded on the fly?)", new Object[]{pluginDescriptionFile.getName(), pluginDescriptionFile.getVersion(), pluginDescriptionFile.getName()});
@@ -44,7 +45,7 @@ public class Carbon extends JavaPlugin {
             injector.registerRecipes();
         } catch (Throwable e) {
             e.printStackTrace(System.out);
-            log.warning("[Carbon] 1.9 injection failed! Something went wrong, server cannot start properly, shutting down...");
+            log.warning("1.9 injection failed! Something went wrong, server cannot start properly, shutting down...");
             Bukkit.shutdown();
             return;
         }

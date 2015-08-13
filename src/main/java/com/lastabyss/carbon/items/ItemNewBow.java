@@ -71,16 +71,16 @@ public class ItemNewBow extends ItemBow {
                 return;
             }
             if (event2.getProjectile() == entityarrow.getBukkitEntity()) {
-                world.addEntity((net.minecraft.server.v1_8_R3.Entity) entityarrow);
+                world.addEntity(entityarrow);
             }
             itemstack.damage(1, player);
-            world.makeSound((net.minecraft.server.v1_8_R3.Entity) player, "random.bow", 1.0f, 1.0f / (ItemNewBow.g.nextFloat() * 0.4f + 1.2f) + ready * 0.5f);
+            world.makeSound(player, "random.bow", 1.0f, 1.0f / (ItemNewBow.g.nextFloat() * 0.4f + 1.2f) + ready * 0.5f);
             if (flag) {
                 entityarrow.fromPlayer = 2;
             } else {
                 player.inventory.a(Items.ARROW);
             }
-            player.b(StatisticList.USE_ITEM_COUNT[Item.getId((Item) this)]);
+            player.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         }
     }
 

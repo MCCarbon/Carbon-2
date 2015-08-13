@@ -19,9 +19,9 @@ import com.lastabyss.carbon.Carbon;
 
 public class StructureSchematicNBTLoader {
 
-	private final Map<String, StructureSchmeatic> schematics = Maps.newHashMap();
+	private final Map<String, StructureSchematic> schematics = Maps.newHashMap();
 
-	public StructureSchmeatic getSchematic(MinecraftKey key) {
+	public StructureSchematic getSchematic(MinecraftKey key) {
 		String name = key.a();
 		if (this.schematics.containsKey(name)) {
 			return this.schematics.get(name);
@@ -30,7 +30,7 @@ public class StructureSchematicNBTLoader {
 			if (this.schematics.containsKey(name)) {
 				return this.schematics.get(name);
 			} else {
-				StructureSchmeatic var3 = new StructureSchmeatic();
+				StructureSchematic var3 = new StructureSchematic();
 				this.schematics.put(name, var3);
 				return var3;
 			}
@@ -80,7 +80,7 @@ public class StructureSchematicNBTLoader {
 
 	private void loadSchematicInputStream(String name, InputStream is) throws IOException {
 		NBTTagCompound compound = NBTCompressedStreamTools.a(is);
-		StructureSchmeatic schematic = new StructureSchmeatic();
+		StructureSchematic schematic = new StructureSchematic();
 		schematic.load(compound);
 		this.schematics.put(name, schematic);
 	}
@@ -101,7 +101,7 @@ public class StructureSchematicNBTLoader {
 
 			File file = new File(folder, name + ".nbt");
 			NBTTagCompound compound = new NBTTagCompound();
-			StructureSchmeatic schematic = this.schematics.get(name);
+			StructureSchematic schematic = this.schematics.get(name);
 			FileOutputStream os = null;
 
 			boolean success;

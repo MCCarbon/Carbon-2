@@ -26,7 +26,6 @@ public class class_ate {
 
 		int var2;
 		for (var2 = 0; var2 < 256; this.f[var2] = var2++) {
-			;
 		}
 
 		for (var2 = 0; var2 < 256; ++var2) {

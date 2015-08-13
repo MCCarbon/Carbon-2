@@ -19,7 +19,7 @@ public class NewChunkSnapshot extends ChunkSnapshot {
     @Override
     public IBlockData a(int var1) {
         if (var1 >= 0 && var1 < this.combinedIds.length) {
-            IBlockData var2 = (IBlockData) Block.d.a(this.combinedIds[var1]);
+            IBlockData var2 = Block.d.a(this.combinedIds[var1]);
             return var2 != null ? var2 : this.air;
         } else {
             throw new IndexOutOfBoundsException("The coordinate is out of range");
@@ -45,7 +45,7 @@ public class NewChunkSnapshot extends ChunkSnapshot {
         int coordId = (x << 12 | z << 8) + 256 - 1;
 
         for (int y = 255; y >= 0; --y) {
-            IBlockData blockdata = (IBlockData) Block.d.a(this.combinedIds[coordId + y]);
+            IBlockData blockdata = Block.d.a(this.combinedIds[coordId + y]);
             if (blockdata != null && blockdata != this.air) {
                 return y;
             }

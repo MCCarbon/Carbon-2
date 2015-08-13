@@ -1,11 +1,39 @@
 package com.lastabyss.carbon;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-
+import com.lastabyss.carbon.blocks.BlockBeetroots;
+import com.lastabyss.carbon.blocks.BlockChorusFlower;
+import com.lastabyss.carbon.blocks.BlockChorusPlant;
+import com.lastabyss.carbon.blocks.BlockEndGateway;
+import com.lastabyss.carbon.blocks.BlockEndRod;
+import com.lastabyss.carbon.blocks.BlockGrassPath;
+import com.lastabyss.carbon.blocks.BlockPurpurSlabAbstract;
+import com.lastabyss.carbon.blocks.BlockRotatable;
+import com.lastabyss.carbon.blocks.BlockStairs;
+import com.lastabyss.carbon.blocks.BlockStepAbstract;
+import com.lastabyss.carbon.blocks.BlockStructureBlock;
+import com.lastabyss.carbon.blocks.TileEntityEndGateway;
+import com.lastabyss.carbon.blocks.TileEntityStructure;
+import com.lastabyss.carbon.blocks.util.SoundUtil;
+import com.lastabyss.carbon.blocks.util.WrappedBlock;
+import com.lastabyss.carbon.effects.NewMobEffectType;
+import com.lastabyss.carbon.entities.EntityShulker;
+import com.lastabyss.carbon.entities.EntityShulkerBullet;
+import com.lastabyss.carbon.entities.EntitySpectralArrow;
+import com.lastabyss.carbon.entities.EntityTippedArrow;
+import com.lastabyss.carbon.generators.end.WorldGenEndCity.WorldGenEndCityStart;
+import com.lastabyss.carbon.generators.end.WorldGenEndCityPieces.CityPiece;
+import com.lastabyss.carbon.items.ItemChorusFruit;
+import com.lastabyss.carbon.items.ItemNewArrow;
+import com.lastabyss.carbon.items.ItemNewBow;
+import com.lastabyss.carbon.items.ItemSpectralArrow;
+import com.lastabyss.carbon.items.ItemSplashPotion;
+import com.lastabyss.carbon.items.ItemStep;
+import com.lastabyss.carbon.items.ItemTippedArrow;
+import com.lastabyss.carbon.network.NetworkInjector;
+import com.lastabyss.carbon.staticaccess.EffectList;
+import com.lastabyss.carbon.staticaccess.MaterialList;
+import com.lastabyss.carbon.utils.FixedChatSerializer;
+import com.lastabyss.carbon.utils.ReflectionUtils;
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.Blocks;
 import net.minecraft.server.v1_8_R3.Enchantment;
@@ -26,7 +54,6 @@ import net.minecraft.server.v1_8_R3.PotionBrewer;
 import net.minecraft.server.v1_8_R3.TileEntity;
 import net.minecraft.server.v1_8_R3.WorldGenFactory;
 import net.minecraft.server.v1_8_R3.WorldServer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -35,36 +62,11 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.potion.PotionEffectType;
 
-import com.lastabyss.carbon.blocks.BlockBeetroots;
-import com.lastabyss.carbon.blocks.BlockChorusFlower;
-import com.lastabyss.carbon.blocks.BlockChorusPlant;
-import com.lastabyss.carbon.blocks.BlockEndGateway;
-import com.lastabyss.carbon.blocks.BlockEndRod;
-import com.lastabyss.carbon.blocks.BlockGrassPath;
-import com.lastabyss.carbon.blocks.BlockPurpurSlabAbstract;
-import com.lastabyss.carbon.blocks.BlockRotatable;
-import com.lastabyss.carbon.blocks.BlockStairs;
-import com.lastabyss.carbon.blocks.BlockStepAbstract;
-import com.lastabyss.carbon.blocks.BlockStructureBlock;
-import com.lastabyss.carbon.blocks.TileEntityEndGateway;
-import com.lastabyss.carbon.blocks.TileEntityStructure;
-import com.lastabyss.carbon.blocks.util.SoundUtil;
-import com.lastabyss.carbon.blocks.util.WrappedBlock;
-import com.lastabyss.carbon.effects.NewMobEffectType;
-import com.lastabyss.carbon.generators.end.WorldGenEndCity.WorldGenEndCityStart;
-import com.lastabyss.carbon.generators.end.WorldGenEndCityPieces.CityPiece;
-import com.lastabyss.carbon.items.ItemNewArrow;
-import com.lastabyss.carbon.items.ItemNewBow;
-import com.lastabyss.carbon.items.ItemChorusFruit;
-import com.lastabyss.carbon.items.ItemSpectralArrow;
-import com.lastabyss.carbon.items.ItemSplashPotion;
-import com.lastabyss.carbon.items.ItemStep;
-import com.lastabyss.carbon.items.ItemTippedArrow;
-import com.lastabyss.carbon.network.NetworkInjector;
-import com.lastabyss.carbon.staticaccess.EffectList;
-import com.lastabyss.carbon.utils.FixedChatSerializer;
-import com.lastabyss.carbon.utils.ReflectionUtils;
-import com.lastabyss.carbon.utils.Utils;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * The injector class is the driver behind Carbon.
@@ -72,29 +74,6 @@ import com.lastabyss.carbon.utils.Utils;
  * @author Navid
  */
 public class Injector {
-
-    public static final org.bukkit.Material END_ROD_BLOCK = Utils.addMaterial("END_ROD_BLOCK", 198);
-    public static final org.bukkit.Material CHORUS_PLANT_BLOCK = Utils.addMaterial("CHORUS_PLANT_BLOCK", 199);
-    public static final org.bukkit.Material CHORUS_FLOWER_MATERIAL = Utils.addMaterial("CHORUS_FLOWER_MATERIAL", 200);
-    public static final org.bukkit.Material PURPUR_BLOCK = Utils.addMaterial("PURPUR_BLOCK", 201);
-    public static final org.bukkit.Material PURPUR_PILLAR = Utils.addMaterial("PURPUR_PILLAR", 202);
-    public static final org.bukkit.Material PURPUR_STAIRS = Utils.addMaterial("PURPUR_STAIRS", 203);
-    public static final org.bukkit.Material PURPUR_DOUBLE_SLAB = Utils.addMaterial("PURPUR_DOUBLE_SLAB", 204);
-    public static final org.bukkit.Material PURPUR_SLAB = Utils.addMaterial("PURPUR_SLAB", 205);
-    public static final org.bukkit.Material END_BRICKS = Utils.addMaterial("END_BRICKS", 206);
-    public static final org.bukkit.Material BEETROOTS = Utils.addMaterial("BEETROOTS", 207);
-    public static final org.bukkit.Material GRASS_PATH = Utils.addMaterial("GRASS_PATH", 208);
-    public static final org.bukkit.Material END_GATEWAY = Utils.addMaterial("END_GATEWAY", 209);
-    public static final org.bukkit.Material STRUCTURE_BLOCK = Utils.addMaterial("STRUCTURE_BLOCK", 255);
-
-    public static final org.bukkit.Material CHORUS_FRUIT = Utils.addMaterial("CHORUS_FRUIT", 432);
-    public static final org.bukkit.Material CHORUS_FRUIT_POPPED = Utils.addMaterial("CHORUS_FRUIT_POPPED", 433);
-    public static final org.bukkit.Material BEETROOT = Utils.addMaterial("BEETROOT", 434);
-    public static final org.bukkit.Material BEETROOT_SEEDS = Utils.addMaterial("BEETROOT_SEEDS", 435);
-    public static final org.bukkit.Material BEETROOT_SOUP = Utils.addMaterial("BEETROOT_SOUP", 436);
-    public static final org.bukkit.Material SPLASH_POTION = Utils.addMaterial("SPLASH_POTION", 438);
-    public static final org.bukkit.Material SPECTRAL_ARROW = Utils.addMaterial("SPECTRAL_ARROW", 439);
-    public static final org.bukkit.Material TIPPED_ARROW = Utils.addMaterial("TIPPED_ARROW", 440);
 
     private Carbon plugin;
     public Injector(Carbon plugin) {
@@ -160,6 +139,12 @@ public class Injector {
         registerTileEntity(TileEntityEndGateway.class, "EndGateway");
         registerTileEntity(TileEntityStructure.class, "Structure");
 
+        //Add new entities
+        registerEntity(EntityTippedArrow.class, "TippedArrow", 23);
+        registerEntity(EntitySpectralArrow.class, "SpectralArrow", 24);
+        registerEntity(EntityShulkerBullet.class, "ShulkerBullet", 25);
+        registerEntity(EntityShulker.class, "Shulker", 69, 9725844, 5060690);
+
         //Add new effects
         prepareMobEffectRegistration(2);
         new NewMobEffectType(24, new MinecraftKey("glowing"), false, 9740385).c("effect.glowing");
@@ -183,19 +168,19 @@ public class Injector {
      
     public void registerRecipes() {
         Bukkit.resetRecipes();
-        addRecipe(new ShapedRecipe(new ItemStack(BEETROOT_SOUP)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', BEETROOT).setIngredient('b', org.bukkit.Material.BOWL));
-        addRecipe(new ShapedRecipe(new ItemStack(END_BRICKS)).shape(new String[] {"ee", "ee"}).setIngredient('e', org.bukkit.Material.ENDER_STONE));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.BEETROOT_SOUP)).shape(new String[] {"rrr", "rrr", " b "}).setIngredient('r', MaterialList.BEETROOT).setIngredient('b', org.bukkit.Material.BOWL));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.END_BRICKS)).shape(new String[] {"ee", "ee"}).setIngredient('e', org.bukkit.Material.ENDER_STONE));
         
         //Purpur block recipes
-        addRecipe(new FurnaceRecipe(new ItemStack(CHORUS_FRUIT_POPPED), CHORUS_FRUIT));
-        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_BLOCK, 4)).shape(new String[] {"pp", "pp"}).setIngredient('p', CHORUS_FRUIT_POPPED));
-        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_STAIRS, 4)).shape(new String[] {"p  ", "pp ", "ppp"}).setIngredient('p', PURPUR_BLOCK));
-        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_STAIRS, 4)).shape(new String[] {"  p", " pp", "ppp"}).setIngredient('p', PURPUR_BLOCK));
-        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_SLAB, 6)).shape(new String[] {"ppp"}).setIngredient('p', PURPUR_BLOCK));
-        addRecipe(new ShapedRecipe(new ItemStack(PURPUR_PILLAR)).shape(new String[] {"s", "s"}).setIngredient('s', PURPUR_SLAB));
+        addRecipe(new FurnaceRecipe(new ItemStack(MaterialList.CHORUS_FRUIT_POPPED), MaterialList.CHORUS_FRUIT));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.PURPUR_BLOCK, 4)).shape(new String[] {"pp", "pp"}).setIngredient('p', MaterialList.CHORUS_FRUIT_POPPED));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.PURPUR_STAIRS, 4)).shape(new String[] {"p  ", "pp ", "ppp"}).setIngredient('p', MaterialList.PURPUR_BLOCK));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.PURPUR_STAIRS, 4)).shape(new String[] {"  p", " pp", "ppp"}).setIngredient('p', MaterialList.PURPUR_BLOCK));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.PURPUR_SLAB, 6)).shape(new String[] {"ppp"}).setIngredient('p', MaterialList.PURPUR_BLOCK));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.PURPUR_PILLAR)).shape(new String[] {"s", "s"}).setIngredient('s', MaterialList.PURPUR_SLAB));
         
         //Arrows
-        addRecipe(new ShapedRecipe(new ItemStack(SPECTRAL_ARROW, 2)).shape(new String[] {" d ", "dad", " d "}).setIngredient('d', org.bukkit.Material.GLOWSTONE_DUST).setIngredient('a', org.bukkit.Material.ARROW));
+        addRecipe(new ShapedRecipe(new ItemStack(MaterialList.SPECTRAL_ARROW, 2)).shape(new String[] {" d ", "dad", " d "}).setIngredient('d', org.bukkit.Material.GLOWSTONE_DUST).setIngredient('a', org.bukkit.Material.ARROW));
     }
      
 

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.lastabyss.carbon.blocks.util.BlockPositionUtil;
-import com.lastabyss.carbon.generators.schematics.StructureSchmeatic;
+import com.lastabyss.carbon.generators.schematics.StructureSchematic;
 import com.lastabyss.carbon.types.EnumRotation;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -17,7 +17,7 @@ import net.minecraft.server.v1_8_R3.World;
 public abstract class class_asp extends StructurePiece {
 
 	private static final class_asu d = new class_asu();
-	public StructureSchmeatic a;
+	public StructureSchematic a;
 	public class_asu b;
 	public BlockPosition c;
 
@@ -30,7 +30,7 @@ public abstract class class_asp extends StructurePiece {
 		this.b = d.a(true).b(true);
 	}
 
-	protected void a(StructureSchmeatic var1, BlockPosition var2, class_asu var3) {
+	protected void a(StructureSchematic var1, BlockPosition var2, class_asu var3) {
 		this.a = var1;
 		this.c = var2;
 		this.b = var3;
@@ -99,25 +99,21 @@ public abstract class class_asp extends StructurePiece {
 			try {
 				a[EnumRotation.NONE.ordinal()] = 1;
 			} catch (NoSuchFieldError var4) {
-				;
 			}
 
 			try {
 				a[EnumRotation.CLOCKWISE_90.ordinal()] = 2;
 			} catch (NoSuchFieldError var3) {
-				;
 			}
 
 			try {
 				a[EnumRotation.COUNTERCLOCKWISE_90.ordinal()] = 3;
 			} catch (NoSuchFieldError var2) {
-				;
 			}
 
 			try {
 				a[EnumRotation.CLOCKWISE_180.ordinal()] = 4;
 			} catch (NoSuchFieldError var1) {
-				;
 			}
 
 		}

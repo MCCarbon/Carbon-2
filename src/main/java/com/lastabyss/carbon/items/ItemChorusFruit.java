@@ -78,7 +78,7 @@ public class ItemChorusFruit extends ItemFood {
             final double pX = prevX + ((entity.locX - prevX) * d6) + ((entity.bc().nextDouble() - 0.5) * entity.width * 2.0);
             final double pY = prevY + ((entity.locY - prevY) * d6) + (entity.bc().nextDouble() * entity.length);
             final double pZ = prevZ + ((entity.locZ - prevZ) * d6) + ((entity.bc().nextDouble() - 0.5) * entity.width * 2.0);
-            entity.world.addParticle(EnumParticle.PORTAL, pX, pY, pZ, spreadX, spreadY, spreadZ, new int[0]);
+            entity.world.addParticle(EnumParticle.PORTAL, pX, pY, pZ, spreadX, spreadY, spreadZ);
         }
         entity.world.makeSound(prevX, prevY, prevZ, "mob.endermen.portal", 1.0f, 1.0f);
         entity.makeSound("mob.endermen.portal", 1.0f, 1.0f);

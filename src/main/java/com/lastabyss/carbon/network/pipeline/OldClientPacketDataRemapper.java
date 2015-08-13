@@ -2,6 +2,7 @@ package com.lastabyss.carbon.network.pipeline;
 
 import java.util.List;
 
+import com.lastabyss.carbon.staticaccess.MaterialList;
 import org.bukkit.Material;
 
 import com.lastabyss.carbon.Injector;
@@ -38,30 +39,30 @@ public class OldClientPacketDataRemapper extends MessageToMessageEncoder<Packet<
         for (int i = 0; i < blockIdRemaps.length; i++) {
             blockIdRemaps[i] = i;
         }
-        blockIdRemaps[Injector.END_ROD_BLOCK.getId()] = Material.STONE.getId();
-        blockIdRemaps[Injector.CHORUS_PLANT_BLOCK.getId()] = Material.CACTUS.getId();
-        blockIdRemaps[Injector.CHORUS_FLOWER_MATERIAL.getId()] = Material.RED_ROSE.getId();
-        blockIdRemaps[Injector.PURPUR_BLOCK.getId()] = Material.ENDER_STONE.getId();
-        blockIdRemaps[Injector.PURPUR_PILLAR.getId()] = Material.ENDER_STONE.getId();
-        blockIdRemaps[Injector.PURPUR_STAIRS.getId()] = Material.BRICK_STAIRS.getId();
-        blockIdRemaps[Injector.PURPUR_SLAB.getId()] = Material.STONE_SLAB2.getId();
-        blockIdRemaps[Injector.PURPUR_DOUBLE_SLAB.getId()] = Material.DOUBLE_STONE_SLAB2.getId();
-        blockIdRemaps[Injector.END_BRICKS.getId()] = Material.ENDER_STONE.getId();
-        blockIdRemaps[Injector.BEETROOTS.getId()] = Material.CROPS.getId();
-        blockIdRemaps[Injector.GRASS_PATH.getId()] = Material.GRASS.getId();
-        blockIdRemaps[Injector.END_GATEWAY.getId()] = Material.ENDER_PORTAL.getId();
-        blockIdRemaps[Injector.STRUCTURE_BLOCK.getId()] = Material.BEDROCK.getId();
+        blockIdRemaps[MaterialList.END_ROD_BLOCK.getId()] = Material.STONE.getId();
+        blockIdRemaps[MaterialList.CHORUS_PLANT_BLOCK.getId()] = Material.CACTUS.getId();
+        blockIdRemaps[MaterialList.CHORUS_FLOWER_MATERIAL.getId()] = Material.RED_ROSE.getId();
+        blockIdRemaps[MaterialList.PURPUR_BLOCK.getId()] = Material.ENDER_STONE.getId();
+        blockIdRemaps[MaterialList.PURPUR_PILLAR.getId()] = Material.ENDER_STONE.getId();
+        blockIdRemaps[MaterialList.PURPUR_STAIRS.getId()] = Material.BRICK_STAIRS.getId();
+        blockIdRemaps[MaterialList.PURPUR_SLAB.getId()] = Material.STONE_SLAB2.getId();
+        blockIdRemaps[MaterialList.PURPUR_DOUBLE_SLAB.getId()] = Material.DOUBLE_STONE_SLAB2.getId();
+        blockIdRemaps[MaterialList.END_BRICKS.getId()] = Material.ENDER_STONE.getId();
+        blockIdRemaps[MaterialList.BEETROOTS.getId()] = Material.CROPS.getId();
+        blockIdRemaps[MaterialList.GRASS_PATH.getId()] = Material.GRASS.getId();
+        blockIdRemaps[MaterialList.END_GATEWAY.getId()] = Material.ENDER_PORTAL.getId();
+        blockIdRemaps[MaterialList.STRUCTURE_BLOCK.getId()] = Material.BEDROCK.getId();
         for (int i = 0; i < itemIdRemaps.length; i++) {
             itemIdRemaps[i] = blockIdRemaps[i];
         }
-        itemIdRemaps[Injector.CHORUS_FRUIT.getId()] = Material.STONE.getId();
-        itemIdRemaps[Injector.CHORUS_FRUIT_POPPED.getId()] = Material.STONE.getId();
-        itemIdRemaps[Injector.BEETROOT.getId()] = Material.BREAD.getId();
-        itemIdRemaps[Injector.BEETROOT_SEEDS.getId()] = Material.SEEDS.getId();
-        itemIdRemaps[Injector.BEETROOT_SOUP.getId()] = Material.MUSHROOM_SOUP.getId();
-        itemIdRemaps[Injector.SPLASH_POTION.getId()] = Material.POTION.getId();
-        itemIdRemaps[Injector.SPECTRAL_ARROW.getId()] = Material.ARROW.getId();
-        itemIdRemaps[Injector.TIPPED_ARROW.getId()] = Material.ARROW.getId();
+        itemIdRemaps[MaterialList.CHORUS_FRUIT.getId()] = Material.STONE.getId();
+        itemIdRemaps[MaterialList.CHORUS_FRUIT_POPPED.getId()] = Material.STONE.getId();
+        itemIdRemaps[MaterialList.BEETROOT.getId()] = Material.BREAD.getId();
+        itemIdRemaps[MaterialList.BEETROOT_SEEDS.getId()] = Material.SEEDS.getId();
+        itemIdRemaps[MaterialList.BEETROOT_SOUP.getId()] = Material.MUSHROOM_SOUP.getId();
+        itemIdRemaps[MaterialList.SPLASH_POTION.getId()] = Material.POTION.getId();
+        itemIdRemaps[MaterialList.SPECTRAL_ARROW.getId()] = Material.ARROW.getId();
+        itemIdRemaps[MaterialList.TIPPED_ARROW.getId()] = Material.ARROW.getId();
     }
 
     @Override

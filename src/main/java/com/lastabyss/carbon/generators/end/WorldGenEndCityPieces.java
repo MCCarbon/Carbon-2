@@ -18,7 +18,7 @@ import net.minecraft.server.v1_8_R3.World;
 import com.google.common.collect.Lists;
 import com.lastabyss.carbon.generators.end.unknown.class_asp;
 import com.lastabyss.carbon.generators.end.unknown.class_asu;
-import com.lastabyss.carbon.generators.schematics.StructureSchmeatic;
+import com.lastabyss.carbon.generators.schematics.StructureSchematic;
 import com.lastabyss.carbon.generators.schematics.StructureSchematicNBTLoader;
 import com.lastabyss.carbon.types.EnumRotation;
 import com.lastabyss.carbon.utils.ReflectionUtils;
@@ -51,12 +51,12 @@ public class WorldGenEndCityPieces {
                 } else if (var8 == 1) {
                     var4.add(var7 = WorldGenEndCityPieces.b(var7, new BlockPosition(-1, 0, -1), "second_floor_2", var6, false));
                     var4.add(var7 = WorldGenEndCityPieces.b(var7, new BlockPosition(-1, 8, -1), "second_roof", var6, false));
-                    WorldGenEndCityPieces.b(WorldGenEndCityPieces.base2, var1 + 1, var7, (BlockPosition) null, var4, var5);
+                    WorldGenEndCityPieces.b(WorldGenEndCityPieces.base2, var1 + 1, var7, null, var4, var5);
                 } else if (var8 == 2) {
                     var4.add(var7 = WorldGenEndCityPieces.b(var7, new BlockPosition(-1, 0, -1), "second_floor_2", var6, false));
                     var4.add(var7 = WorldGenEndCityPieces.b(var7, new BlockPosition(-1, 4, -1), "third_floor_c", var6, false));
                     var4.add(var7 = WorldGenEndCityPieces.b(var7, new BlockPosition(-1, 8, -1), "third_roof", var6, true));
-                    WorldGenEndCityPieces.b(WorldGenEndCityPieces.base2, var1 + 1, var7, (BlockPosition) null, var4, var5);
+                    WorldGenEndCityPieces.b(WorldGenEndCityPieces.base2, var1 + 1, var7, null, var4, var5);
                 }
 
                 return true;
@@ -91,14 +91,14 @@ public class WorldGenEndCityPieces {
                     if (var5.nextBoolean()) {
                         CityPiece var12;
                         var4.add(var12 = WorldGenEndCityPieces.b(var8, var11.b(), "bridge_end", var6.a(var11.a()), true));
-                        WorldGenEndCityPieces.b(WorldGenEndCityPieces.bridge, var1 + 1, var12, (BlockPosition) null, var4, var5);
+                        WorldGenEndCityPieces.b(WorldGenEndCityPieces.bridge, var1 + 1, var12, null, var4, var5);
                     }
                 }
 
                 var4.add(WorldGenEndCityPieces.b(var7, new BlockPosition(-1, 4, -1), "tower_top", var6, true));
             } else {
                 if (var1 != 7) {
-                    return WorldGenEndCityPieces.b(WorldGenEndCityPieces.fatBase, var1 + 1, var7, (BlockPosition) null, var4, var5);
+                    return WorldGenEndCityPieces.b(WorldGenEndCityPieces.fatBase, var1 + 1, var7, null, var4, var5);
                 }
 
                 var4.add(WorldGenEndCityPieces.b(var7, new BlockPosition(-1, 4, -1), "tower_top", var6, true));
@@ -169,7 +169,7 @@ public class WorldGenEndCityPieces {
                     if (var5.nextBoolean()) {
                         CityPiece var11 = WorldGenEndCityPieces.b(var6, var10.b(), "bridge_end", var7.a(var10.a()), true);
                         var4.add(var11);
-                        WorldGenEndCityPieces.b(WorldGenEndCityPieces.bridge, var1 + 1, var11, (BlockPosition) null, var4, var5);
+                        WorldGenEndCityPieces.b(WorldGenEndCityPieces.bridge, var1 + 1, var11, null, var4, var5);
                     }
                 }
             }
@@ -198,7 +198,7 @@ public class WorldGenEndCityPieces {
         var2.add(var6 = b(var4, new BlockPosition(-1, 0, -1), "second_floor", var1, false));
         var2.add(var6 = b(var6, new BlockPosition(-1, 4, -1), "third_floor", var1, false));
         var2.add(var6 = b(var6, new BlockPosition(-1, 8, -1), "third_roof", var1, true));
-        b(base2, var5 + 1, var6, (BlockPosition) null, var2, var3);
+        b(base2, var5 + 1, var6, null, var2, var3);
     }
 
     static void setSturcturePieceNValue(StructurePiece of, int value) {
@@ -278,7 +278,7 @@ public class WorldGenEndCityPieces {
         }
 
         private void a(BlockPosition position) {
-            StructureSchmeatic schematic = WorldGenEndCityPieces.LOADER.getSchematic(new MinecraftKey("endcity/" + this.template));
+            StructureSchematic schematic = WorldGenEndCityPieces.LOADER.getSchematic(new MinecraftKey("endcity/" + this.template));
             class_asu var3 = null;
             if (this.ow) {
                 var3 = WorldGenEndCityPieces.b.a().a(this.rotation);

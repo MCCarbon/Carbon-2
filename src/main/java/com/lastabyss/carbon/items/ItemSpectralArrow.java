@@ -14,7 +14,7 @@ public class ItemSpectralArrow extends ItemNewArrow {
     }
 
     @Override
-    protected EntityNewArrow createArrowEntity0(World world, ItemStack itemstack, EntityLiving entity) {
+    protected EntityNewArrow createArrowEntity(World world, ItemStack itemstack, EntityLiving entity) {
         return new EntitySpectralArrow(world, entity);
     }
 

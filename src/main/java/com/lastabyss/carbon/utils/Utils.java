@@ -1,6 +1,8 @@
 package com.lastabyss.carbon.utils;
 
+import com.lastabyss.carbon.api.BossBarAPI;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketListener;
 
@@ -88,6 +90,17 @@ public class Utils {
         durability[data] = material;
         ReflectionUtils.setFieldValue(Material.class, "durability", null, byId);
         return material;
+    }
+
+    public static EnumParticle addParticle(String name, int id, boolean hasGravity) {
+        return addParticle(name, id, hasGravity, 0);
+    }
+
+    public static EnumParticle addParticle(String name, int id, boolean hasGravity, int data) {
+        EnumParticle particle = DynamicEnumType.addEnum(EnumParticle.class, name.toUpperCase(),
+                new Class[]{String.class, Integer.TYPE, Boolean.TYPE, Integer.TYPE},
+                new Object[]{name, id, hasGravity, data});
+        return particle;
     }
 
     /**

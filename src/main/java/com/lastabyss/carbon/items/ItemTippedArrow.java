@@ -17,7 +17,7 @@ public class ItemTippedArrow extends ItemNewArrow {
     }
 
     @Override
-    public EntityNewArrow createArrowEntity0(World world, ItemStack itemstack, EntityLiving entity) {
+    public EntityNewArrow createArrowEntity(World world, ItemStack itemstack, EntityLiving entity) {
         return new EntityTippedArrow(world, entity, itemstack);
     }
 
