@@ -30,6 +30,7 @@ public class BossBar {
 		this.darkenSky = darkenSky;
 		this.isDragon = isDragon;
 		this.health = 1.0F;
+		this.packet = packet;
 	}
 
 	public UUID getUniqueId() {
