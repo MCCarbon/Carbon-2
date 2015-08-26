@@ -5,7 +5,7 @@ softdepend: []
 loadbefore: [LWC, NoCheatPlus, NoCheatPlusCompat]
 load: STARTUP
 version: 2.0
-authors: [Navid K., _Shevchik_, Aust1n46]
+authors: [Navid K., _Shevchik_, Aust1n46, PatoTheBest]
 
 commands:
   carbon:
