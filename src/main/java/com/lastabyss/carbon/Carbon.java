@@ -39,7 +39,7 @@ public class Carbon extends JavaPlugin {
             return;
         }
 
-        // Inject 1.8 features. Stop server if something fails
+        // Inject 1.9 features. Stop server if something fails
         try {
             injector.registerAll();
             injector.registerRecipes();

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CarbonPacketPlayOutBossBar implements Packet<PacketListenerPlayOut> {
 
-    public static final int REAL_ID = 0x49;
+    public static final int REAL_ID = 0x0C;
     public static final int FAKE_ID = 99;
 
     private UUID uniqueId;
